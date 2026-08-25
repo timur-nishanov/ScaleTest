@@ -9,6 +9,7 @@ import { TaskSelectScreen } from '@/screens/TaskSelectScreen'
 import { BuildScreen } from '@/screens/BuildScreen'
 import { ReadyScreen } from '@/screens/ReadyScreen'
 import { IdlePrompt } from '@/screens/IdlePrompt'
+import { GridOverlay } from '@/components/dev/GridOverlay'
 
 /**
  * Корень приложения: Stage (масштабирование дизайн-сцены 3840×2160 под вьюпорт),
@@ -55,6 +56,8 @@ export default function App() {
         {screen === 'ready' && <ReadyScreen />}
 
         {idle.showPrompt && <IdlePrompt onStay={idle.stay} />}
+
+        <GridOverlay />
       </div>
     </div>
   )

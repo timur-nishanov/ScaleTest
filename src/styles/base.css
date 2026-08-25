@@ -166,23 +166,48 @@ body {
   color: var(--color-error);
 }
 
-/* ---------- заставка ---------- */
+/* ---------- заставка (макет 11:1134, всё в дизайн-координатах) ---------- */
 
 .screen--attract {
   cursor: pointer;
 }
 
-.attract__brand {
+.attract__logo {
   position: absolute;
-  top: 90px;
   left: 90px;
-  font-size: 48px;
-  font-weight: 600;
+  top: 90px;
+  width: 672px;
+  height: 95px;
+}
+
+.attract__logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.attract__logo-fallback {
+  display: none;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 64px;
+  line-height: 95px;
+  white-space: nowrap;
+}
+
+.attract__logo--placeholder .attract__logo-fallback {
+  display: block;
 }
 
 .attract__text {
-  margin: 336px 0 0 90px;
-  max-width: 1700px;
+  position: absolute;
+  left: 90px;
+  top: 336px;
+  width: 1659px;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
 }
 
 .attract__text h1 {
@@ -190,73 +215,122 @@ body {
   font-weight: 900;
   font-size: 188px;
   line-height: 184px;
-  margin: 0 0 60px;
+  width: 1346px;
+  margin: 0;
 }
 
 .attract__text p {
   font-size: 44px;
-  color: var(--color-text-secondary);
-  max-width: 930px;
-  margin: 0 0 80px;
+  line-height: 56px;
+  width: 922px;
+  margin: 0;
 }
 
-.attract__facts {
+.attract__cta {
   position: absolute;
-  right: 90px;
-  top: 300px;
+  left: 90px;
+  top: 1228px;
+  width: 460px;
+  height: 136px;
   display: flex;
-  flex-direction: column;
-  gap: 40px;
-  text-align: center;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-button);
+  background: var(--color-cta);
+  color: var(--color-text-invert);
+  font-family: inherit;
+  font-size: 44px;
+  line-height: 56px;
 }
 
+/* факт-блоки: фигура-ассет + абсолютные тексты (координаты макета) */
 .fact {
-  background: var(--color-surface);
-  border-radius: var(--radius-card);
-  padding: 60px 80px;
+  position: absolute;
+}
+
+.fact img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .fact__value {
+  position: absolute;
+  transform: translateX(-50%);
   font-family: var(--font-display);
-  font-size: 96px;
   font-weight: 900;
+  font-size: 96px;
   line-height: 116px;
+  white-space: nowrap;
+  text-align: center;
 }
 
 .fact__label {
-  font-size: 36px;
-  color: var(--color-text-secondary);
-  max-width: 540px;
+  position: absolute;
+  transform: translateX(-50%);
+  font-size: 44px;
+  line-height: 56px;
+  text-align: center;
 }
 
+.fact--services {
+  left: 1949px;
+  top: 90px;
+  width: 1801px;
+  height: 791px;
+}
+
+.fact--services .fact__value { left: 956px; top: 289px; }
+.fact--services .fact__label { left: 957px; top: 425px; width: 419px; }
+
+.fact--care {
+  left: 1950px;
+  top: 926px;
+  width: 870px;
+  height: 847px;
+}
+
+.fact--care .fact__value { left: 420px; top: 311px; }
+.fact--care .fact__label { left: 420px; top: 447px; width: 656px; }
+
+.fact--sla {
+  left: 2877px;
+  top: 926px;
+  width: 873px;
+  height: 873px;
+}
+
+.fact--sla .fact__value { left: 430px; top: 311px; }
+.fact--sla .fact__label { left: 430px; top: 447px; width: 540px; }
+
+/* бегущая строка тегов (движение — GSAP marquee, src/animations/marquee.ts) */
 .attract__tags {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 90px;
+  top: 1958px;
+  height: 112px;
   overflow: hidden;
 }
 
-.tags-marquee {
+.tags-track {
   display: flex;
   gap: 20px;
   width: max-content;
-  animation: marquee 40s linear infinite;
+  will-change: transform;
 }
 
-.tags-marquee__run {
+.tags-run {
   display: flex;
   gap: 20px;
-}
-
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
 }
 
 .tag-chip {
   display: inline-flex;
   align-items: center;
+  height: 112px;
   gap: 30px;
   background: var(--color-surface);
   border-radius: var(--radius-pill);
@@ -820,4 +894,21 @@ body {
   font-size: 96px;
   line-height: 116px;
   margin: 0;
+}
+
+/* ---------- дев-оверлей сетки (12 / margin 90 / gutter 60, FF0000 10%) ---------- */
+
+.grid-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  gap: 60px;
+  padding: 0 90px;
+  pointer-events: none;
+}
+
+.grid-overlay__col {
+  flex: 1;
+  background: rgb(255 0 0 / 10%);
 }

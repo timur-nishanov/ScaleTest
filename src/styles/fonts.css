@@ -1,0 +1,37 @@
+/* Фирменные шрифты YS (ассеты заказчика, public/assets/fonts). */
+
+@font-face {
+  font-family: 'YS Display';
+  src: url('/assets/fonts/ys-display-black.woff2') format('woff2'),
+    url('/assets/fonts/ys-display-black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'YS Display';
+  src: url('/assets/fonts/ys-display-heavy.woff2') format('woff2'),
+    url('/assets/fonts/ys-display-heavy.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'YS Text';
+  src: url('/assets/fonts/ys-text-regular.woff2') format('woff2'),
+    url('/assets/fonts/ys-text-regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'YS Text';
+  src: url('/assets/fonts/ys-text-medium.woff2') format('woff2'),
+    url('/assets/fonts/ys-text-medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
