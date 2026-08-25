@@ -53,11 +53,11 @@ export function AttractScreen() {
       </div>
 
       <div className="attract__text">
-        <h1 data-assemble="words">{STRINGS.attract.title}</h1>
+        <h1 data-assemble>{STRINGS.attract.title}</h1>
         <p data-assemble>{STRINGS.attract.subtitle}</p>
       </div>
 
-      <button className="attract__cta pressable" data-assemble="click">
+      <button className="attract__cta pressable" data-assemble>
         {STRINGS.attract.cta}
       </button>
 

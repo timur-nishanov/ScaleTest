@@ -23,8 +23,7 @@ function DiceIcon() {
 
 /**
  * Экраны 3/5 — выбор бизнес-задачи (обе ветки). Макеты 11:2528 и 11:3515.
- * Карточки — колесо с интро-прокруткой; шапка собирается катами (заголовок
- * пословно) по гайду анимации.
+ * Карточки — колесо с интро-прокруткой; шапка — быстрая сборка кадра.
  */
 export function TaskSelectScreen() {
   const gameMode = useFlow((s) => s.gameMode)
@@ -53,7 +52,7 @@ export function TaskSelectScreen() {
         <div className="select__label" data-assemble>
           {gameMode === 'build' ? STRINGS.taskSelect.buildLabel : STRINGS.taskSelect.readyLabel}
         </div>
-        <h1 data-assemble="words">{STRINGS.taskSelect.title}</h1>
+        <h1 data-assemble>{STRINGS.taskSelect.title}</h1>
         <p data-assemble>
           {gameMode === 'build'
             ? STRINGS.taskSelect.buildSubtitle
