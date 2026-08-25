@@ -2,7 +2,7 @@ import { useEffect, useRef, type ReactNode } from 'react'
 import gsap from 'gsap'
 import type { Draggable } from 'gsap/Draggable'
 import { DEG_PER_PX, STEP, cardAngle, cardTransform } from './wheelMath'
-import { createWheelDrag, tweenWheelTo, xToDeg } from '@/animations/wheelDrag'
+import { createWheelDrag, degToX, tweenWheelTo, xToDeg } from '@/animations/wheelDrag'
 import { createWheelIntro } from '@/animations/wheelIntro'
 
 /**
@@ -19,9 +19,14 @@ interface Props {
   count: number
   renderCard: (index: number) => ReactNode
   onPick: (index: number) => void
+  /**
+   * Стартовая карточка: null/undefined — свежий вход, играем интро-прогон;
+   * число — возврат «Назад» из задачи, колесо сразу стоит на этой карточке.
+   */
+  initialIndex?: number | null
 }
 
-export function WheelCarousel({ count, renderCard, onPick }: Props) {
+export function WheelCarousel({ count, renderCard, onPick, initialIndex }: Props) {
   const rootRef = useRef<HTMLDivElement>(null)
   const proxyRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<(HTMLDivElement | null)[]>([])
@@ -29,6 +34,9 @@ export function WheelCarousel({ count, renderCard, onPick }: Props) {
   const applyRef = useRef<(deg: number) => void>(() => {})
   const onPickRef = useRef(onPick)
   onPickRef.current = onPick
+  // стартовая позиция фиксируется на маунте: обновление стора при выборе
+  // карточки не должно передёргивать колесо во время смены экрана
+  const startIndexRef = useRef(initialIndex)
 
   useEffect(() => {
     const proxy = proxyRef.current
@@ -53,20 +61,30 @@ export function WheelCarousel({ count, renderCard, onPick }: Props) {
     applyRef.current = apply
     const common = { stepDeg: STEP, count, degPerPx: DEG_PER_PX, onScroll: apply }
 
-    gsap.set(proxy, { x: 0 })
-    apply(0)
-
-    // после прогона колесо встаёт на середину колоды (как в макете) —
-    // карточки по обе стороны, слева нет пустого пространства
-    const endIndex = Math.round((count - 1) / 2)
-    // на время интро ховер карточек выключен (класс снимается по завершении)
-    root.classList.add('is-intro')
     const endIntro = () => {
       introActive.current = false
       root.classList.remove('is-intro')
     }
-    const intro = createWheelIntro({ proxy, endIndex, ...common })
-    intro.eventCallback('onComplete', endIntro)
+
+    const startIndex = startIndexRef.current
+    let intro: gsap.core.Timeline | null = null
+    if (startIndex == null) {
+      gsap.set(proxy, { x: 0 })
+      apply(0)
+      // после прогона колесо встаёт на середину колоды (как в макете) —
+      // карточки по обе стороны, слева нет пустого пространства
+      const endIndex = Math.round((count - 1) / 2)
+      // на время интро ховер карточек выключен (класс снимается по завершении)
+      root.classList.add('is-intro')
+      intro = createWheelIntro({ proxy, endIndex, ...common })
+      intro.eventCallback('onComplete', endIntro)
+    } else {
+      // возврат «Назад» из задачи: без интро, колесо на прежней карточке
+      const deg = startIndex * STEP
+      gsap.set(proxy, { x: degToX(deg, DEG_PER_PX) })
+      apply(deg)
+      introActive.current = false
+    }
 
     let introInterrupted = false
     let drag: Draggable | null = null
@@ -97,7 +115,7 @@ export function WheelCarousel({ count, renderCard, onPick }: Props) {
     })
 
     return () => {
-      intro.kill()
+      intro?.kill()
       drag?.kill()
       gsap.killTweensOf(proxy)
     }

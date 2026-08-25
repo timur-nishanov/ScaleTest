@@ -3,6 +3,7 @@ import { useFlow } from './flow'
 import { APP_MODE, DESIGN_H, DESIGN_W } from './config'
 import { useStageScale } from '@/lib/useStageScale'
 import { useIdleReset } from '@/lib/useIdleReset'
+import { useScreenTransition } from '@/lib/useScreenTransition'
 import { AttractScreen } from '@/screens/AttractScreen'
 import { ModeScreen } from '@/screens/ModeScreen'
 import { TaskSelectScreen } from '@/screens/TaskSelectScreen'
@@ -19,6 +20,8 @@ export default function App() {
   const screen = useFlow((s) => s.screen)
   const resetToAttract = useFlow((s) => s.resetToAttract)
   const scale = useStageScale()
+  // плавная смена: сначала гаснет текущий экран, потом маунтится следующий
+  const { displayed, hostRef } = useScreenTransition(screen)
 
   // автосброс по бездействию — только в киоске и не на заставке
   const idle = useIdleReset(APP_MODE === 'kiosk' && screen !== 'attract', resetToAttract)
@@ -49,11 +52,13 @@ export default function App() {
           transform: `scale(${scale})`,
         }}
       >
-        {screen === 'attract' && <AttractScreen />}
-        {screen === 'mode' && <ModeScreen />}
-        {screen === 'taskSelect' && <TaskSelectScreen />}
-        {screen === 'build' && <BuildScreen />}
-        {screen === 'ready' && <ReadyScreen />}
+        <div className="screen-host" ref={hostRef}>
+          {displayed === 'attract' && <AttractScreen />}
+          {displayed === 'mode' && <ModeScreen />}
+          {displayed === 'taskSelect' && <TaskSelectScreen />}
+          {displayed === 'build' && <BuildScreen />}
+          {displayed === 'ready' && <ReadyScreen />}
+        </div>
 
         {idle.showPrompt && <IdlePrompt onStay={idle.stay} />}
 

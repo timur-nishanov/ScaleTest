@@ -48,6 +48,12 @@ body {
 
 /* ---------- общие блоки экрана ---------- */
 
+/* хост активного экрана: его гасит useScreenTransition при смене */
+.screen-host {
+  position: absolute;
+  inset: 0;
+}
+
 .screen {
   position: absolute;
   inset: 0;
@@ -208,7 +214,7 @@ body {
   width: 2394px;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 40px;
   text-align: center;
   z-index: 2;
   pointer-events: none;
@@ -907,22 +913,26 @@ body {
   }
 }
 
-/* ---------- выбор бандла ---------- */
+/* ---------- выбор бандла (макет 11:2265) ---------- */
 
 .ready__panel {
-  flex: 1;
-  margin: 60px 90px 90px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 596px;
+  width: 3660px;
+  height: 1474px;
   background: var(--color-panel);
   border-radius: var(--radius-screen-card);
-  padding: 100px 120px 60px;
-  display: flex;
-  flex-direction: column;
 }
 
 .ready__assignment {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 120px;
+  width: 1275px;
   text-align: center;
-  max-width: 1300px;
-  margin: 0 auto 80px;
 }
 
 .ready__assignment h2 {
@@ -934,25 +944,39 @@ body {
 }
 
 .ready__assignment p {
-  font-size: 34px;
-  color: var(--color-text-secondary);
+  font-size: 32px;
+  line-height: 44px;
+  color: var(--color-text-soft);
   margin: 0;
 }
 
 .ready__bundles {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 372px;
+  width: 2780px;
+  height: 958px;
   display: flex;
-  justify-content: center;
   gap: 60px;
 }
 
 .bundle-card {
-  width: 887px;
-  height: 958px;
+  flex: 1;
+  min-width: 0;
   background: var(--color-surface);
   border-radius: var(--radius-bundle);
   padding: 50px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+}
+
+.bundle-card__head {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .bundle-card h3 {
@@ -960,40 +984,52 @@ body {
   font-weight: 900;
   font-size: 56px;
   line-height: 64px;
-  margin: 0 0 24px;
+  margin: 0;
 }
 
-.bundle-card p {
+.bundle-card__head p {
   font-size: 32px;
   line-height: 44px;
-  color: var(--color-text-soft);
+  color: rgb(0 0 0 / 85%);
   margin: 0;
-  flex: 1;
 }
 
+/* чипы сервисов: тянутся на равную ширину, высота — по самому высокому */
 .bundle-card__services {
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+  align-items: stretch;
+  gap: 20px;
 }
 
 .bundle-chip {
-  display: inline-flex;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 16px;
+  justify-content: flex-start;
+  gap: 20px;
   background: var(--color-surface);
   border: 2px solid var(--color-silver);
   border-radius: var(--radius-tile);
-  padding: 16px 32px 16px 16px;
-  font-size: 30px;
-  white-space: nowrap;
+  /* по горизонтали чуть уже макетных 30 — иначе «Managed PostgreSQL»
+     не влезает в одну строку, как нарисовано */
+  padding: 32px 22px;
+  font-size: 32px;
+  line-height: 36px;
+  font-weight: 500;
+  text-align: center;
 }
 
 .ready__hint {
-  text-align: center;
-  font-size: 34px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 60px;
+  font-size: 32px;
+  line-height: 44px;
   color: var(--color-text-secondary);
-  margin-top: 48px;
+  white-space: nowrap;
 }
 
 /* ---------- оверлеи ---------- */
@@ -1212,6 +1248,19 @@ body {
 
   .screen--mode.is-assembled:has(.mode-card:hover) .mode-card:not(:hover) {
     opacity: 0.55;
+  }
+
+  /* карточки бандлов: подъём по ховеру после сборки кадра (стейт макета) */
+  .screen--ready.is-assembled .bundle-card {
+    transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .screen--ready.is-assembled .bundle-card:hover {
+    transform: translateY(-40px);
+  }
+
+  .screen--ready.is-assembled .bundle-card:active {
+    transition-duration: var(--press-duration);
   }
 }
 

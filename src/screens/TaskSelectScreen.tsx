@@ -17,6 +17,7 @@ export function TaskSelectScreen() {
   const openTask = useFlow((s) => s.openTask)
   const openRandomTask = useFlow((s) => s.openRandomTask)
   const backToMode = useFlow((s) => s.backToMode)
+  const taskWheelIndex = useFlow((s) => s.taskWheelIndex)
   const root = useAssemble<HTMLElement>()
 
   const tasks = gameMode === 'build' ? BUILD_TASKS : READY_TASKS
@@ -49,6 +50,7 @@ export function TaskSelectScreen() {
 
       <WheelCarousel
         count={tasks.length}
+        initialIndex={taskWheelIndex}
         onPick={(i) => deferNav(() => openTask(tasks[i].id))}
         renderCard={(i) => {
           const t = tasks[i]

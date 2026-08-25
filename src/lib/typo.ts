@@ -18,6 +18,10 @@ export function typo(text: string): string {
   out = out.replace(HANGING, `$1$2${NBSP}`)
   // тире не отрывается от предыдущего слова: «слово — слово»
   out = out.replace(/ —/g, `${NBSP}—`)
+  // число не отрывается от следующего слова: «45 секунд», «10 задач»
+  out = out.replace(/(\d) /g, `$1${NBSP}`)
+  // «PostgreSQL + DataLens» — связка с плюсом не рвётся
+  out = out.replace(/ \+ /g, `${NBSP}+${NBSP}`)
   return out
 }
 

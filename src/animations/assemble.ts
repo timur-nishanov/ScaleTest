@@ -17,7 +17,9 @@ export function assembleScreen(
   opts: { delay?: number } = {},
 ): gsap.core.Timeline {
   const items = Array.from(root.querySelectorAll<HTMLElement>('[data-assemble]'))
-  const tl = gsap.timeline({ delay: opts.delay ?? 0.1 })
+  // паузу перед сборкой держим минимальной: ритм смены экранов задаёт
+  // затухание предыдущего кадра (useScreenTransition)
+  const tl = gsap.timeline({ delay: opts.delay ?? 0.05 })
   if (!items.length) return tl
   const moving = items.filter((el) => el.dataset.assemble !== 'static')
   const still = items.filter((el) => el.dataset.assemble === 'static')
