@@ -33,9 +33,9 @@ export function ReadyScreen() {
       <Button variant="secondary" className="nav-back" onClick={() => deferNav(backToTasks)}>
         {STRINGS.ready.back}
       </Button>
-      <TimerBadge label={timer.label} warning={timer.warning} />
+      <TimerBadge label={timer.label} left={timer.left} warning={timer.warning} />
 
-      <header className="screen__top">
+      <header className="task__top">
         <h1>{task.title}</h1>
         <p>{task.cardDesc}</p>
       </header>
@@ -58,7 +58,7 @@ export function ReadyScreen() {
               <div className="bundle-card__services">
                 {b.services.map((id) => (
                   <span className="bundle-chip" key={id}>
-                    <ServiceIcon id={id} size={56} />
+                    <ServiceIcon id={id} size={56} variant="tile" />
                     {SERVICES[id].name}
                   </span>
                 ))}

@@ -10,17 +10,29 @@ import { ServiceIcon } from '@/components/ui/ServiceIcon'
 import { TimerBadge } from '@/components/ui/TimerBadge'
 import { useTimer } from '@/lib/useTimer'
 import { deferNav } from '@/lib/navDelay'
+import { useAssemble } from '@/lib/useAssemble'
 import { ResultOverlay } from './ResultOverlay'
 
+/** Коннектор между слотами (макет: линия со стрелкой, 238×13). */
+function SlotConnector() {
+  return (
+    <svg className="slot-connector" width="238" height="13" viewBox="0 0 238 13" aria-hidden>
+      <line x1="0" y1="6.5" x2="228" y2="6.5" stroke="currentColor" strokeWidth="3" />
+      <path d="M226 1 L236 6.5 L226 12" fill="none" stroke="currentColor" strokeWidth="3" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 /**
- * Экран 4 — решение задачи drag-and-drop (ветка А). Макет 2334:4377 + стейты.
+ * Экран 4 — решение задачи drag-and-drop (ветка А). Макет 11:2060 + стейты.
  *
  * Взаимодействия (по ТЗ и стейтам макета):
- * - тап по сервису → подсветка + описание в панели (не ставит в слот);
+ * - тап по сервису → плитка выбрана, слоты подсвечены, внизу панель описания;
  * - постановка: перетаскивание в слот ЛИБО тап по свободному слоту после выбора;
  * - тап по заполненному слоту → сервис возвращается в палитру;
  * - использованный сервис в палитре гаснет;
- * - «Проверить связку» активна, когда все слоты заполнены.
+ * - «Проверить связку» активна, когда все слоты заполнены;
+ * - последние 10 секунд — красный таймер.
  */
 export function BuildScreen() {
   const taskId = useFlow((s) => s.taskId)
@@ -37,6 +49,7 @@ export function BuildScreen() {
 
   const task = getBuildTask(taskId ?? '')
   const timer = useTimer(!result, timeoutTask)
+  const root = useAssemble<HTMLElement>()
 
   // --- drag-слой (pointer-based, работает и с тачем, и с мышью) ---
   const [ghost, setGhost] = useState<{ id: ServiceId; x: number; y: number } | null>(null)
@@ -46,6 +59,7 @@ export function BuildScreen() {
   if (!task) return null
 
   const canCheck = slots.every((s) => s !== null)
+  const targeting = selected !== null || ghost !== null
 
   const toLocal = (e: React.PointerEvent) => {
     // координаты в дизайн-пикселях внутри секции (учитывая скейл Stage)
@@ -74,7 +88,7 @@ export function BuildScreen() {
     setGhost(null)
     if (!d) return
     if (!d.moved) {
-      tapService(d.id) // тап = описание + выбор
+      tapService(d.id) // тап = выбор + описание в панели
       return
     }
     const el = document.elementFromPoint(e.clientX, e.clientY)
@@ -89,57 +103,80 @@ export function BuildScreen() {
 
   return (
     <section
-      ref={sectionRef}
+      ref={(el) => {
+        sectionRef.current = el
+        root.current = el
+      }}
       className="screen screen--build"
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
     >
-      <Button variant="secondary" className="nav-back" onClick={() => deferNav(backToTasks)}>
+      <Button
+        variant="secondary"
+        className="nav-back"
+        onClick={() => deferNav(backToTasks)}
+        data-assemble="static"
+      >
         {STRINGS.build.back}
       </Button>
-      <TimerBadge label={timer.label} warning={timer.warning} />
+      <TimerBadge label={timer.label} left={timer.left} warning={timer.warning} />
 
-      <header className="screen__top">
+      <header className="task__top" data-assemble>
         <h1>{task.title}</h1>
         <p>{task.cardDesc}</p>
       </header>
 
-      <div className="build__panel">
+      <div className="build__panel" data-assemble>
         <div className="build__assignment">
           <h2>{STRINGS.build.assignmentLabel}</h2>
           <p>{task.assignment}</p>
         </div>
 
-        <div className="build__slots">
+        <div className={`build__slots ${targeting ? 'is-targeting' : ''}`}>
           {slots.map((id, i) => (
             <div key={i} style={{ display: 'contents' }}>
-              {i > 0 && <span className="slot-arrow" aria-hidden>→</span>}
+              {i > 0 && <SlotConnector />}
               <div
-                className={`slot pressable ${id ? 'is-filled' : ''}`}
+                className={`slot ${id ? 'is-filled pressable' : ''}`}
                 data-slot={i}
                 onClick={() => onSlotTap(i)}
               >
-                <span className="slot__num">{STRINGS.build.slot(i + 1)}</span>
                 {id ? (
                   <>
-                    <ServiceIcon id={id} size={84} />
+                    <ServiceIcon id={id} size={70} variant="tile" />
                     <span className="slot__name">{SERVICES[id].name}</span>
                   </>
                 ) : (
-                  <span className="slot__plus">＋</span>
+                  <>
+                    <span className="slot__num">{STRINGS.build.slot(i + 1)}</span>
+                    <span className="slot__plus">
+                      <img src="/assets/icons/ui/plus.svg" width={64} height={64} alt="" draggable={false} />
+                    </span>
+                  </>
                 )}
               </div>
             </div>
           ))}
         </div>
 
-        <div className="build__hint">
-          {selected
-            ? `${SERVICES[selected].name} — ${SERVICES[selected].short}. Перетащи в слот или коснись слота.`
-            : STRINGS.build.paletteHint}
-        </div>
+        {selected ? (
+          <div className="svc-info">
+            <ServiceIcon id={selected} size={56} variant="tile" />
+            <span>
+              <b>{SERVICES[selected].name}</b>
+              <em>{SERVICES[selected].short}</em>
+            </span>
+          </div>
+        ) : (
+          <div className="build__info">
+            <span className="build__info-hand">
+              <img src="/assets/icons/ui/hand.svg" width={48} height={48} alt="" draggable={false} />
+            </span>
+            <span className="build__info-text">{STRINGS.build.paletteHint}</span>
+          </div>
+        )}
 
-        <div className="build__palette">
+        <div className={`build__palette ${selected ? 'has-selection' : ''}`}>
           {/* тапы и драг палитры обрабатываются pointer-логикой секции,
               onTap плитке не передаём — иначе тап сработает дважды */}
           {PALETTE_ORDER.map((id) => (
@@ -150,7 +187,7 @@ export function BuildScreen() {
         </div>
       </div>
 
-      <div className="screen__cta">
+      <div className="screen__cta" data-assemble="static">
         <Button variant="secondary" onClick={clearSlots}>
           {STRINGS.build.clear}
         </Button>
@@ -161,7 +198,8 @@ export function BuildScreen() {
 
       {ghost && (
         <div className="drag-ghost" style={{ left: ghost.x, top: ghost.y }}>
-          <ServiceIcon id={ghost.id} size={84} />
+          <ServiceIcon id={ghost.id} size={70} variant="tile" />
+          <span>{SERVICES[ghost.id].name}</span>
         </div>
       )}
 
