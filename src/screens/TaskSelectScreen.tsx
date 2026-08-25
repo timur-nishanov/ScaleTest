@@ -7,20 +7,6 @@ import { Button } from '@/components/ui/Button'
 import { WheelCarousel } from '@/components/wheel/WheelCarousel'
 import { useAssemble } from '@/lib/useAssemble'
 
-/** Иконка кубика для «Случайный выбор» (гравити-стиль, 5 точек). */
-function DiceIcon() {
-  return (
-    <svg width="44" height="44" viewBox="0 0 44 44" fill="none" aria-hidden>
-      <rect x="4" y="4" width="36" height="36" rx="9" stroke="currentColor" strokeWidth="3" />
-      <circle cx="14.5" cy="14.5" r="3" fill="currentColor" />
-      <circle cx="29.5" cy="14.5" r="3" fill="currentColor" />
-      <circle cx="22" cy="22" r="3" fill="currentColor" />
-      <circle cx="14.5" cy="29.5" r="3" fill="currentColor" />
-      <circle cx="29.5" cy="29.5" r="3" fill="currentColor" />
-    </svg>
-  )
-}
-
 /**
  * Экраны 3/5 — выбор бизнес-задачи (обе ветки). Макеты 11:2528 и 11:3515.
  * Карточки — колесо с интро-прокруткой; шапка — быстрая сборка кадра.
@@ -44,7 +30,7 @@ export function TaskSelectScreen() {
       {showRandom && (
         <Button variant="secondary" className="nav-random" onClick={openRandomTask} data-assemble>
           {STRINGS.taskSelect.random}
-          <DiceIcon />
+          <img src="/assets/icons/dice-5.svg" width={44} height={44} alt="" draggable={false} />
         </Button>
       )}
 

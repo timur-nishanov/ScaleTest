@@ -56,7 +56,10 @@ export function WheelCarousel({ count, renderCard, onPick }: Props) {
     gsap.set(proxy, { x: 0 })
     apply(0)
 
-    const intro = createWheelIntro({ proxy, ...common })
+    // после прогона колесо встаёт на середину колоды (как в макете) —
+    // карточки по обе стороны, слева нет пустого пространства
+    const endIndex = Math.round((count - 1) / 2)
+    const intro = createWheelIntro({ proxy, endIndex, ...common })
     intro.eventCallback('onComplete', () => {
       introActive.current = false
     })
@@ -131,9 +134,7 @@ export function WheelCarousel({ count, renderCard, onPick }: Props) {
           onPointerDown={(e) => e.stopPropagation()}
           onClick={() => step(-1)}
         >
-          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" aria-hidden>
-            <path d="M26 10 L14 22 L26 34" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <img src="/assets/icons/chevron-left.svg" width={73} height={73} alt="" draggable={false} />
         </button>
         <button
           className="arrow pressable"
@@ -141,9 +142,7 @@ export function WheelCarousel({ count, renderCard, onPick }: Props) {
           onPointerDown={(e) => e.stopPropagation()}
           onClick={() => step(1)}
         >
-          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" aria-hidden>
-            <path d="M18 10 L30 22 L18 34" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+          <img src="/assets/icons/chevron-right.svg" width={73} height={73} alt="" draggable={false} />
         </button>
       </div>
     </div>
