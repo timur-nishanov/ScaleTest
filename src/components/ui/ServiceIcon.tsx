@@ -1,18 +1,26 @@
 import type { ServiceId } from '@/data/types'
 
 /**
- * Иконка сервиса. Ассеты появятся в public/assets/icons/<id>.svg —
- * компонент уже смотрит туда, а до заливки показывает плейсхолдер с инициалами.
+ * Иконка сервиса. Два набора ассетов:
+ * - mono — монохромная 64×64 (теги заставки): assets/icons/<id>.svg
+ * - tile — 70×70 с подложкой #CAB8FF и бордером (палитра, слоты, чипы):
+ *   assets/icons/tile/<id>.svg
  */
-export function ServiceIcon({ id, size = 64 }: { id: ServiceId; size?: number }) {
+export function ServiceIcon({
+  id,
+  size = 64,
+  variant = 'mono',
+}: {
+  id: ServiceId
+  size?: number
+  variant?: 'mono' | 'tile'
+}) {
+  const src =
+    variant === 'tile' ? `/assets/icons/tile/${id}.svg` : `/assets/icons/${id}.svg`
   return (
-    <span
-      className="service-icon"
-      style={{ width: size, height: size }}
-      data-service={id}
-    >
+    <span className="service-icon" style={{ width: size, height: size }} data-service={id}>
       <img
-        src={`/assets/icons/${id}.svg`}
+        src={src}
         width={size}
         height={size}
         alt=""

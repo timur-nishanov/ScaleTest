@@ -47,7 +47,7 @@ export function ResultOverlay() {
         const state = wrongSlots ? (wrongSlots.includes(i) ? 'is-wrong' : 'is-ok') : 'is-ok'
         return (
           <span key={i} className={`result-chip ${state}`}>
-            <ServiceIcon id={id} size={70} />
+            <ServiceIcon id={id} size={70} variant="tile" />
             {SERVICES[id].name}
           </span>
         )

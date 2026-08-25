@@ -9,7 +9,7 @@ interface Props {
   onTap?: (id: ServiceId) => void
 }
 
-/** Плитка сервиса в палитре (макет: 248×226, иконка 70 + подпись). */
+/** Плитка сервиса в палитре (макет: 248×226, иконка 70 на подложке + подпись). */
 export function ServiceTile({ id, used, selected, onTap }: Props) {
   const s = SERVICES[id]
   return (
@@ -18,7 +18,7 @@ export function ServiceTile({ id, used, selected, onTap }: Props) {
       data-service={id}
       onClick={() => !used && onTap?.(id)}
     >
-      <ServiceIcon id={id} size={70} />
+      <ServiceIcon id={id} size={70} variant="tile" />
       <div className="service-tile__name">{s.name}</div>
     </div>
   )

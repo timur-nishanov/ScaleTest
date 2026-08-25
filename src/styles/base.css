@@ -151,19 +151,75 @@ body {
   position: absolute;
   top: 90px;
   right: 90px;
+  width: 297px;
+  height: 128px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 32px;
   background: var(--color-surface);
   border-radius: var(--radius-slot);
-  padding: 36px 48px;
   font-size: 44px;
+  line-height: 56px;
   font-variant-numeric: lining-nums proportional-nums;
   z-index: 5;
 }
 
+/* дуга прошедшего времени по контуру пилюли */
+.timer-badge__ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  stroke: var(--color-accent);
+  pointer-events: none;
+}
+
+.timer-badge__icon {
+  width: 44px;
+  height: 44px;
+  background: currentColor;
+  mask: url('/assets/icons/ui/alarm.svg') center / contain no-repeat;
+  -webkit-mask: url('/assets/icons/ui/alarm.svg') center / contain no-repeat;
+}
+
 .timer-badge.is-warning {
   color: var(--color-error);
+}
+
+.timer-badge.is-warning .timer-badge__ring {
+  stroke: var(--color-error);
+}
+
+/* ---------- шапка экранов задачи (макеты 11:2060 / 11:2265) ---------- */
+
+.task__top {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 130px;
+  width: 2394px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  text-align: center;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.task__top h1 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 96px;
+  line-height: 116px;
+  margin: 0;
+}
+
+.task__top p {
+  font-size: 44px;
+  line-height: 56px;
+  width: 1800px;
+  margin: 0 auto;
 }
 
 /* ---------- заставка (макет 11:1134, всё в дизайн-координатах) ---------- */
@@ -599,22 +655,29 @@ body {
   gap: 39px;
 }
 
-/* ---------- экран сборки ---------- */
+/* ---------- экран сборки (макет 11:2060, вёрстка 1:1) ---------- */
 
 .build__panel {
-  flex: 1;
-  margin: 60px 90px 220px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 596px;
+  width: 3660px;
+  height: 1268px;
   background: var(--color-panel);
   border-radius: var(--radius-screen-card);
-  padding: 100px 120px 60px;
-  display: flex;
-  flex-direction: column;
 }
 
 .build__assignment {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 120px;
+  width: 1275px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   text-align: center;
-  max-width: 1300px;
-  margin: 0 auto 60px;
 }
 
 .build__assignment h2 {
@@ -622,21 +685,23 @@ body {
   font-weight: 900;
   font-size: 56px;
   line-height: 64px;
-  margin: 0 0 20px;
+  margin: 0;
 }
 
 .build__assignment p {
-  font-size: 34px;
-  color: var(--color-text-secondary);
+  font-size: 32px;
+  line-height: 44px;
+  color: var(--color-text-soft);
   margin: 0;
 }
 
 .build__slots {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 372px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 24px;
-  margin-bottom: 60px;
 }
 
 .slot {
@@ -650,69 +715,135 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 20px;
+  transition: border-color 0.2s ease;
+}
+
+/* выбран сервис или тянем — дроп-зоны подсвечены фиолетовым (стейты макета) */
+.build__slots.is-targeting .slot:not(.is-filled) {
+  border-color: var(--color-accent);
 }
 
 .slot.is-filled {
-  border-style: solid;
+  border: none;
   background: var(--color-surface);
 }
 
 .slot__num {
   position: absolute;
-  top: 32px;
-  left: 32px;
+  top: 28px;
+  left: 28px;
   font-size: 32px;
+  line-height: 44px;
   color: var(--color-text-secondary);
 }
 
 .slot__plus {
-  font-size: 72px;
-  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 27px;
+  background: var(--color-surface);
+  border-radius: 60px;
 }
 
 .slot__name {
-  font-size: 36px;
-}
-
-.slot-arrow {
-  font-size: 56px;
-  color: var(--color-text-secondary);
-}
-
-.build__hint {
+  font-size: 32px;
+  line-height: 36px;
+  font-weight: 500;
   text-align: center;
-  font-size: 34px;
+}
+
+.slot-connector {
+  flex: none;
+  color: var(--color-text);
+}
+
+/* подсказка с рукой (дефолт) */
+.build__info {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 752px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.build__info-hand {
+  width: 96px;
+  height: 96px;
+  border-radius: 18px;
+  background: var(--color-surface);
+  display: grid;
+  place-items: center;
+}
+
+.build__info-text {
+  width: 640px;
+  font-size: 32px;
+  line-height: 44px;
   color: var(--color-text-secondary);
-  margin-bottom: 48px;
-  min-height: 44px;
+}
+
+/* панель описания выбранного сервиса (стейт «нажали на сервис») */
+.svc-info {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 752px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: var(--color-surface);
+  border-radius: 24px;
+  padding: 20px 40px 20px 20px;
+  white-space: nowrap;
+}
+
+.svc-info b {
+  display: block;
+  font-size: 32px;
+  line-height: 36px;
+  font-weight: 500;
+}
+
+.svc-info em {
+  display: block;
+  font-style: normal;
+  font-size: 32px;
+  line-height: 36px;
+  color: var(--color-text-secondary);
 }
 
 .build__palette {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 60px;
   display: flex;
+  align-items: stretch;
   justify-content: center;
   gap: 20px;
 }
 
 .service-tile {
   width: 248px;
-  height: 226px;
+  min-height: 226px;
   background: var(--color-surface);
   border-radius: var(--radius-tile);
+  padding: 32px 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 20px;
   text-align: center;
-  border: 3px solid transparent;
 }
 
 .service-tile__name {
   font-size: 32px;
   line-height: 36px;
   font-weight: 500;
-  padding: 0 16px;
 }
 
 .service-tile.is-used {
@@ -720,16 +851,38 @@ body {
   pointer-events: none;
 }
 
-.service-tile.is-selected {
-  border-color: var(--color-accent);
+.build__palette.has-selection .service-tile:not(.is-selected):not(.is-used) {
+  opacity: 0.6;
 }
 
+/* призрак перетаскивания — белая плитка с иконкой и именем (стейт «тянем») */
 .drag-ghost {
   position: absolute;
   z-index: 50;
   pointer-events: none;
-  transform: translate(-50%, -50%) scale(1.08);
-  filter: drop-shadow(0 24px 48px rgb(11 13 18 / 35%));
+  transform: translate(-50%, -60%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background: var(--color-surface);
+  border-radius: var(--radius-tile);
+  padding: 28px 36px;
+  font-size: 32px;
+  line-height: 36px;
+  font-weight: 500;
+  filter: drop-shadow(0 24px 48px rgb(11 13 18 / 25%));
+}
+
+/* ховер плитки (веб-версия): лёгкий подъём, как в стейте макета */
+@media (hover: hover) and (pointer: fine) {
+  .service-tile {
+    transition: transform 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .service-tile:not(.is-used):hover {
+    transform: translateY(-24px);
+  }
 }
 
 /* ---------- выбор бандла ---------- */
