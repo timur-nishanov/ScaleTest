@@ -13,13 +13,17 @@ import { deferNav } from '@/lib/navDelay'
 import { useAssemble } from '@/lib/useAssemble'
 import { ResultOverlay } from './ResultOverlay'
 
-/** Коннектор между слотами (макет: линия со стрелкой, 238×13). */
+/** Коннектор между слотами — стрелка из макета (238×28). */
 function SlotConnector() {
   return (
-    <svg className="slot-connector" width="238" height="13" viewBox="0 0 238 13" aria-hidden>
-      <line x1="0" y1="6.5" x2="228" y2="6.5" stroke="currentColor" strokeWidth="3" />
-      <path d="M226 1 L236 6.5 L226 12" fill="none" stroke="currentColor" strokeWidth="3" strokeLinejoin="round" />
-    </svg>
+    <img
+      className="slot-connector"
+      src="/assets/icons/ui/arrow.svg"
+      width={238}
+      height={28}
+      alt=""
+      draggable={false}
+    />
   )
 }
 
@@ -60,6 +64,8 @@ export function BuildScreen() {
 
   const canCheck = slots.every((s) => s !== null)
   const targeting = selected !== null || ghost !== null
+  // в панели описания — сервис, который тянем, иначе выбранный тапом
+  const infoId = ghost?.id ?? selected
 
   const toLocal = (e: React.PointerEvent) => {
     // координаты в дизайн-пикселях внутри секции (учитывая скейл Stage)
@@ -148,6 +154,10 @@ export function BuildScreen() {
                   </>
                 ) : (
                   <>
+                    {/* пунктир — SVG-рамка, dash 16 как в настройках макета */}
+                    <svg className="slot__dash" viewBox="0 0 648 300" aria-hidden>
+                      <rect x="2" y="2" width="644" height="296" rx="36" />
+                    </svg>
                     <span className="slot__num">{STRINGS.build.slot(i + 1)}</span>
                     <span className="slot__plus">
                       <img src="/assets/icons/ui/plus.svg" width={64} height={64} alt="" draggable={false} />
@@ -159,12 +169,12 @@ export function BuildScreen() {
           ))}
         </div>
 
-        {selected ? (
+        {infoId ? (
           <div className="svc-info">
-            <ServiceIcon id={selected} size={56} variant="tile" />
+            <ServiceIcon id={infoId} size={56} variant="tile" />
             <span>
-              <b>{SERVICES[selected].name}</b>
-              <em>{SERVICES[selected].short}</em>
+              <b>{SERVICES[infoId].name}</b>
+              <em>{SERVICES[infoId].short}</em>
             </span>
           </div>
         ) : (
@@ -181,7 +191,12 @@ export function BuildScreen() {
               onTap плитке не передаём — иначе тап сработает дважды */}
           {PALETTE_ORDER.map((id) => (
             <div key={id} onPointerDown={onPalettePointerDown(id)}>
-              <ServiceTile id={id} used={slots.includes(id)} selected={selected === id} />
+              <ServiceTile
+                id={id}
+                used={slots.includes(id)}
+                selected={selected === id}
+                dragging={ghost?.id === id}
+              />
             </div>
           ))}
         </div>

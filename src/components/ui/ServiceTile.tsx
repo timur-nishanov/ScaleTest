@@ -6,15 +6,17 @@ interface Props {
   id: ServiceId
   used?: boolean
   selected?: boolean
+  /** Плитку сейчас тянут: гаснет на месте, «карточка ушла за пальцем». */
+  dragging?: boolean
   onTap?: (id: ServiceId) => void
 }
 
 /** Плитка сервиса в палитре (макет: 248×226, иконка 70 на подложке + подпись). */
-export function ServiceTile({ id, used, selected, onTap }: Props) {
+export function ServiceTile({ id, used, selected, dragging, onTap }: Props) {
   const s = SERVICES[id]
   return (
     <div
-      className={`service-tile pressable ${used ? 'is-used' : ''} ${selected ? 'is-selected' : ''}`}
+      className={`service-tile pressable ${used ? 'is-used' : ''} ${selected ? 'is-selected' : ''} ${dragging ? 'is-dragging' : ''}`}
       data-service={id}
       onClick={() => !used && onTap?.(id)}
     >
