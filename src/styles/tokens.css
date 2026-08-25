@@ -1,40 +1,53 @@
 /*
- * Дизайн-токены.
- *
- * ЗНАЧЕНИЯ — ВРЕМЕННЫЕ ПЛЕЙСХОЛДЕРЫ (приближение к скриншотам макетов).
- * На этапе вёрстки заменяются палитрой/типографикой из брендбука YC
- * и переменными из Figma (get_variable_defs). Менять только здесь.
+ * Дизайн-токены — значения сняты из макетов Figma (Yandex-Interactive,
+ * file uQ5AOTiVFp6NILcvOLIMly) через design context и variable defs.
+ * Источники: docs/DESIGN-NOTES.md, раздел «Палитра и типографика».
  */
 :root {
   /* фон и поверхности */
-  --color-bg: #e9edf5;
-  --color-surface: #ffffff;
-  --color-surface-dim: #dfe4ef;
+  --color-bg: #e7ebf4;            /* фон всех экранов */
+  --color-panel: #d0d7e8;         /* подложка зоны задачи, radius 72 */
+  --color-surface: #ffffff;       /* карточки, плитки, теги */
+  --color-surface-dim: #dde3ef;   /* плейсхолдеры иллюстраций (до ассетов) */
+  --color-compare-bg: #e7ebf4;    /* блок сравнения в попапе, radius 56 */
 
   /* текст */
-  --color-text: #0b0d12;
-  --color-text-secondary: #5c6270;
+  --color-text: #000000;
+  --color-text-soft: rgba(0, 0, 0, 0.85);   /* описания карточек */
+  --color-text-secondary: #49657d;          /* подписи, подсказки, «Слот N» */
   --color-text-invert: #ffffff;
 
-  /* акценты (фиолетовый из макетов, чёрные кнопки) */
-  --color-accent: #b29bf9;
-  --color-accent-soft: #cbb9ff;
-  --color-cta: #101114;
+  /* акценты */
+  --color-accent: #9572ff;        /* промо-баннеры, чип «Монета за конкурс» */
+  --color-icon-bg: #cab8ff;       /* подложка иконок сервисов, radius 7.5 */
+  --color-silver: #b0bdd9;        /* рамки слотов/чипов, пунктир */
+  --color-cta: #000000;           /* основная кнопка */
+  --color-base-generic: rgba(0, 0, 0, 0.05); /* Gravity base-generic: secondary кнопки */
 
-  /* статусы проверки */
-  --color-ok: #35c26a;
-  --color-error: #ff4d5e;
+  /* статусы проверки (рамки чипов в попапе результата) */
+  --color-ok: #a5f898;
+  --color-error: #fa5c5e;
 
-  /* скругления */
-  --radius-card: 48px;
-  --radius-tile: 32px;
-  --radius-pill: 999px;
+  /* скругления из макетов */
+  --radius-screen-card: 72px;     /* карточки режимов/задач, попапы, панель задачи */
+  --radius-compare: 56px;         /* блок сравнения */
+  --radius-button: 40px;          /* кнопки */
+  --radius-slot: 38px;            /* слоты, таймер */
+  --radius-bundle: 32px;          /* карточки бандлов */
+  --radius-tile: 24px;            /* плитки сервисов, чипы результата */
+  --radius-pill: 999px;           /* теги (в макете 300px на высоте 112) */
 
-  /* типографика: шрифт бренда придёт ассетом (assets/fonts) */
+  /*
+   * Типографика: YS Display (Black) + YS Text — файлы придут в assets/fonts,
+   * тогда добавить @font-face здесь. Фичи YS Text в макетах: ss03, lnum, pnum.
+   * Шкала: H1 188/184 · H2 96/116 · H3 56/64 · Subtitle 44/56 · Body 32/44 · Tag 32/36 Medium
+   */
+  --font-display: 'YS Display', 'Yandex Sans Display', -apple-system, 'Segoe UI',
+    Roboto, Arial, sans-serif;
   --font-brand: 'YS Text', 'Yandex Sans Text', -apple-system, 'Segoe UI', Roboto,
     Arial, sans-serif;
 
   /* моушен */
-  --press-scale: 0.94;
+  --press-scale: 0.94;            /* аннотация в макете: «Скейл при нажатии 0.94x везде» */
   --press-duration: 120ms;
 }
