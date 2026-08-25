@@ -271,7 +271,15 @@ export const useFlow = create<FlowState>((set, get) => {
           earnedCoin: false,
           answerServices: s.slots.filter((x): x is ServiceId => x !== null),
         })
-        set({ result: { outcome: 'timeout', earnedCoin: false, correct: task.correct } })
+        // по макету «Время вышло» тоже показывает «Твою сборку» (что успел поставить)
+        set({
+          result: {
+            outcome: 'timeout',
+            earnedCoin: false,
+            placedSnapshot: [...s.slots],
+            correct: task.correct,
+          },
+        })
       } else {
         const task = getReadyTask(s.taskId ?? '')
         if (!task) return

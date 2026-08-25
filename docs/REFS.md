@@ -4,7 +4,13 @@
 
 > При попадании на экран, сначала все карточки (их будет N штук) прокрутятся от начала до конца, как тут https://lionsgoodnews.com/article01/ — далее их можно будет скроллить влево-вправо. Ещё рефы по взаимодействию самого листания карточек: https://spencergabor.work/ · https://ponpon-mania.com/chapters
 
-Прямой доступ к сайтам из рабочего окружения закрыт egress-политикой — ниже декомпозиция механик по известному поведению этих сайтов; тайминги финально сверим на этапе моушена.
+Прямой доступ к сайтам из рабочего окружения закрыт egress-политикой; декомпозиция — по известному поведению сайтов, подтверждена публичными разборами (веб-поиск):
+
+- **Lions Good News 2023** — GSAP + ScrollTrigger, WebGL/three.js ([webdesignclip](https://webdesignclip.com/lionsgoodnews/), [orpetron](https://orpetron.com/sites/liones-good-news-2023/)).
+- **Ponpon Mania** — WebGL-рендер + GSAP-таймлайны, Lenis для плавного скролла, Matter.js на странице About; главы поданы как обложки альбомов, листаются «как коллекция пластинок» ([разбор на Codrops](https://tympanus.net/codrops/2025/10/07/ponpon-mania-how-webgl-and-gsap-bring-a-comic-sheeps-dream-to-life/), [Awwwards SOTD](https://www.awwwards.com/sites/ponpon-mania)).
+- **spencergabor.work** — публичных тех-разборов не нашлось; декомпозиция по поведению.
+
+Нам WebGL не нужен: наш кейс (поворот карточек вокруг пивота) полностью покрывается CSS-transform + rAF; GSAP можем подключить точечно на этапе моушена, если пружин/таймлайнов motion не хватит.
 
 ## 1. lionsgoodnews.com/article01 — интро-прокрутка
 

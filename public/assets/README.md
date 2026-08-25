@@ -24,11 +24,17 @@ trino.svg  data_transfer.svg  sharded_pg.svg  websql.svg  datalens_platform.svg
 
 ## illustrations/
 
-Иллюстрации 640×640 из брендбука и композиции для:
+Композиции из макетов (имена слоёв Figma → имена файлов):
 
-- карточек задач (по `id` задачи: `task-logs.svg`, `task-etl.svg`, …),
-- карточек режимов на экране «Как будем собирать бандл?» (`mode-build.svg`, `mode-ready.svg`),
-- попапов результата (`result-correct.svg`, `result-wrong.svg`, `result-timeout.svg`, `result-coin.svg`),
-- декоративных фигур заставки.
+- иллюстрации карточек задач (связка по ключевому сервису, ~330×220):
+  `kv_kafka.svg`, `kv_airflow.svg`, `kv_valkey.svg`, `kv_datalens.svg`, `kv_ydb.svg`,
+  `kv_ytsaurus.svg`, `kv_pg.svg`, `kv_spark.svg`, `kv_ch.svg`, `kv_storedoc.svg`
+  (в Figma это `managed-kafka-kv`, `kv_managed-airflow` и т.п. — нормализуем к ключам сервисов);
+- иллюстрации попапов результата (система иллюстраций YC, ~350×320):
+  `popup-success.svg` (В точку / Отличный выбор), `popup-not-found.svg` (Почти / Почти угадал),
+  `popup-access-denied.svg` (Мимо), `popup-unavailable.svg` (Время вышло);
+- иконка баннеров монеты: `coin-circle.svg` (звезда в белом круге, 120×120);
+- композиции карточек режимов «Собрать самому» / «Выбрать из готового» (`mode-build.svg`, `mode-ready.svg`);
+- декоративные фигуры факт-блоков заставки (`fact-1.svg`, `fact-2.svg`, `fact-3.svg`).
 
-Имена согласуем при заливке — код подключит их точечно на этапе вёрстки.
+Векторные слои можно выгрузить и напрямую из Figma (download_assets по node id из docs/DESIGN-NOTES.md) — если пришлёте только шрифты и логотип, остальное вытащим сами.
