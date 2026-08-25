@@ -46,6 +46,12 @@ interface FlowState {
   viewedBundles: string[]
   /** оверлей результата поверх экрана задачи; null — игра идёт */
   result: ResultState | null
+  /**
+   * Позиция колеса задач при возврате «Назад» из задачи: интро не повторяем,
+   * колесо стоит на выбранной карточке. null — свежий вход, играем интро
+   * (сбрасывается при выходе на экран выбора режима).
+   */
+  taskWheelIndex: number | null
 
   startVisit: () => void
   chooseMode: (mode: GameMode) => void
@@ -137,14 +143,21 @@ export const useFlow = create<FlowState>((set, get) => {
     screen: 'attract',
     gameMode: 'build',
     visit: null,
+    taskWheelIndex: null,
     ...cleanAttempt,
 
-    startVisit: () => set({ screen: 'mode', visit: newVisit(), ...cleanAttempt }),
+    startVisit: () =>
+      set({ screen: 'mode', visit: newVisit(), taskWheelIndex: null, ...cleanAttempt }),
 
-    chooseMode: (mode) => set({ screen: 'taskSelect', gameMode: mode, ...cleanAttempt }),
+    chooseMode: (mode) =>
+      set({ screen: 'taskSelect', gameMode: mode, taskWheelIndex: null, ...cleanAttempt }),
 
     openTask: (taskId) => {
       const { gameMode } = get()
+      // запоминаем карточку — при возврате «Назад» колесо встанет на неё без интро
+      const pool = gameMode === 'build' ? BUILD_TASKS : READY_TASKS
+      const wheelIndex = pool.findIndex((t) => t.id === taskId)
+      if (wheelIndex >= 0) set({ taskWheelIndex: wheelIndex })
       if (gameMode === 'build') {
         const task = getBuildTask(taskId)
         if (!task) return
@@ -178,7 +191,9 @@ export const useFlow = create<FlowState>((set, get) => {
       get().openTask(pool[Math.floor(Math.random() * pool.length)].id)
     },
 
-    backToMode: () => set({ screen: 'mode', ...cleanAttempt }),
+    // после карточек «Назад» — следующий вход на колесо снова с интро
+    backToMode: () => set({ screen: 'mode', taskWheelIndex: null, ...cleanAttempt }),
+    // из задачи «Назад» — колесо на прежнем месте, без повторного интро
     backToTasks: () => set({ screen: 'taskSelect', ...cleanAttempt }),
 
     tapService: (id) =>
@@ -297,6 +312,7 @@ export const useFlow = create<FlowState>((set, get) => {
       }
     },
 
-    resetToAttract: () => set({ screen: 'attract', visit: null, ...cleanAttempt }),
+    resetToAttract: () =>
+      set({ screen: 'attract', visit: null, taskWheelIndex: null, ...cleanAttempt }),
   }
 })
