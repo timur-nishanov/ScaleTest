@@ -44,6 +44,8 @@ export interface BuildTask {
   assignment: string
   /** Эталонная связка по слотам (порядок = слоты слева направо). */
   correct: ServiceId[]
+  /** Сервис-иллюстрация карточки (файл assets/illustrations/kv_<id>.svg). */
+  kv: ServiceId
 }
 
 export type BundleTier = 'best' | 'partial' | 'wrong'
@@ -64,6 +66,8 @@ export interface ReadyTask {
   cardDesc: string
   assignment: string
   bundles: ReadyBundle[]
+  /** Сервис-иллюстрация карточки (файл assets/illustrations/kv_<id>.svg). */
+  kv: ServiceId
 }
 
 export type Outcome = 'correct' | 'partial' | 'wrong' | 'timeout'

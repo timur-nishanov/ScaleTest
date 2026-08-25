@@ -125,11 +125,25 @@ export function WheelCarousel({ count, renderCard, onPick }: Props) {
         )
       })}
       <div className="wheel-arrows">
-        <button className="arrow pressable" onPointerDown={(e) => e.stopPropagation()} onClick={() => step(-1)}>
-          ←
+        <button
+          className="arrow pressable"
+          aria-label="Предыдущая карточка"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={() => step(-1)}
+        >
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" aria-hidden>
+            <path d="M26 10 L14 22 L26 34" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
         </button>
-        <button className="arrow pressable" onPointerDown={(e) => e.stopPropagation()} onClick={() => step(1)}>
-          →
+        <button
+          className="arrow pressable"
+          aria-label="Следующая карточка"
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={() => step(1)}
+        >
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none" aria-hidden>
+            <path d="M18 10 L30 22 L18 34" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
         </button>
       </div>
     </div>
