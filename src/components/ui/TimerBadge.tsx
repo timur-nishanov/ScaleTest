@@ -24,6 +24,9 @@ const PATH_LEN = 2 * (W - 2 * R) + 2 * (H - 2 * R) + 2 * Math.PI * AR
  */
 export function TimerBadge({ label, left, warning }: Props) {
   const progress = Math.max(0, Math.min(1, left / TIMER_SECONDS))
+  // видимая дуга — прошедшее время (по макету: в начале — короткая дуга
+  // у старта, к концу контур замыкается)
+  const elapsed = Math.max(PATH_LEN * (1 - progress), 0.001)
   // старт дуги — верхняя середина, по часовой
   const d = `M ${W / 2} ${INSET}
     H ${W - R} A ${AR} ${AR} 0 0 1 ${W - INSET} ${R}
@@ -33,15 +36,16 @@ export function TimerBadge({ label, left, warning }: Props) {
   return (
     <div className={`timer-badge ${warning ? 'is-warning' : ''}`}>
       <svg className="timer-badge__ring" viewBox={`0 0 ${W} ${H}`} aria-hidden>
-        {/* дуга показывает ПРОШЕДШЕЕ время (по макету: в начале — короткая
-            дуга у старта, к концу контур замыкается) */}
+        {/* дуга чуть сдвинута с точки разреза контура (dashoffset −0.5):
+            иначе стартовый конец режется плоско и линия остаётся без
+            скругления — оба конца должны получить round-cap, как в макете */}
         <path
           d={d}
           fill="none"
           strokeWidth={SW}
           strokeLinecap="round"
-          strokeDasharray={PATH_LEN}
-          strokeDashoffset={PATH_LEN * progress}
+          strokeDasharray={`${elapsed} ${PATH_LEN}`}
+          strokeDashoffset={-0.5}
         />
       </svg>
       <span className="timer-badge__icon" aria-hidden />

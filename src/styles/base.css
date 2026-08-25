@@ -755,8 +755,8 @@ body {
 
 .slot__num {
   position: absolute;
-  top: 28px;
-  left: 28px;
+  top: 32px;
+  left: 32px;
   font-size: 32px;
   line-height: 44px;
   color: var(--color-text-secondary);
@@ -809,19 +809,21 @@ body {
   color: var(--color-text-secondary);
 }
 
-/* панель описания выбранного сервиса (стейт «нажали на сервис») */
+/* панель описания выбранного сервиса (стейт «нажали на сервис», 11:1301):
+   фиксированная пилюля 720×134, иконка 70, тексты 32/36 + 32/44 */
 .svc-info {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: 752px;
+  top: 744px;
+  width: 720px;
+  height: 134px;
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 32px;
   background: var(--color-surface);
-  border-radius: 24px;
-  padding: 20px 40px 20px 20px;
-  white-space: nowrap;
+  border-radius: var(--radius-tile);
+  padding: 27px 64px 27px 32px;
 }
 
 .svc-info b {
@@ -835,8 +837,8 @@ body {
   display: block;
   font-style: normal;
   font-size: 32px;
-  line-height: 36px;
-  color: var(--color-text-secondary);
+  line-height: 44px;
+  color: rgb(0 0 0 / 85%);
 }
 
 .build__palette {

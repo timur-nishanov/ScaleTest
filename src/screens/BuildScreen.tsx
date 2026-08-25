@@ -171,7 +171,7 @@ export function BuildScreen() {
 
         {infoId ? (
           <div className="svc-info">
-            <ServiceIcon id={infoId} size={56} variant="tile" />
+            <ServiceIcon id={infoId} size={70} variant="tile" />
             <span>
               <b>{SERVICES[infoId].name}</b>
               <em>{SERVICES[infoId].short}</em>
