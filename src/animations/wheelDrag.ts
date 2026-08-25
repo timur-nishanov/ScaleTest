@@ -32,6 +32,8 @@ export interface WheelDragOptions {
    * Передаём исходный target — снаружи ищут карточку через closest().
    */
   onTap?: (target: Element) => void
+  /** Касание колеса (любое) — например, чтобы прервать интро-прогон. */
+  onPress?: () => void
 }
 
 export const degToX = (deg: number, degPerPx: number) => -deg / degPerPx
@@ -58,6 +60,7 @@ export function createWheelDrag(o: WheelDragOptions): Draggable {
     onPress() {
       // палец важнее любых твинов (интро, стрелки)
       gsap.killTweensOf(o.proxy)
+      o.onPress?.()
     },
     onDrag() {
       emit(this.x as number)

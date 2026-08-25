@@ -59,21 +59,34 @@ export function WheelCarousel({ count, renderCard, onPick }: Props) {
     // после прогона колесо встаёт на середину колоды (как в макете) —
     // карточки по обе стороны, слева нет пустого пространства
     const endIndex = Math.round((count - 1) / 2)
-    const intro = createWheelIntro({ proxy, endIndex, ...common })
-    intro.eventCallback('onComplete', () => {
+    // на время интро ховер карточек выключен (класс снимается по завершении)
+    root.classList.add('is-intro')
+    const endIntro = () => {
       introActive.current = false
-    })
+      root.classList.remove('is-intro')
+    }
+    const intro = createWheelIntro({ proxy, endIndex, ...common })
+    intro.eventCallback('onComplete', endIntro)
 
+    let introInterrupted = false
     let drag: Draggable | null = null
     drag = createWheelDrag({
       proxy,
       trigger: root,
       ...common,
-      onTap: (target) => {
+      onPress: () => {
+        // касание во время интро прерывает прогон (твины уже убиты фабрикой)
         if (introActive.current) {
-          // тап во время интро только прерывает прогон и снапит к ближайшей
-          introActive.current = false
-          intro.kill()
+          introInterrupted = true
+          endIntro()
+        } else {
+          introInterrupted = false
+        }
+      },
+      onTap: (target) => {
+        if (introInterrupted) {
+          // тап, прервавший интро, карточку не выбирает — только снап к ближайшей
+          introInterrupted = false
           const deg = xToDeg(Number(gsap.getProperty(proxy, 'x')), DEG_PER_PX)
           tweenWheelTo(proxy, Math.round(deg / STEP), common, drag ?? undefined)
           return

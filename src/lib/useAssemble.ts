@@ -9,10 +9,15 @@ import { assembleScreen } from '@/animations/assemble'
 export function useAssemble<T extends HTMLElement>() {
   const ref = useRef<T>(null)
   useEffect(() => {
-    if (!ref.current) return
-    const tl = assembleScreen(ref.current)
+    const el = ref.current
+    if (!el) return
+    const tl = assembleScreen(el)
+    // ховер-эффекты (CSS transition на transform) включаются только после
+    // сборки — иначе transition перехватывает кадры GSAP и переход «рвётся»
+    tl.eventCallback('onComplete', () => el.classList.add('is-assembled'))
     return () => {
       tl.kill()
+      el.classList.remove('is-assembled')
     }
   }, [])
   return ref

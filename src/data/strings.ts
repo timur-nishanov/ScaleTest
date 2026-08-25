@@ -3,7 +3,9 @@
  * Источник истины — макеты Figma; где текст в макете не читается
  * (переименованные ноды) — согласованный прототип/ТЗ. TODO(design-sync).
  */
-export const STRINGS = {
+import { deepTypo } from '@/lib/typo'
+
+export const STRINGS = deepTypo({
   attract: {
     title: 'Собери свой идеальный бандл',
     subtitle:
@@ -95,4 +97,4 @@ export const STRINGS = {
     title: 'Вы ещё здесь?',
     stay: 'Да',
   },
-} as const
+} as const)
