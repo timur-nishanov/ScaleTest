@@ -1006,36 +1006,36 @@ body {
    внешний .wheel-card вращает GSAP (не конфликтуем с его transform). */
 
 @media (hover: hover) and (pointer: fine) {
-  .task-card {
+  /* колесо: ховер активен только после интро-прокрутки (.is-intro снят) */
+  .wheel:not(.is-intro) .task-card {
     transition:
       transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1),
-      opacity 0.35s ease,
-      box-shadow 0.35s ease;
+      opacity 0.35s ease;
   }
 
-  .task-card:hover {
+  .wheel:not(.is-intro) .task-card:hover {
     transform: translateY(-40px);
-    box-shadow: 0 48px 120px rgb(11 13 18 / 12%);
   }
 
-  .wheel:has(.task-card:hover) .wheel-card:not(:hover) .task-card {
+  .wheel:not(.is-intro):has(.task-card:hover) .wheel-card:not(:hover) .task-card {
     opacity: 0.55;
   }
 
-  .mode-card {
+  /* карточки режима: ховер активен только после сборки кадра (.is-assembled) */
+  .screen--mode.is-assembled .mode-card {
     transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.35s ease;
   }
 
-  .mode-card:hover {
+  .screen--mode.is-assembled .mode-card:hover {
     transform: translateY(-40px);
   }
 
   /* нажатие остаётся быстрым, ховер-подъём его не замедляет */
-  .mode-card:active {
+  .screen--mode.is-assembled .mode-card:active {
     transition-duration: var(--press-duration);
   }
 
-  .screen--mode:has(.mode-card:hover) .mode-card:not(:hover) {
+  .screen--mode.is-assembled:has(.mode-card:hover) .mode-card:not(:hover) {
     opacity: 0.55;
   }
 }

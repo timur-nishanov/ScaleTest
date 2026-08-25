@@ -1,4 +1,5 @@
 import type { ReadyTask } from './types'
+import { deepTypo } from '@/lib/typo'
 
 /**
  * Задачи режима «Выбрать из готового» — 6 карточек, порядок как в колесе макета
@@ -11,7 +12,7 @@ import type { ReadyTask } from './types'
  * Названия бандлов в ТЗ упоминаются и содержательные («LakeHouse», «DataLens
  * Platform») — поле name это поддерживает; в макете «Бандл A/B/C».
  */
-export const READY_TASKS: ReadyTask[] = [
+export const READY_TASKS: ReadyTask[] = deepTypo([
   {
     id: 'logs',
     kv: 'kafka',
@@ -193,6 +194,6 @@ export const READY_TASKS: ReadyTask[] = [
       },
     ],
   },
-]
+])
 
 export const getReadyTask = (id: string) => READY_TASKS.find((t) => t.id === id)

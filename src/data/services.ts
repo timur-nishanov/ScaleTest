@@ -1,4 +1,5 @@
 import type { Service, ServiceId } from './types'
+import { deepTypo } from '@/lib/typo'
 
 /**
  * Сервисы платформы данных.
@@ -9,7 +10,7 @@ import type { Service, ServiceId } from './types'
  * Короткие описания (short) — из согласованного прототипа; заменить финальными
  * текстами Yandex Cloud, когда придут. TODO(design-sync)
  */
-export const SERVICES: Record<ServiceId, Service> = {
+export const SERVICES: Record<ServiceId, Service> = deepTypo({
   pg: {
     id: 'pg',
     name: 'Managed PostgreSQL',
@@ -137,7 +138,7 @@ export const SERVICES: Record<ServiceId, Service> = {
     short: 'BI-платформа',
     inPalette: false,
   },
-}
+})
 
 /** Палитра экрана сборки — 13 сервисов в порядке макета (фрейм 2334:4377). */
 export const PALETTE_ORDER: ServiceId[] = [

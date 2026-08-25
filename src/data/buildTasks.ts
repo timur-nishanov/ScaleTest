@@ -1,4 +1,5 @@
 import type { BuildTask } from './types'
+import { deepTypo } from '@/lib/typo'
 
 /**
  * Задачи режима «Собрать самому» — 10 карточек, порядок как в колесе макета
@@ -8,7 +9,7 @@ import type { BuildTask } from './types'
  * assignment («Задание») отрисован в макете только для задачи rt — остальные
  * сформулированы по схеме связки, заменить при получении текстов YC. TODO(assignments)
  */
-export const BUILD_TASKS: BuildTask[] = [
+export const BUILD_TASKS: BuildTask[] = deepTypo([
   {
     id: 'logs',
     kv: 'kafka',
@@ -120,6 +121,6 @@ export const BUILD_TASKS: BuildTask[] = [
       'Соберите архитектуру: реляционная БД каталога и заказов → кэш корзины и сессий.',
     correct: ['pg', 'valkey'],
   },
-]
+])
 
 export const getBuildTask = (id: string) => BUILD_TASKS.find((t) => t.id === id)
