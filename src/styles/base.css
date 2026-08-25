@@ -349,6 +349,15 @@ body {
   touch-action: none;
 }
 
+/* невидимый прокси Draggable: его x — единственный источник угла колеса */
+.wheel-proxy {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .wheel-card {
   width: 790px;
   height: 1060px;

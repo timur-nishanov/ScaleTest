@@ -31,6 +31,9 @@ export const DEFAULT_LAYOUT: WheelLayout = {
 
 export const STEP = WHEEL_STEP_DEG
 
+/** Градусы колеса на пиксель горизонтального драга (~ширина карточки с зазором = шаг). */
+export const DEG_PER_PX = STEP / 820
+
 /** Угол карточки i при положении колеса scrollDeg (0 = первая карточка в центре). */
 export function cardAngle(index: number, scrollDeg: number): number {
   return index * STEP - scrollDeg
