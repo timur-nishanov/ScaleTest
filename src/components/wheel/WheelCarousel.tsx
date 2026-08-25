@@ -1,171 +1,134 @@
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from 'react'
-import { STEP, cardTransform, clampScroll, nearestIndex } from './wheelMath'
+import { useEffect, useRef, type ReactNode } from 'react'
+import gsap from 'gsap'
+import type { Draggable } from 'gsap/Draggable'
+import { DEG_PER_PX, STEP, cardAngle, cardTransform } from './wheelMath'
+import { createWheelDrag, tweenWheelTo, xToDeg } from '@/animations/wheelDrag'
+import { createWheelIntro } from '@/animations/wheelIntro'
 
 /**
- * Колесо карточек с физикой (см. docs/REFS.md):
- * 1) интро — при появлении колесо прокручивается по всем карточкам от первой
- *    до последней и возвращается к первой (реф lionsgoodnews);
- * 2) свободный драг с инерцией и снапом к ближайшей карточке (реф ponpon-mania);
- * 3) стрелки — шаг на соседнюю карточку.
+ * Колесо карточек (см. docs/REFS.md и docs/ANIMATIONS.md):
+ * 1) интро — прокрутка по всем карточкам и возврат (реф lionsgoodnews);
+ * 2) свободный драг с инерцией и снапом (Draggable + InertiaPlugin);
+ * 3) стрелки — шаг на соседнюю карточку; 4) тап по карточке = выбор.
  *
- * Каркас механики: цифры (жёсткость пружины, трение) будем тюнить на этапе
- * вёрстки на целевом железе.
+ * Анимации — чистый GSAP (договорённость с командой YC, фабрики в
+ * src/animations). React рендерит карточки один раз; углы на каждый кадр
+ * пишет GSAP напрямую в transform — без ре-рендеров (важно для 60fps на 4К).
  */
 interface Props {
   count: number
-  renderCard: (index: number, angle: number) => ReactNode
-  /** Тап по карточке (не драг). */
+  renderCard: (index: number) => ReactNode
   onPick: (index: number) => void
 }
 
-const FRICTION = 0.94
-const SNAP_SPRING = 0.12
-const INTRO_TOTAL_MS = 2600
-
 export function WheelCarousel({ count, renderCard, onPick }: Props) {
-  const [scroll, setScroll] = useState(0)
-  const scrollRef = useRef(0)
-  const velocity = useRef(0)
-  const raf = useRef<number>(0)
-  const phase = useRef<'intro' | 'free'>('intro')
-  const introStart = useRef<number>(0)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const proxyRef = useRef<HTMLDivElement>(null)
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([])
+  const introActive = useRef(true)
+  const applyRef = useRef<(deg: number) => void>(() => {})
+  const onPickRef = useRef(onPick)
+  onPickRef.current = onPick
 
-  const drag = useRef<{
-    active: boolean
-    moved: boolean
-    lastX: number
-    startX: number
-    pointerId: number
-  } | null>(null)
-
-  const setScrollBoth = useCallback((v: number) => {
-    scrollRef.current = v
-    setScroll(v)
-  }, [])
-
-  // единый rAF-цикл: интро → инерция/снап
   useEffect(() => {
-    introStart.current = performance.now()
-    const tick = (now: number) => {
-      raf.current = requestAnimationFrame(tick)
+    const proxy = proxyRef.current
+    const root = rootRef.current
+    if (!proxy || !root) return
 
-      if (phase.current === 'intro') {
-        const t = Math.min(1, (now - introStart.current) / INTRO_TOTAL_MS)
-        // туда-обратно по всем карточкам одним ease-in-out
-        const sweep = Math.sin(t * Math.PI) // 0 → 1 → 0
-        setScrollBoth(sweep * (count - 1) * STEP)
-        if (t >= 1) {
-          phase.current = 'free'
-          setScrollBoth(0)
+    const apply = (deg: number) => {
+      for (let i = 0; i < count; i++) {
+        const el = cardRefs.current[i]
+        if (!el) continue
+        const angle = cardAngle(i, deg)
+        // карточки за пределами ~100° от центра не видны — не считаем их
+        if (Math.abs(angle) > 100) {
+          el.style.visibility = 'hidden'
+          continue
         }
-        return
+        el.style.visibility = 'visible'
+        gsap.set(el, { rotation: angle })
       }
-
-      if (drag.current?.active) return // позицию ведёт палец
-
-      // инерция + снап
-      let s = scrollRef.current + velocity.current
-      velocity.current *= FRICTION
-      if (Math.abs(velocity.current) < 0.02) {
-        const target = nearestIndex(s, count) * STEP
-        s += (target - s) * SNAP_SPRING
-        if (Math.abs(target - s) < 0.01) s = target
-      }
-      s = clampScroll(s, count)
-      if (s !== scrollRef.current) setScrollBoth(s)
     }
-    raf.current = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf.current)
-  }, [count, setScrollBoth])
 
-  // px горизонтального движения → градусы вращения колеса
-  const PX_TO_DEG = -STEP / 820 // ~ширина карточки с зазором на один шаг
+    applyRef.current = apply
+    const common = { stepDeg: STEP, count, degPerPx: DEG_PER_PX, onScroll: apply }
 
-  const onPointerDown = (e: React.PointerEvent) => {
-    if (phase.current === 'intro') {
-      // тап во время интро — досрочно в свободный режим
-      phase.current = 'free'
-      setScrollBoth(0)
-      return
+    gsap.set(proxy, { x: 0 })
+    apply(0)
+
+    const intro = createWheelIntro({ proxy, ...common })
+    intro.eventCallback('onComplete', () => {
+      introActive.current = false
+    })
+
+    let drag: Draggable | null = null
+    drag = createWheelDrag({
+      proxy,
+      trigger: root,
+      ...common,
+      onTap: (target) => {
+        if (introActive.current) {
+          // тап во время интро только прерывает прогон и снапит к ближайшей
+          introActive.current = false
+          intro.kill()
+          const deg = xToDeg(Number(gsap.getProperty(proxy, 'x')), DEG_PER_PX)
+          tweenWheelTo(proxy, Math.round(deg / STEP), common, drag ?? undefined)
+          return
+        }
+        const card = target.closest<HTMLElement>('[data-wheel-index]')
+        if (card) onPickRef.current(Number(card.dataset.wheelIndex))
+      },
+    })
+
+    return () => {
+      intro.kill()
+      drag?.kill()
+      gsap.killTweensOf(proxy)
     }
-    drag.current = {
-      active: true,
-      moved: false,
-      lastX: e.clientX,
-      startX: e.clientX,
-      pointerId: e.pointerId,
-    }
-    velocity.current = 0
-  }
-
-  const onPointerMove = (e: React.PointerEvent) => {
-    const d = drag.current
-    if (!d?.active || e.pointerId !== d.pointerId) return
-    const dx = e.clientX - d.lastX
-    d.lastX = e.clientX
-    if (Math.abs(e.clientX - d.startX) > 8) d.moved = true
-    const next = clampScroll(scrollRef.current + dx * PX_TO_DEG, count)
-    velocity.current = dx * PX_TO_DEG
-    setScrollBoth(next)
-  }
-
-  const endDrag = () => {
-    if (drag.current) drag.current.active = false
-  }
+  }, [count])
 
   const step = (dir: 1 | -1) => {
-    if (phase.current === 'intro') return
-    const target = nearestIndex(scrollRef.current, count) + dir
-    velocity.current = 0
-    setScrollBoth(clampScroll(target * STEP, count, 0))
+    const proxy = proxyRef.current
+    if (!proxy || introActive.current) return
+    const deg = xToDeg(Number(gsap.getProperty(proxy, 'x')), DEG_PER_PX)
+    tweenWheelTo(proxy, Math.round(deg / STEP) + dir, {
+      stepDeg: STEP,
+      count,
+      degPerPx: DEG_PER_PX,
+      onScroll: (d) => applyRef.current(d),
+    })
   }
 
   return (
-    <div
-      className="wheel"
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={endDrag}
-      onPointerCancel={endDrag}
-      onPointerLeave={endDrag}
-    >
+    <div ref={rootRef} className="wheel">
+      {/* невидимый прокси: его x таскает Draggable, интро и стрелки твинят его же */}
+      <div ref={proxyRef} className="wheel-proxy" aria-hidden />
       {Array.from({ length: count }, (_, i) => {
-        const t = cardTransform(i, scroll)
-        // карточки дальше ~100° от центра не рендерим содержимым (экономия на 4К)
-        const visible = Math.abs(t.angle) < 100
+        const t = cardTransform(i, 0)
         return (
           <div
             key={i}
+            ref={(el) => {
+              cardRefs.current[i] = el
+            }}
             className="wheel-card"
+            data-wheel-index={i}
             style={{
               position: 'absolute',
               left: t.left,
               top: t.top,
-              transform: t.transform,
               transformOrigin: t.transformOrigin,
-              visibility: visible ? 'visible' : 'hidden',
-            }}
-            onPointerUp={() => {
-              if (drag.current && !drag.current.moved && phase.current === 'free') {
-                onPick(i)
-              }
             }}
           >
-            {visible ? renderCard(i, t.angle) : null}
+            {renderCard(i)}
           </div>
         )
       })}
       <div className="wheel-arrows">
-        <button className="arrow" onPointerDown={(e) => e.stopPropagation()} onClick={() => step(-1)}>
+        <button className="arrow pressable" onPointerDown={(e) => e.stopPropagation()} onClick={() => step(-1)}>
           ←
         </button>
-        <button className="arrow" onPointerDown={(e) => e.stopPropagation()} onClick={() => step(1)}>
+        <button className="arrow pressable" onPointerDown={(e) => e.stopPropagation()} onClick={() => step(1)}>
           →
         </button>
       </div>
