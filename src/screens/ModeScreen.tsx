@@ -2,6 +2,7 @@ import { useFlow } from '@/app/flow'
 import { STRINGS } from '@/data/strings'
 import { Button } from '@/components/ui/Button'
 import { useAssemble } from '@/lib/useAssemble'
+import { deferNav } from '@/lib/navDelay'
 
 /**
  * Экран 2 — выбор режима. Макет 11:604, вёрстка 1:1.
@@ -14,7 +15,7 @@ export function ModeScreen() {
 
   return (
     <section ref={root} className="screen screen--mode">
-      <Button variant="secondary" className="nav-back" onClick={resetToAttract} data-assemble>
+      <Button variant="secondary" className="nav-back" onClick={() => deferNav(resetToAttract)} data-assemble>
         {STRINGS.mode.back}
       </Button>
 
@@ -25,7 +26,7 @@ export function ModeScreen() {
 
       <div
         className="mode-card mode-card--build pressable"
-        onClick={() => chooseMode('build')}
+        onClick={() => deferNav(() => chooseMode('build'))}
         data-assemble
       >
         <img
@@ -42,7 +43,7 @@ export function ModeScreen() {
 
       <div
         className="mode-card mode-card--ready pressable"
-        onClick={() => chooseMode('ready')}
+        onClick={() => deferNav(() => chooseMode('ready'))}
         data-assemble
       >
         <img

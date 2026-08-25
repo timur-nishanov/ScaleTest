@@ -9,6 +9,7 @@ import { ServiceTile } from '@/components/ui/ServiceTile'
 import { ServiceIcon } from '@/components/ui/ServiceIcon'
 import { TimerBadge } from '@/components/ui/TimerBadge'
 import { useTimer } from '@/lib/useTimer'
+import { deferNav } from '@/lib/navDelay'
 import { ResultOverlay } from './ResultOverlay'
 
 /**
@@ -93,7 +94,7 @@ export function BuildScreen() {
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
     >
-      <Button variant="secondary" className="nav-back" onClick={backToTasks}>
+      <Button variant="secondary" className="nav-back" onClick={() => deferNav(backToTasks)}>
         {STRINGS.build.back}
       </Button>
       <TimerBadge label={timer.label} warning={timer.warning} />
