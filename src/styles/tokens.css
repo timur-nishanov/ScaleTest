@@ -1,0 +1,40 @@
+/*
+ * Дизайн-токены.
+ *
+ * ЗНАЧЕНИЯ — ВРЕМЕННЫЕ ПЛЕЙСХОЛДЕРЫ (приближение к скриншотам макетов).
+ * На этапе вёрстки заменяются палитрой/типографикой из брендбука YC
+ * и переменными из Figma (get_variable_defs). Менять только здесь.
+ */
+:root {
+  /* фон и поверхности */
+  --color-bg: #e9edf5;
+  --color-surface: #ffffff;
+  --color-surface-dim: #dfe4ef;
+
+  /* текст */
+  --color-text: #0b0d12;
+  --color-text-secondary: #5c6270;
+  --color-text-invert: #ffffff;
+
+  /* акценты (фиолетовый из макетов, чёрные кнопки) */
+  --color-accent: #b29bf9;
+  --color-accent-soft: #cbb9ff;
+  --color-cta: #101114;
+
+  /* статусы проверки */
+  --color-ok: #35c26a;
+  --color-error: #ff4d5e;
+
+  /* скругления */
+  --radius-card: 48px;
+  --radius-tile: 32px;
+  --radius-pill: 999px;
+
+  /* типографика: шрифт бренда придёт ассетом (assets/fonts) */
+  --font-brand: 'YS Text', 'Yandex Sans Text', -apple-system, 'Segoe UI', Roboto,
+    Arial, sans-serif;
+
+  /* моушен */
+  --press-scale: 0.94;
+  --press-duration: 120ms;
+}
