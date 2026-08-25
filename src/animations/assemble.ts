@@ -12,21 +12,20 @@ import gsap from 'gsap'
  */
 export function assembleScreen(
   root: Element,
-  opts: { stagger?: number } = {},
+  opts: { stagger?: number; delay?: number } = {},
 ): gsap.core.Tween | gsap.core.Timeline {
   const items = root.querySelectorAll<HTMLElement>('[data-assemble]')
   if (!items.length) return gsap.timeline()
-  return gsap.fromTo(
-    items,
-    { autoAlpha: 0, y: 40 },
-    {
-      autoAlpha: 1,
-      y: 0,
-      duration: 0.28,
-      ease: 'power2.out',
-      stagger: opts.stagger ?? 0.05,
-      clearProps: 'y',
-      overwrite: 'auto',
-    },
-  )
+  // чистый кат без движения (фидбек заказчика: «подтягивание» элементов
+  // резало глаз) — появление на месте, последовательность задаёт стаггер;
+  // небольшая пауза перед сборкой, чтобы смена экрана не была встык
+  gsap.set(items, { autoAlpha: 0 })
+  return gsap.to(items, {
+    autoAlpha: 1,
+    duration: 0.22,
+    ease: 'power1.out',
+    delay: opts.delay ?? 0.05,
+    stagger: opts.stagger ?? 0.04,
+    overwrite: 'auto',
+  })
 }

@@ -6,6 +6,7 @@ import { TAG_CLOUD_ORDER, TAG_CLOUD_HASHTAG } from '@/data/services'
 import { TagChip, TextChip } from '@/components/ui/TagChip'
 import { createMarquee } from '@/animations/marquee'
 import { useAssemble } from '@/lib/useAssemble'
+import { deferNav } from '@/lib/navDelay'
 
 /* Визуальное соответствие факт-блоков (порядок = FACTS): фигура + модификатор позиции. */
 const FACT_VIEW = [
@@ -36,7 +37,7 @@ export function AttractScreen() {
   }, [])
 
   return (
-    <section ref={root} className="screen screen--attract" onPointerUp={startVisit}>
+    <section ref={root} className="screen screen--attract" onPointerUp={() => deferNav(startVisit)}>
       {/* Логотип YC 672×95 @ (90,90); при отсутствии файла — текстовый фолбэк */}
       <div className="attract__logo" data-assemble>
         <img

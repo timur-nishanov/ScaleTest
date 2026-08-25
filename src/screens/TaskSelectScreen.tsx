@@ -6,6 +6,7 @@ import { FLAGS } from '@/app/config'
 import { Button } from '@/components/ui/Button'
 import { WheelCarousel } from '@/components/wheel/WheelCarousel'
 import { useAssemble } from '@/lib/useAssemble'
+import { deferNav } from '@/lib/navDelay'
 
 /**
  * Экраны 3/5 — выбор бизнес-задачи (обе ветки). Макеты 11:2528 и 11:3515.
@@ -23,12 +24,12 @@ export function TaskSelectScreen() {
 
   return (
     <section ref={root} className="screen screen--task-select">
-      <Button variant="secondary" className="nav-back" onClick={backToMode} data-assemble>
+      <Button variant="secondary" className="nav-back" onClick={() => deferNav(backToMode)} data-assemble>
         {STRINGS.taskSelect.back}
       </Button>
 
       {showRandom && (
-        <Button variant="secondary" className="nav-random" onClick={openRandomTask} data-assemble>
+        <Button variant="secondary" className="nav-random" onClick={() => deferNav(openRandomTask)} data-assemble>
           {STRINGS.taskSelect.random}
           <img src="/assets/icons/dice-5.svg" width={44} height={44} alt="" draggable={false} />
         </Button>
@@ -48,7 +49,7 @@ export function TaskSelectScreen() {
 
       <WheelCarousel
         count={tasks.length}
-        onPick={(i) => openTask(tasks[i].id)}
+        onPick={(i) => deferNav(() => openTask(tasks[i].id))}
         renderCard={(i) => {
           const t = tasks[i]
           return (

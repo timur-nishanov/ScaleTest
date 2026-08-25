@@ -6,6 +6,7 @@ import { ServiceIcon } from '@/components/ui/ServiceIcon'
 import { SERVICES } from '@/data/services'
 import { TimerBadge } from '@/components/ui/TimerBadge'
 import { useTimer } from '@/lib/useTimer'
+import { deferNav } from '@/lib/navDelay'
 import { ResultOverlay } from './ResultOverlay'
 
 /**
@@ -29,7 +30,7 @@ export function ReadyScreen() {
 
   return (
     <section className="screen screen--ready">
-      <Button variant="secondary" className="nav-back" onClick={backToTasks}>
+      <Button variant="secondary" className="nav-back" onClick={() => deferNav(backToTasks)}>
         {STRINGS.ready.back}
       </Button>
       <TimerBadge label={timer.label} warning={timer.warning} />
