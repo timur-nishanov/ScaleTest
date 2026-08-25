@@ -24,12 +24,12 @@ export function TaskSelectScreen() {
 
   return (
     <section ref={root} className="screen screen--task-select">
-      <Button variant="secondary" className="nav-back" onClick={() => deferNav(backToMode)} data-assemble>
+      <Button variant="secondary" className="nav-back" onClick={() => deferNav(backToMode)} data-assemble="static">
         {STRINGS.taskSelect.back}
       </Button>
 
       {showRandom && (
-        <Button variant="secondary" className="nav-random" onClick={() => deferNav(openRandomTask)} data-assemble>
+        <Button variant="secondary" className="nav-random" onClick={() => deferNav(openRandomTask)} data-assemble="static">
           {STRINGS.taskSelect.random}
           <img src="/assets/icons/dice-5.svg" width={44} height={44} alt="" draggable={false} />
         </Button>

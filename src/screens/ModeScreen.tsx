@@ -15,7 +15,7 @@ export function ModeScreen() {
 
   return (
     <section ref={root} className="screen screen--mode">
-      <Button variant="secondary" className="nav-back" onClick={() => deferNav(resetToAttract)} data-assemble>
+      <Button variant="secondary" className="nav-back" onClick={() => deferNav(resetToAttract)} data-assemble="static">
         {STRINGS.mode.back}
       </Button>
 

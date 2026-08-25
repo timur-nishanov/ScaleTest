@@ -39,7 +39,7 @@ export function AttractScreen() {
   return (
     <section ref={root} className="screen screen--attract" onPointerUp={() => deferNav(startVisit)}>
       {/* Логотип YC 672×95 @ (90,90); при отсутствии файла — текстовый фолбэк */}
-      <div className="attract__logo" data-assemble>
+      <div className="attract__logo" data-assemble="static">
         <img
           src="/assets/logo/yc-logotype.svg"
           alt="Yandex Cloud"
