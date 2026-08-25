@@ -11,6 +11,7 @@ import type { BuildTask } from './types'
 export const BUILD_TASKS: BuildTask[] = [
   {
     id: 'logs',
+    kv: 'kafka',
     type: 'Логи / наблюдаемость',
     title: 'Сбор и анализ логов большого сервиса',
     cardDesc:
@@ -21,6 +22,7 @@ export const BUILD_TASKS: BuildTask[] = [
   },
   {
     id: 'etl',
+    kv: 'airflow',
     type: 'ETL / отчётность',
     title: 'Регулярный ETL и витрины для отчётности',
     cardDesc:
@@ -31,6 +33,7 @@ export const BUILD_TASKS: BuildTask[] = [
   },
   {
     id: 'rt',
+    kv: 'datalens',
     type: 'Реалтайм-аналитика',
     title: 'Аналитика продуктовых событий в реальном времени',
     cardDesc:
@@ -42,6 +45,7 @@ export const BUILD_TASKS: BuildTask[] = [
   },
   {
     id: 'lake',
+    kv: 'ytsaurus',
     type: 'Big data / data lake',
     title: 'Хранилище и пакетная обработка больших данных',
     cardDesc:
@@ -52,6 +56,7 @@ export const BUILD_TASKS: BuildTask[] = [
   },
   {
     id: 'ml',
+    kv: 'spark',
     type: 'Big data / ML',
     title: 'Подготовка больших данных для обучения ML-моделей',
     cardDesc:
@@ -62,6 +67,7 @@ export const BUILD_TASKS: BuildTask[] = [
   },
   {
     id: 'docs',
+    kv: 'storedoc',
     type: 'Документное хранилище',
     title: 'Хранилище пользовательских документов с гибкой схемой',
     cardDesc:
@@ -72,6 +78,7 @@ export const BUILD_TASKS: BuildTask[] = [
   },
   {
     id: 'iot',
+    kv: 'ch',
     type: 'Стриминг / IOT',
     title: 'Приём и обработка потока IoT-телеметрии',
     cardDesc:
@@ -82,6 +89,7 @@ export const BUILD_TASKS: BuildTask[] = [
   },
   {
     id: 'search',
+    kv: 'pg',
     type: 'Поиск',
     title: 'Полнотекстовый поиск по каталогу товаров',
     cardDesc:
@@ -92,6 +100,7 @@ export const BUILD_TASKS: BuildTask[] = [
   },
   {
     id: 'oltp',
+    kv: 'ydb',
     type: 'Highload OLTP',
     title: 'Транзакционное ядро для финтех-приложения',
     cardDesc:
@@ -102,10 +111,11 @@ export const BUILD_TASKS: BuildTask[] = [
   },
   {
     id: 'shop',
+    kv: 'valkey',
     type: 'Веб-приложение',
     title: 'Каталог и корзина интернет-магазина',
     cardDesc:
-      'Классический бэкенд онлайн-магазина: хранить товары и заказы в надёжной реляционной базе и быстро отдавать горячие данные из кэша.',
+      'Классический бэкенд онлайн-магазина: хранить товары и заказы в надёжной реляционной базе и быстро отдавать горячие данные (корзина, сессии) из кэша.',
     assignment:
       'Соберите архитектуру: реляционная БД каталога и заказов → кэш корзины и сессий.',
     correct: ['pg', 'valkey'],

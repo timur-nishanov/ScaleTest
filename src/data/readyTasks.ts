@@ -14,6 +14,7 @@ import type { ReadyTask } from './types'
 export const READY_TASKS: ReadyTask[] = [
   {
     id: 'logs',
+    kv: 'kafka',
     type: 'Логи / наблюдаемость',
     title: 'Сбор и анализ логов большого сервиса',
     cardDesc:
@@ -43,6 +44,7 @@ export const READY_TASKS: ReadyTask[] = [
   },
   {
     id: 'dwh',
+    kv: 'airflow',
     type: 'DWH / отчётность',
     title: 'Аналитическое хранилище для корпоративной отчётности',
     cardDesc:
@@ -72,6 +74,7 @@ export const READY_TASKS: ReadyTask[] = [
   },
   {
     id: 'search',
+    kv: 'pg',
     type: 'Поиск',
     title: 'Поиск по большому каталогу товаров',
     cardDesc:
@@ -101,6 +104,7 @@ export const READY_TASKS: ReadyTask[] = [
   },
   {
     id: 'rtdash',
+    kv: 'ch',
     type: 'Реалтайм-дашборд',
     title: 'Онлайн-дашборд для маркетинга в реальном времени',
     cardDesc:
@@ -131,6 +135,7 @@ export const READY_TASKS: ReadyTask[] = [
   },
   {
     id: 'bigml',
+    kv: 'ytsaurus',
     type: 'Big data / ML',
     title: 'Платформа для обработки больших данных и ML',
     cardDesc:
@@ -160,6 +165,7 @@ export const READY_TASKS: ReadyTask[] = [
   },
   {
     id: 'oltpscale',
+    kv: 'ydb',
     type: 'Highload-бэкенд',
     title: 'Бэкенд для быстрорастущего сервиса с пиковыми нагрузками',
     cardDesc:

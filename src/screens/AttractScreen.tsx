@@ -5,6 +5,7 @@ import { STRINGS } from '@/data/strings'
 import { TAG_CLOUD_ORDER, TAG_CLOUD_HASHTAG } from '@/data/services'
 import { TagChip, TextChip } from '@/components/ui/TagChip'
 import { createMarquee } from '@/animations/marquee'
+import { useAssemble } from '@/lib/useAssemble'
 
 /* Визуальное соответствие факт-блоков (порядок = FACTS): фигура + модификатор позиции. */
 const FACT_VIEW = [
@@ -23,6 +24,7 @@ const FACT_VIEW = [
 export function AttractScreen() {
   const startVisit = useFlow((s) => s.startVisit)
   const trackRef = useRef<HTMLDivElement>(null)
+  const root = useAssemble<HTMLElement>()
 
   useEffect(() => {
     const track = trackRef.current
@@ -34,10 +36,9 @@ export function AttractScreen() {
   }, [])
 
   return (
-    <section className="screen screen--attract" onPointerUp={startVisit}>
-      {/* Логотип YC 671×95 @ (90,90). Ассета пока нет — текстовый плейсхолдер;
-          положите public/assets/logo/yc-logotype.svg — подхватится сам. */}
-      <div className="attract__logo">
+    <section ref={root} className="screen screen--attract" onPointerUp={startVisit}>
+      {/* Логотип YC 672×95 @ (90,90); при отсутствии файла — текстовый фолбэк */}
+      <div className="attract__logo" data-assemble>
         <img
           src="/assets/logo/yc-logotype.svg"
           alt="Yandex Cloud"
@@ -52,22 +53,24 @@ export function AttractScreen() {
       </div>
 
       <div className="attract__text">
-        <h1>{STRINGS.attract.title}</h1>
-        <p>{STRINGS.attract.subtitle}</p>
+        <h1 data-assemble="words">{STRINGS.attract.title}</h1>
+        <p data-assemble>{STRINGS.attract.subtitle}</p>
       </div>
 
-      <button className="attract__cta pressable">{STRINGS.attract.cta}</button>
+      <button className="attract__cta pressable" data-assemble="click">
+        {STRINGS.attract.cta}
+      </button>
 
       {/* Факт-блоки: фигуры-ассеты + тексты из data/facts, координаты из макета */}
       {FACTS.map((f, i) => (
-        <div key={f.value} className={`fact fact--${FACT_VIEW[i].mod}`}>
+        <div key={f.value} className={`fact fact--${FACT_VIEW[i].mod}`} data-assemble>
           <img src={`/assets/illustrations/${FACT_VIEW[i].shape}`} alt="" draggable={false} />
           <div className="fact__value">{f.value}</div>
           <div className="fact__label">{f.label}</div>
         </div>
       ))}
 
-      <div className="attract__tags">
+      <div className="attract__tags" data-assemble>
         {/* контент продублирован: xPercent -50 даёт бесшовный цикл */}
         <div className="tags-track" ref={trackRef}>
           {[0, 1].map((copy) => (
