@@ -16,8 +16,9 @@ export const TIMER_SECONDS = 60
 /** Красная зона таймера, последние N секунд. */
 export const TIMER_WARN_SECONDS = 10
 
-/** Простой до попапа «Вы ещё здесь?», сек (не на attract-экране). */
-export const IDLE_PROMPT_AFTER_S = 15
+/** Простой до попапа «Вы ещё здесь?», сек (не на attract-экране).
+ * Было 15 по ТЗ — увеличено до 30 по фидбеку заказчика 26.08. */
+export const IDLE_PROMPT_AFTER_S = 30
 
 /** Простой после попапа до автосброса на заставку, сек. */
 export const IDLE_RESET_AFTER_S = 15
