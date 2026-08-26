@@ -132,7 +132,7 @@ export function BuildScreen() {
         <p>{task.cardDesc}</p>
       </header>
 
-      <div className="build__panel" data-assemble>
+      <div className="build__panel" data-assemble data-assemble-step="1">
         <div className="build__assignment">
           <h2>{STRINGS.build.assignmentLabel}</h2>
           <p>{task.assignment}</p>

@@ -26,6 +26,10 @@ interface Props {
   initialIndex?: number | null
 }
 
+// интро показываем один раз за загрузку страницы (фидбек артдира) —
+// дальше колесо сразу стоит на первой карточке
+let introShownThisPageLoad = false
+
 export function WheelCarousel({ count, renderCard, onPick, initialIndex }: Props) {
   const rootRef = useRef<HTMLDivElement>(null)
   const proxyRef = useRef<HTMLDivElement>(null)
@@ -68,20 +72,21 @@ export function WheelCarousel({ count, renderCard, onPick, initialIndex }: Props
 
     const startIndex = startIndexRef.current
     let intro: gsap.core.Timeline | null = null
-    if (startIndex == null) {
-      gsap.set(proxy, { x: 0 })
-      apply(0)
-      // после прогона колесо встаёт на середину колоды (как в макете) —
-      // карточки по обе стороны, слева нет пустого пространства
-      const endIndex = Math.round((count - 1) / 2)
+    if (startIndex == null && !introShownThisPageLoad) {
+      // интро (фидбек артдира): старт с последней карточки, один прогон
+      // к первой — на ней колесо и останавливается
+      introShownThisPageLoad = true
+      const startDeg = (count - 1) * STEP
+      gsap.set(proxy, { x: degToX(startDeg, DEG_PER_PX) })
+      apply(startDeg)
       // на время интро ховер карточек выключен (класс снимается по завершении)
       root.classList.add('is-intro')
-      intro = createWheelIntro({ proxy, endIndex, ...common })
+      intro = createWheelIntro({ proxy, endIndex: 0, ...common })
       intro.pause()
       intro.eventCallback('onComplete', endIntro)
     } else {
-      // возврат «Назад» из задачи: без интро, колесо на прежней карточке
-      const deg = startIndex * STEP
+      // без интро: возврат «Назад» — прежняя карточка, иначе первая
+      const deg = (startIndex ?? 0) * STEP
       gsap.set(proxy, { x: degToX(deg, DEG_PER_PX) })
       apply(deg)
       introActive.current = false

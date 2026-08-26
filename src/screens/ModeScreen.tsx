@@ -24,10 +24,12 @@ export function ModeScreen() {
         <p data-assemble>{STRINGS.mode.subtitle}</p>
       </header>
 
+      {/* порядок сборки (фидбек артдира): заголовок → левая → правая */}
       <div
         className="mode-card mode-card--build pressable"
         onClick={() => deferNav(() => chooseMode('build'))}
         data-assemble
+        data-assemble-step="1"
       >
         <img
           className="mode-card__ill"
@@ -45,6 +47,7 @@ export function ModeScreen() {
         className="mode-card mode-card--ready pressable"
         onClick={() => deferNav(() => chooseMode('ready'))}
         data-assemble
+        data-assemble-step="2"
       >
         <img
           className="mode-card__ill"

@@ -49,8 +49,10 @@ export function createWheelDrag(o: WheelDragOptions): Draggable {
     inertia: true,
     edgeResistance: 0.78,
     bounds: { minX: degToX(maxDeg, o.degPerPx), maxX: 0 },
-    // максимальная длительность доката, чтобы киоск не «уплывал» надолго
-    maxDuration: 1.2,
+    // фидбек артдира: инерции поменьше, отклик пошустрее —
+    // докат гаснет быстро и колесо не «уплывает»
+    throwResistance: 3500,
+    maxDuration: 0.65,
     snap: {
       x: (x: number) => {
         const deg = Math.max(0, Math.min(maxDeg, xToDeg(x, o.degPerPx)))
@@ -85,7 +87,7 @@ export function tweenWheelTo(
   gsap.killTweensOf(proxy)
   return gsap.to(proxy, {
     x: degToX(clamped * o.stepDeg, o.degPerPx),
-    duration: 0.55,
+    duration: 0.4,
     ease: 'power3.out',
     onUpdate() {
       o.onScroll(xToDeg(Number(gsap.getProperty(proxy, 'x')), o.degPerPx))
