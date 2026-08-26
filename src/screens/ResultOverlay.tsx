@@ -78,17 +78,16 @@ export function ResultOverlay() {
             ? STRINGS.result.timeoutReady
             : STRINGS.result.readyWrong
 
-  const chipRow = (ids: (ServiceId | null)[], wrongSlots?: number[]) => (
+  // neutral — без цветных рамок (ветка Б: связку не «проверяли» по слотам)
+  const chipRow = (ids: (ServiceId | null)[], wrongSlots?: number[], neutral = false) => (
     <div className="result-compare__row">
       {ids.map((id, i) => {
+        const state = neutral ? '' : wrongSlots?.includes(i) ? 'is-wrong' : 'is-ok'
         const chip =
           id === null ? (
             <span key={`c${i}`} className="result-chip result-chip--empty" />
           ) : (
-            <span
-              key={`c${i}`}
-              className={`result-chip ${wrongSlots?.includes(i) ? 'is-wrong' : 'is-ok'}`}
-            >
+            <span key={`c${i}`} className={`result-chip ${state}`}>
               <ServiceIcon id={id} size={70} variant="tile" />
               {SERVICES[id].name}
             </span>
@@ -143,7 +142,7 @@ export function ResultOverlay() {
           )}
           <div className="result-compare__group">
             <span className="result-compare__label">{STRINGS.result.optimal}</span>
-            {chipRow(result.correct)}
+            {chipRow(result.correct, undefined, gameMode === 'ready')}
           </div>
         </div>
 
