@@ -1,0 +1,16 @@
+<svg width="350" height="322" viewBox="0 0 350 322" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M26.7632 320L281.772 320L281.772 176.842C281.772 162.89 270.461 151.579 256.509 151.579L1.5 151.579L1.5 294.737C1.5 308.689 12.8107 320 26.7632 320Z" fill="white" stroke="#B0BDD9" stroke-width="3"/>
+<rect width="8.42105" height="8.42105" rx="4.21053" transform="matrix(0 -1 -1 4.37114e-08 26.8633 176.84)" fill="white" stroke="#B0BDD9" stroke-width="3"/>
+<rect width="8.42105" height="8.42105" rx="4.21053" transform="matrix(0 -1 -1 4.37114e-08 48.0352 176.84)" fill="white" stroke="#B0BDD9" stroke-width="3"/>
+<rect width="8.42105" height="8.42105" rx="4.21053" transform="matrix(0 -1 -1 4.37114e-08 69.2344 176.84)" fill="white" stroke="#B0BDD9" stroke-width="3"/>
+<path d="M180.184 67.3684V202.105H324.237C338.19 202.105 349.5 190.795 349.5 176.842V25.2632C349.5 11.3107 338.19 0 324.237 0H230.979L180.184 67.3684Z" fill="#FF5B5A"/>
+<rect width="8.44341" height="8.44341" rx="4.22171" transform="matrix(1 0 0 -1 188.656 193.695)" fill="white"/>
+<path d="M315.656 25.2636C315.656 29.9268 319.436 33.707 324.1 33.707V33.707C328.763 33.707 332.543 29.9268 332.543 25.2636V25.2636C332.543 20.6005 328.763 16.8202 324.1 16.8202V16.8202C319.436 16.8202 315.656 20.6005 315.656 25.2636V25.2636Z" fill="white"/>
+<rect width="16.8868" height="16.8868" rx="8.44341" transform="matrix(1 0 0 -1 188.645 193.684)" fill="white"/>
+<path d="M234.83 83.1106C231.532 79.8307 231.532 74.513 234.83 71.2331L240.832 65.2627L294.724 118.87C298.021 122.15 298.021 127.467 294.724 130.747L288.722 136.718L234.83 83.1106Z" fill="white"/>
+<path d="M288.723 65.2617L300.695 77.1709L240.833 136.717L228.86 124.808L288.723 65.2617Z" fill="white"/>
+<rect width="16.8868" height="16.8868" rx="8.44341" transform="matrix(0 -1 -1 4.37114e-08 264.82 303.156)" fill="black"/>
+<rect width="33.7736" height="33.7736" rx="16.8868" transform="matrix(0 -1 -1 4.37114e-08 52.1992 303.156)" fill="white" stroke="#B0BDD9" stroke-width="3"/>
+<rect width="16.8868" height="16.8868" rx="8.44341" transform="matrix(0 -1 -1 4.37114e-08 332.566 185.309)" fill="black"/>
+<path d="M256.375 294.736H298.838C312.791 294.736 324.102 283.425 324.102 269.473V181.473" stroke="black" stroke-width="3"/>
+</svg>
