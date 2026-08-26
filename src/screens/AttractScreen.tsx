@@ -6,6 +6,7 @@ import { STRINGS } from '@/data/strings'
 import { TAG_CLOUD_ORDER, TAG_CLOUD_HASHTAG } from '@/data/services'
 import { TagChip, TextChip } from '@/components/ui/TagChip'
 import { createMarquee } from '@/animations/marquee'
+import { createPulse } from '@/animations/pulse'
 import { useAssemble } from '@/lib/useAssemble'
 import { deferNav } from '@/lib/navDelay'
 
@@ -26,6 +27,7 @@ const FACT_VIEW = [
 export function AttractScreen() {
   const startVisit = useFlow((s) => s.startVisit)
   const trackRef = useRef<HTMLDivElement>(null)
+  const ctaRef = useRef<HTMLDivElement>(null)
   const root = useAssemble<HTMLElement>()
 
   useEffect(() => {
@@ -33,9 +35,12 @@ export function AttractScreen() {
     if (!track) return
     // пауза перед стартом строки — первый тег успевает считаться (фидбек)
     const tween = createMarquee(track, { speed: 60, startDelay: 1.6 })
+    // пульс CTA — после сборки кадра (фидбек артдира: привлекать внимание)
+    const pulse = ctaRef.current ? createPulse(ctaRef.current, { delay: 1.4 }) : null
     return () => {
       gsap.killTweensOf(tween)
       tween.kill()
+      pulse?.kill()
     }
   }, [])
 
@@ -61,9 +66,11 @@ export function AttractScreen() {
         <p data-assemble>{STRINGS.attract.subtitle}</p>
       </div>
 
-      <button className="attract__cta pressable" data-assemble>
-        {STRINGS.attract.cta}
-      </button>
+      {/* пульс на обёртке (фидбек артдира: CTA привлекает внимание);
+          сама кнопка остаётся pressable со своим скейлом нажатия */}
+      <div className="attract__cta-wrap" data-assemble ref={ctaRef}>
+        <button className="attract__cta pressable">{STRINGS.attract.cta}</button>
+      </div>
 
       {/* Факт-блоки: фигуры-ассеты + тексты из data/facts, координаты из макета */}
       {FACTS.map((f, i) => (

@@ -301,10 +301,14 @@ body {
   margin: 0;
 }
 
-.attract__cta {
+/* обёртка CTA: позиционирование + GSAP-пульс (кнопка внутри — pressable) */
+.attract__cta-wrap {
   position: absolute;
   left: 90px;
   top: 1228px;
+}
+
+.attract__cta {
   width: 460px;
   height: 136px;
   display: flex;
