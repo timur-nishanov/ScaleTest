@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import gsap from 'gsap'
 import { useFlow } from '@/app/flow'
 import { FACTS } from '@/data/facts'
 import { STRINGS } from '@/data/strings'
@@ -30,8 +31,10 @@ export function AttractScreen() {
   useEffect(() => {
     const track = trackRef.current
     if (!track) return
-    const tween = createMarquee(track, { speed: 60 })
+    // пауза перед стартом строки — первый тег успевает считаться (фидбек)
+    const tween = createMarquee(track, { speed: 60, startDelay: 1.6 })
     return () => {
+      gsap.killTweensOf(tween)
       tween.kill()
     }
   }, [])
