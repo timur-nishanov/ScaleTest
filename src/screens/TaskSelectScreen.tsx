@@ -40,7 +40,13 @@ export function TaskSelectScreen() {
         <div className="select__label" data-assemble>
           {gameMode === 'build' ? STRINGS.taskSelect.buildLabel : STRINGS.taskSelect.readyLabel}
         </div>
-        <h1 data-assemble>{STRINGS.taskSelect.title}</h1>
+        <div className="select__title-row" data-assemble>
+          <h1>{STRINGS.taskSelect.title}</h1>
+          {/* в ветке Б рядом с заголовком чип «Монета за конкурс» (макет 11:3515) */}
+          {gameMode === 'ready' && (
+            <span className="select__coin">{STRINGS.mode.ready.coinBadge}</span>
+          )}
+        </div>
         <p data-assemble>
           {gameMode === 'build'
             ? STRINGS.taskSelect.buildSubtitle
