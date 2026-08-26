@@ -830,7 +830,10 @@ body {
 }
 
 .build__info-text {
-  width: 640px;
+  /* ширина по фактическим строкам (не фикс 640) — композиция
+     «рука + текст» центрируется честно, без пустоты справа */
+  width: fit-content;
+  max-width: 640px;
   font-size: 32px;
   line-height: 44px;
   color: var(--color-text-secondary);
