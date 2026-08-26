@@ -388,6 +388,8 @@ body {
   display: flex;
   gap: 20px;
   width: max-content;
+  /* стартовая позиция — по сетке (margin 90), не впритык к краю */
+  margin-left: 90px;
   will-change: transform;
 }
 
