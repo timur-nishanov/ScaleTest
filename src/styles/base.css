@@ -526,7 +526,8 @@ body {
   max-width: 778px;
 }
 
-.mode-card__coin {
+.mode-card__coin,
+.select__coin {
   background: var(--color-accent);
   color: var(--color-text-invert);
   border-radius: var(--radius-screen-card);
@@ -556,6 +557,14 @@ body {
   font-size: 32px;
   line-height: 36px;
   font-weight: 500;
+}
+
+/* строка заголовка: в ветке Б заголовок и чип центруются парой (макет) */
+.select__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
 }
 
 .select__top h1 {
