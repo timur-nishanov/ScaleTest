@@ -2,7 +2,8 @@ import gsap from 'gsap'
 
 /**
  * Пульс CTA на заставке (фидбек артдира: кнопка «Начать» должна
- * привлекать внимание). Мягкий одиночный удар с паузой между циклами.
+ * привлекать внимание). Непрерывное «дыхание» — плавная синусоида
+ * scale 1 ↔ 1.06 без пауз между циклами.
  *
  * Пульсируем ОБЁРТКУ кнопки: сама кнопка остаётся .pressable —
  * её CSS-скейл нажатия не конфликтует с inline-transform GSAP.
@@ -10,18 +11,14 @@ import gsap from 'gsap'
  */
 export function createPulse(
   el: HTMLElement,
-  options: { scale?: number; repeatDelay?: number; delay?: number } = {},
-): gsap.core.Timeline {
-  const scale = options.scale ?? 1.06
-  const tl = gsap.timeline({
+  options: { scale?: number; period?: number; delay?: number } = {},
+): gsap.core.Tween {
+  return gsap.to(el, {
+    scale: options.scale ?? 1.06,
+    duration: (options.period ?? 1.8) / 2,
+    ease: 'sine.inOut',
+    yoyo: true,
     repeat: -1,
-    repeatDelay: options.repeatDelay ?? 1.1,
     delay: options.delay ?? 0,
   })
-  tl.to(el, { scale, duration: 0.35, ease: 'power2.out' }).to(el, {
-    scale: 1,
-    duration: 0.5,
-    ease: 'power2.inOut',
-  })
-  return tl
 }
