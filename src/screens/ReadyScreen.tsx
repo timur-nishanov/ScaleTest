@@ -49,7 +49,7 @@ export function ReadyScreen() {
         <p>{task.cardDesc}</p>
       </header>
 
-      <div className="ready__panel" data-assemble>
+      <div className="ready__panel" data-assemble data-assemble-step="1">
         <div className="ready__assignment">
           <h2>{STRINGS.ready.assignmentLabel}</h2>
           <p>{task.assignment}</p>

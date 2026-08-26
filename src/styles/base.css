@@ -761,9 +761,15 @@ body {
   transition: stroke 0.2s ease;
 }
 
-/* выбран сервис или тянем — дроп-зоны подсвечены фиолетовым (стейты макета) */
+/* выбран сервис или тянем — дроп-зоны подсвечены фиолетовым, пунктир
+   бежит по контуру (фидбек артдира: «чтоб прям видеть, что это интерактив») */
+@keyframes slot-dash-march {
+  to { stroke-dashoffset: -32; } /* период = dash 16 + gap 16 */
+}
+
 .build__slots.is-targeting .slot:not(.is-filled) .slot__dash {
   stroke: var(--color-accent);
+  animation: slot-dash-march 0.6s linear infinite;
 }
 
 .slot.is-filled {
@@ -896,6 +902,16 @@ body {
   pointer-events: none;
 }
 
+/* выбранный сервис: обводка, приподнят и поверх соседних плиток
+   (фидбек артдира + стейт макета «нажали на сервис») */
+.service-tile.is-selected {
+  position: relative;
+  z-index: 5;
+  outline: 4px solid var(--color-accent);
+  outline-offset: -4px;
+  transform: translateY(-40px);
+}
+
 /* плитка, которую тянем: карточка «ушла» за пальцем, на месте гаснет */
 .service-tile.is-dragging {
   opacity: 0.3;
@@ -937,6 +953,11 @@ body {
 
   .service-tile:not(.is-used):not(.is-dragging):hover {
     transform: translateY(-24px);
+  }
+
+  /* выбранная плитка уже поднята на 40 — ховер её не опускает */
+  .service-tile.is-selected:not(.is-used):not(.is-dragging):hover {
+    transform: translateY(-40px);
   }
 }
 
