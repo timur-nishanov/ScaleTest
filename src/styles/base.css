@@ -178,6 +178,12 @@ body {
   pointer-events: none;
 }
 
+/* тик таймера раз в секунду; линейная интерполяция между тиками
+   даёт непрерывное наполнение дуги без рывков */
+.timer-badge__ring path {
+  transition: stroke-dasharray 1s linear;
+}
+
 /* иконка и текст зафиксированы по координатам макета — не двигаются */
 .timer-badge__icon {
   position: absolute;
@@ -1321,6 +1327,20 @@ body {
   .screen--ready.is-assembled .bundle-card:hover:active {
     transform: translateY(-40px) scale(var(--press-scale));
     transition-duration: var(--press-duration);
+  }
+
+  /* второстепенные кнопки (веб): лёгкое затемнение фона по ховеру,
+     как у secondary в Gravity (base-generic 5% → 10%) */
+  .btn--secondary:not(:disabled),
+  .btn--ghost:not(:disabled) {
+    transition:
+      background-color 0.2s ease,
+      transform var(--press-duration) ease;
+  }
+
+  .btn--secondary:not(:disabled):hover,
+  .btn--ghost:not(:disabled):hover {
+    background: var(--color-base-generic-hover);
   }
 }
 

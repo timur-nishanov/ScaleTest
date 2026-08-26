@@ -23,6 +23,7 @@
   --color-silver: #b0bdd9;        /* рамки слотов/чипов, пунктир */
   --color-cta: #000000;           /* основная кнопка */
   --color-base-generic: rgba(0, 0, 0, 0.05); /* Gravity base-generic: secondary кнопки */
+  --color-base-generic-hover: rgba(0, 0, 0, 0.1); /* Gravity base-generic-hover */
 
   /* статусы проверки (рамки чипов в попапе результата) */
   --color-ok: #a5f898;
