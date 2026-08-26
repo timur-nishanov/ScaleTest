@@ -885,22 +885,27 @@ body {
   opacity: 0.6;
 }
 
-/* призрак перетаскивания — белая плитка с иконкой и именем (стейт «тянем») */
+/* призрак перетаскивания — та же плитка палитры, без растягивания
+   (фидбек: «какая есть, такая и есть»; растягивается только слот) */
 .drag-ghost {
   position: absolute;
   z-index: 50;
   pointer-events: none;
   transform: translate(-50%, -60%);
+  width: 248px;
+  min-height: 226px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  justify-content: center;
+  gap: 20px;
   background: var(--color-surface);
   border-radius: var(--radius-tile);
-  padding: 28px 36px;
+  padding: 32px 30px;
   font-size: 32px;
   line-height: 36px;
   font-weight: 500;
+  text-align: center;
   filter: drop-shadow(0 24px 48px rgb(11 13 18 / 25%));
 }
 
@@ -1048,28 +1053,39 @@ body {
   background: rgb(11 13 18 / 45%);
 }
 
+/* карточка результата 1560 по центру экрана (эталон 15:861) */
 .result-modal {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   width: 1560px;
-  max-height: 1760px;
   background: var(--color-surface);
   border-radius: var(--radius-screen-card);
-  padding: 100px 50px 60px;
+  padding-bottom: 100px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 36px;
 }
 
-.result-modal__ill {
-  width: 396px;
+/* контейнер иллюстрации: во всю ширину карточки, картинка прижата к низу */
+.result-modal__illbox {
+  width: 100%;
+  height: 472px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.result-modal__illbox img {
   height: 320px;
-  border-radius: var(--radius-tile);
-  background: var(--color-surface-dim);
+  width: auto;
+}
+
+/* ассет ещё не залит — тихий плейсхолдер вместо битой картинки */
+.result-modal__illbox img.is-missing {
+  visibility: hidden;
 }
 
 .result-modal h2 {
@@ -1077,49 +1093,32 @@ body {
   font-weight: 900;
   font-size: 96px;
   line-height: 116px;
-  margin: 0;
+  margin: 90px 0 0;
 }
 
-.result-modal p {
+.result-modal > p {
   font-size: 44px;
   line-height: 56px;
   color: var(--color-text);
-  margin: 0;
+  margin: 24px 0 0;
   max-width: 1106px;
 }
 
 .result-compare {
-  width: 100%;
+  width: 1460px;
+  margin: 70px 0 0;
   background: var(--color-compare-bg);
   border-radius: var(--radius-compare);
   padding: 60px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 50px;
 }
 
 .result-compare__group {
   display: flex;
   flex-direction: column;
   gap: 24px;
-}
-
-.result-compare__row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 40px;
-}
-
-.result-compare__row .result-chip {
-  flex: 1;
-  justify-content: center;
-}
-
-.result-chip--empty {
-  border: 4px dashed var(--color-silver);
-  background: rgb(255 255 255 / 20%);
-  min-height: 122px;
 }
 
 .result-compare__label {
@@ -1129,16 +1128,30 @@ body {
   text-align: left;
 }
 
+.result-compare__row {
+  display: flex;
+  align-items: center;
+}
+
+.result-compare__arrow {
+  flex: none;
+  width: 114px;
+}
+
 .result-chip {
-  display: inline-flex;
+  flex: 1;
+  min-width: 0;
+  display: flex;
   align-items: center;
   gap: 16px;
   background: var(--color-surface);
   border: 4px solid transparent;
   border-radius: var(--radius-tile);
-  padding: 26px 30px;
+  padding: 30px;
   font-size: 30px;
+  line-height: 36px;
   font-weight: 500;
+  text-align: left;
 }
 
 .result-chip.is-ok {
@@ -1149,11 +1162,21 @@ body {
   border-color: var(--color-error);
 }
 
-/* боковой баннер (промо монеты в ветке А / «Ты заработал монету» в ветке Б) */
-.coin-promo {
+.result-chip--empty {
+  border: 4px dashed var(--color-silver);
+  background: rgb(255 255 255 / 20%);
+  min-height: 130px;
+}
+
+.result-modal__actions {
+  margin: 70px 0 0;
+}
+
+/* баннер справа вплотную к карточке (gap 32), прижат к её верху */
+.result-banner {
   position: absolute;
-  right: 90px;
-  top: 200px;
+  left: calc(100% + 32px);
+  top: 0;
   width: 742px;
   background: var(--color-accent);
   color: var(--color-text-invert);
@@ -1161,10 +1184,11 @@ body {
   padding: 60px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  align-items: flex-start;
+  text-align: left;
 }
 
-.coin-promo__star {
+.result-banner__circle {
   width: 120px;
   height: 120px;
   border-radius: 50%;
@@ -1172,22 +1196,38 @@ body {
   color: var(--color-text);
   display: grid;
   place-items: center;
-  font-size: 56px;
+  margin-bottom: 90px;
 }
 
-.coin-promo h3 {
+.result-banner__circle img {
+  width: 120px;
+  height: 120px;
+}
+
+.result-banner__circle img.is-missing {
+  visibility: hidden;
+}
+
+.result-banner h3 {
   font-family: var(--font-display);
   font-weight: 900;
   font-size: 56px;
   line-height: 64px;
   margin: 0;
+  max-width: 494px;
 }
 
-.coin-promo p {
+.result-banner p {
   font-size: 32px;
   line-height: 44px;
   color: rgb(255 255 255 / 85%);
-  margin: 0;
+  margin: 24px 0 0;
+  max-width: 541px;
+}
+
+.result-banner__cta {
+  margin-top: 64px;
+  width: 100%;
 }
 
 .idle-modal {
@@ -1196,7 +1236,7 @@ body {
   top: 50%;
   transform: translate(-50%, -50%);
   background: var(--color-surface);
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-screen-card);
   padding: 120px 160px;
   text-align: center;
   display: flex;
@@ -1230,8 +1270,10 @@ body {
     transform: translateY(-40px);
   }
 
-  .wheel:not(.is-intro):has(.task-card:hover) .wheel-card:not(:hover) .task-card {
-    opacity: 0.55;
+  /* нажатие поверх ховера: подъём сохраняется, карточка поджимается */
+  .wheel:not(.is-intro) .wheel-card.is-pressed .task-card:hover {
+    transform: translateY(-40px) scale(var(--press-scale));
+    transition-duration: var(--press-duration);
   }
 
   /* карточки режима: ховер активен только после сборки кадра (.is-assembled) */
@@ -1243,8 +1285,9 @@ body {
     transform: translateY(-40px);
   }
 
-  /* нажатие остаётся быстрым, ховер-подъём его не замедляет */
-  .screen--mode.is-assembled .mode-card:active {
+  /* нажатие поверх ховера: подъём сохраняется, карточка поджимается */
+  .screen--mode.is-assembled .mode-card:hover:active {
+    transform: translateY(-40px) scale(var(--press-scale));
     transition-duration: var(--press-duration);
   }
 
@@ -1261,9 +1304,17 @@ body {
     transform: translateY(-40px);
   }
 
-  .screen--ready.is-assembled .bundle-card:active {
+  .screen--ready.is-assembled .bundle-card:hover:active {
+    transform: translateY(-40px) scale(var(--press-scale));
     transition-duration: var(--press-duration);
   }
+}
+
+/* нажатие карточки колеса на таче: Draggable глушит :active,
+   класс ставит JS (WheelCarousel) */
+.wheel-card.is-pressed .task-card {
+  transform: scale(var(--press-scale));
+  transition: transform var(--press-duration) ease;
 }
 
 /* ---------- дев-оверлей сетки (12 / margin 90 / gutter 60, FF0000 10%) ---------- */

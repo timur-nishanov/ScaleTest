@@ -77,6 +77,7 @@ export function WheelCarousel({ count, renderCard, onPick, initialIndex }: Props
       // на время интро ховер карточек выключен (класс снимается по завершении)
       root.classList.add('is-intro')
       intro = createWheelIntro({ proxy, endIndex, ...common })
+      intro.pause()
       intro.eventCallback('onComplete', endIntro)
     } else {
       // возврат «Назад» из задачи: без интро, колесо на прежней карточке
@@ -85,6 +86,31 @@ export function WheelCarousel({ count, renderCard, onPick, initialIndex }: Props
       apply(deg)
       introActive.current = false
     }
+
+    // колесо появляется с паузой и мягким фейдом (фидбек: карточки не должны
+    // «уже ехать» в момент попадания на экран); прогон стартует после фейда
+    gsap.set(root, { autoAlpha: 0 })
+    const reveal = gsap.to(root, {
+      autoAlpha: 1,
+      duration: 0.45,
+      ease: 'power1.out',
+      delay: 0.25,
+      onComplete: () => {
+        if (introActive.current) intro?.play()
+      },
+    })
+
+    // нажатие карточки (тач и мышь): Draggable гасит :active, класс ставим сами
+    const pressCard = (e: PointerEvent) => {
+      const card = (e.target as Element | null)?.closest?.('[data-wheel-index]')
+      card?.classList.add('is-pressed')
+    }
+    const releaseCards = () => {
+      root.querySelectorAll('.is-pressed').forEach((el) => el.classList.remove('is-pressed'))
+    }
+    root.addEventListener('pointerdown', pressCard)
+    window.addEventListener('pointerup', releaseCards)
+    window.addEventListener('pointercancel', releaseCards)
 
     let introInterrupted = false
     let drag: Draggable | null = null
@@ -116,8 +142,12 @@ export function WheelCarousel({ count, renderCard, onPick, initialIndex }: Props
 
     return () => {
       intro?.kill()
+      reveal.kill()
       drag?.kill()
       gsap.killTweensOf(proxy)
+      root.removeEventListener('pointerdown', pressCard)
+      window.removeEventListener('pointerup', releaseCards)
+      window.removeEventListener('pointercancel', releaseCards)
     }
   }, [count])
 

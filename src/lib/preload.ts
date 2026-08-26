@@ -40,6 +40,17 @@ export function preloadAssets() {
   }
   urls.add('/assets/logo/yc-logotype.svg')
 
+  // иллюстрации попапов результата и монета баннера
+  for (const name of [
+    'popup-success',
+    'popup-not-found',
+    'popup-access-denied',
+    'popup-unavailable',
+    'coin-circle',
+  ]) {
+    urls.add(`/assets/illustrations/${name}.svg`)
+  }
+
   for (const url of urls) {
     const img = new Image()
     img.decoding = 'async'
