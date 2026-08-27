@@ -6,10 +6,10 @@
 **Статус (27.08):** заказчик прислал полный набор иконок сервисов (19 tile-иконок 32×32 с подложкой #CAB8FF) и 19 kv-иллюстраций карточек. Разложено по ключам `src/data/services.ts`, дубликаты уже имевшихся файлов не заводились, исходники из корня репозитория удалены. Соответствия, где имя файла не совпадало с ключом: `Cloud Router` → `data_transfer`, `MPP` → `greenplum`, `PostgreSQL1` → `sharded_pg`, `data` → `data_proc`, `kv_postgre-sql` → `kv_pg`, `managed-kafka-kv` → `kv_kafka`, `managed-valkey-kv` → `kv_valkey`.
 
 **Чего ещё не хватает:**
-- **Object Storage** — ни иконки, ни kv-иллюстрации. Временно сервис показывается глифом Data Processing (`icon: 'data_proc'` в `services.ts`), карточка «Lakehouse для аналитики и ML» — иллюстрацией `kv_data_proc.svg`. Пришлёте — снимем заглушку (два TODO в коде).
+- **Object Storage** — ни иконки, ни kv-иллюстрации. Заглушки не ставим (решение заказчика 27.08): в палитре и чипах сервис идёт без глифа, карточка «Lakehouse для аналитики и ML» — без иллюстрации. Нужны `icons/object_storage.svg`, `icons/tile/object_storage.svg` и `illustrations/kv_object_storage.svg`.
 - **DataLens Platform** — tile-версии не было, собрана из монохромной иконки (`icons/datalens_platform.svg` на стандартной подложке). Если есть исходная — заменим.
 
-Не пригодились (в контенте лида таких задач нет, поэтому в репозиторий не клали): `MetaData Hub`, `kv_metadata-hub`, `kv_managed-mysql`, `kv_managed-spqr`, `kv_websql`.
+Не пригодились (в контенте лида таких задач нет, поэтому в репозиторий не клали): `MetaData Hub`, `kv_metadata-hub`, `kv_managed-mysql`, `kv_managed-spqr`, `kv_websql`, `data` и `kv_data-proc` (Data Processing).
 
 ## fonts/
 
@@ -27,7 +27,6 @@
 pg.svg  mysql.svg  ch.svg  valkey.svg  storedoc.svg  kafka.svg  greenplum.svg
 opensearch.svg  airflow.svg  spark.svg  ytsaurus.svg  ydb.svg  datalens.svg
 trino.svg  data_transfer.svg  sharded_pg.svg  websql.svg  datalens_platform.svg
-data_proc.svg
 ```
 
 Два набора: `icons/<ключ>.svg` — монохром без подложки (теги заставки), `icons/tile/<ключ>.svg` — тот же глиф на подложке #CAB8FF (палитра, слоты, чипы). On-prem версии (YTsaurus/YDB/DataLens On-Premises) переиспользуют файлы managed-версий через поле `icon` — отдельных файлов не нужно.

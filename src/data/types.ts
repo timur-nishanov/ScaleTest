@@ -37,13 +37,6 @@ export interface Service {
   icon?: string
 }
 
-/**
- * Ключ иллюстрации карточки задачи. Обычно совпадает с ключевым сервисом,
- * но набор kv от заказчика шире каталога сервисов интерактива
- * (например, Data Processing), поэтому тип отдельный.
- */
-export type KvKey = ServiceId | 'data_proc'
-
 export interface BuildTask {
   id: string
   /** Тег задачи — капс-лейбл на карточке («Интернет-магазин»). */
@@ -59,7 +52,7 @@ export interface BuildTask {
   /** Палитра сервисов ИМЕННО этой задачи (по контент-доку лида). */
   palette: ServiceId[]
   /** Сервис-иллюстрация карточки (файл assets/illustrations/kv_<id>.svg). */
-  kv: KvKey
+  kv: ServiceId
 }
 
 export type BundleTier = 'best' | 'partial' | 'wrong'
@@ -86,7 +79,7 @@ export interface ReadyTask {
   /** Варианты; порядок отображения перемешивается при каждом открытии задачи. */
   bundles: ReadyBundle[]
   /** Сервис-иллюстрация карточки (файл assets/illustrations/kv_<id>.svg). */
-  kv: KvKey
+  kv: ServiceId
 }
 
 export type Outcome = 'correct' | 'partial' | 'wrong' | 'timeout'

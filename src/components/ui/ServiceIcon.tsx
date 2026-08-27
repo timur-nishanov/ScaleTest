@@ -9,8 +9,8 @@ import { SERVICES } from '@/data/services'
  *
  * Имя файла: SERVICES[id].icon ?? id — on-prem версии переиспользуют
  * managed-иконки. Если tile-ассета ещё нет, фолбэк — монохромная иконка
- * на CSS-подложке (класс service-icon--tile-fallback); совсем без ассета —
- * пустой плейсхолдер.
+ * на CSS-подложке (класс service-icon--tile-fallback); совсем без ассета
+ * место просто остаётся пустым: чужие глифы вместо недостающих не ставим.
  */
 export function ServiceIcon({
   id,
@@ -41,9 +41,9 @@ export function ServiceIcon({
             el.parentElement?.classList.add('service-icon--tile-fallback')
             return
           }
-          // ассета нет совсем — пустой плейсхолдер до заливки
+          // ассета нет совсем — оставляем место пустым до заливки
           el.style.display = 'none'
-          el.parentElement?.classList.add('service-icon--placeholder')
+          el.parentElement?.classList.remove('service-icon--tile-fallback')
         }}
       />
     </span>
