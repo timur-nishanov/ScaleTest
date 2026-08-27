@@ -237,6 +237,11 @@ body {
   font-size: 96px;
   line-height: 116px;
   margin: 0;
+  /* финальные тексты длиннее макетных: шапка не должна налезать на панель */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 
 .task__top p {
@@ -244,6 +249,10 @@ body {
   line-height: 56px;
   width: 1800px;
   margin: 0 auto;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 
 /* ---------- заставка (макет 11:1134, всё в дизайн-координатах) ---------- */
@@ -370,7 +379,7 @@ body {
 }
 
 .fact--services .fact__value { left: 956px; top: 289px; }
-.fact--services .fact__label { left: 957px; top: 425px; width: 419px; }
+.fact--services .fact__label { left: 957px; top: 425px; width: 1000px; }
 
 .fact--care {
   left: 1950px;
@@ -509,7 +518,7 @@ body {
   left: 50%;
   top: 1048px;
   transform: translate(-50%, -50%);
-  width: 778px;
+  width: 980px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -520,7 +529,7 @@ body {
 .mode-card__text--ready {
   top: 920px;
   transform: translateX(-50%);
-  width: 914px;
+  width: 980px;
   gap: 60px;
   align-items: center;
 }
@@ -543,7 +552,8 @@ body {
   font-size: 44px;
   line-height: 56px;
   margin: 0 auto;
-  max-width: 778px;
+  /* по ширине текстового блока карточки: описание укладывается в 3 строки */
+  max-width: 980px;
 }
 
 .mode-card__coin,
@@ -902,9 +912,17 @@ body {
   gap: 20px;
 }
 
+/* обёртка плитки (pointer-обработчик) растягивается — все плитки ряда
+   одной высоты, даже с именами разной длины */
+.build__palette > div {
+  display: flex;
+  align-items: stretch;
+}
+
 .service-tile {
-  width: 248px;
+  width: 320px;
   min-height: 226px;
+  height: 100%;
   background: var(--color-surface);
   border-radius: var(--radius-tile);
   padding: 32px 30px;
@@ -967,7 +985,7 @@ body {
   z-index: 50;
   pointer-events: none;
   transform: translate(-50%, -60%);
-  width: 248px;
+  width: 320px;
   min-height: 226px;
   display: flex;
   flex-direction: column;
@@ -1042,7 +1060,8 @@ body {
   left: 50%;
   transform: translateX(-50%);
   top: 372px;
-  width: 2780px;
+  /* шире макетных 2780: финальные имена сервисов длинные, чипам нужно место */
+  width: 3420px;
   height: 958px;
   display: flex;
   gap: 60px;
@@ -1185,7 +1204,8 @@ body {
   line-height: 56px;
   color: var(--color-text);
   margin: 24px 0 0;
-  max-width: 1106px;
+  /* по внутренним полям карточки 1560 — длинные тексты лида не сжимаются в столбик */
+  max-width: 1380px;
 }
 
 .result-compare {

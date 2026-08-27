@@ -18,11 +18,12 @@ import type { Outcome, ServiceId } from '@/data/types'
  */
 
 /** Иллюстрация попапа по исходу (assets/illustrations/popup-*.svg). */
-function illustrationFor(outcome: Outcome, mode: 'build' | 'ready') {
+function illustrationFor(outcome: Outcome, mode: 'build' | 'ready', allWrong: boolean) {
   if (outcome === 'correct') return 'popup-success'
   if (outcome === 'timeout') return 'popup-unavailable'
-  if (mode === 'ready' && outcome === 'wrong') return 'popup-access-denied'
-  return 'popup-not-found' // build «Почти», ready «Почти угадал»
+  // «Мимо» и «Не верно» (всё мимо) — красный крест
+  if (allWrong || (mode === 'ready' && outcome === 'wrong')) return 'popup-access-denied'
+  return 'popup-not-found' // build «Почти», ready «Почти угадали»
 }
 
 export function ResultOverlay() {
@@ -122,7 +123,7 @@ export function ResultOverlay() {
   const placedAny =
     gameMode === 'build' && result.placedSnapshot?.some((x) => x !== null)
 
-  const ill = illustrationFor(result.outcome, gameMode)
+  const ill = illustrationFor(result.outcome, gameMode, allWrong)
 
   return (
     <div className="overlay" ref={rootRef}>
@@ -155,23 +156,15 @@ export function ResultOverlay() {
           </div>
         </div>
 
+        {/* кнопки едины для обеих веток (решение заказчика 26.08):
+            «Выбрать другую задачу» → колесо, «Завершить» → заставка */}
         <div className="result-modal__actions">
-          {gameMode === 'build' ? (
-            <>
-              <Button variant="secondary" onClick={backToTasks}>
-                {STRINGS.result.anotherTask}
-              </Button>
-              <Button variant="secondary" onClick={resetToAttract}>
-                {STRINGS.result.finish}
-              </Button>
-            </>
-          ) : (
-            <Button variant="secondary" onClick={resetToAttract}>
-              {result.outcome === 'correct' || result.outcome === 'timeout'
-                ? STRINGS.result.finish
-                : STRINGS.result.restart}
-            </Button>
-          )}
+          <Button variant="secondary" onClick={backToTasks}>
+            {STRINGS.result.anotherTask}
+          </Button>
+          <Button variant="secondary" onClick={resetToAttract}>
+            {STRINGS.result.finish}
+          </Button>
         </div>
 
         {gameMode === 'build' && (
