@@ -38,6 +38,12 @@ export const FLAGS = {
   orderMatters: true,
   /** Кнопка случайного выбора в режиме «Выбрать из готового» (есть в макете 2334:5831). */
   randomInReadyMode: true,
+  /**
+   * Попап «Вы ещё здесь?» перед автосбросом. Выключен по решению заказчика
+   * 27.08 (дизайна попапа нет): киоск просто уходит на заставку после
+   * IDLE_PROMPT_AFTER_S + IDLE_RESET_AFTER_S простоя, без вопроса.
+   */
+  idlePrompt: false,
 } as const
 
 export type AppMode = 'kiosk' | 'web'
