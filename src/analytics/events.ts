@@ -1,5 +1,5 @@
 import type { GameMode, Outcome, ServiceId } from '@/data/types'
-import { PALETTE_ORDER } from '@/data/services'
+import { ALL_SERVICE_IDS } from '@/data/services'
 
 /**
  * Контракт данных для пост-анализа — по таблице из ТЗ («Технические особенности»).
@@ -64,7 +64,7 @@ export function buildAttemptRow(
     bundle_choice: input.bundleChoice ?? null,
     viewed_bundles: input.viewedBundles?.join(',') ?? null,
   }
-  for (const id of PALETTE_ORDER) {
+  for (const id of ALL_SERVICE_IDS) {
     row[`ans_${id}`] = input.answerServices.includes(id) ? 1 : 0
     row[`tap_${id}`] = input.serviceTaps[id] ?? 0
   }

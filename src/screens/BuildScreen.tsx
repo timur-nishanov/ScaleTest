@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { useFlow } from '@/app/flow'
 import { getBuildTask } from '@/data/buildTasks'
-import { PALETTE_ORDER, SERVICES } from '@/data/services'
+import { SERVICES } from '@/data/services'
 import { STRINGS } from '@/data/strings'
 import type { ServiceId } from '@/data/types'
 import { Button } from '@/components/ui/Button'
@@ -187,9 +187,9 @@ export function BuildScreen() {
         )}
 
         <div className={`build__palette ${selected ? 'has-selection' : ''}`}>
-          {/* тапы и драг палитры обрабатываются pointer-логикой секции,
-              onTap плитке не передаём — иначе тап сработает дважды */}
-          {PALETTE_ORDER.map((id) => (
+          {/* палитра ИМЕННО этой задачи (контент-док лида); тапы и драг
+              обрабатываются pointer-логикой секции, onTap плитке не передаём */}
+          {task.palette.map((id) => (
             <div key={id} onPointerDown={onPalettePointerDown(id)}>
               <ServiceTile
                 id={id}

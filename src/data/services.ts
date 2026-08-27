@@ -2,181 +2,174 @@ import type { Service, ServiceId } from './types'
 import { deepTypo } from '@/lib/typo'
 
 /**
- * Сервисы платформы данных.
+ * Сервисы Платформы данных. Имена и описания — финальный контент-док
+ * продуктового лида YC (26.08, «Актуальные тексты интерфейса_FINAL»).
  *
- * Имена (name/tagName) взяты из макетов Figma:
- * - палитра экрана сборки: фрейм 2334:4377 «Собрать самому. Задача. Дефолт» — 13 плиток;
- * - облако тегов заставки: фрейм 2334:3600 «tags» — 18 тегов + «#Платформа данных».
- * Короткие описания (short) — из согласованного прототипа; заменить финальными
- * текстами Yandex Cloud, когда придут. TODO(design-sync)
+ * on-prem позиции — отдельные сущности контента, но иконки переиспользуют
+ * managed-версии (поле icon). storedoc/websql в новом контенте не участвуют,
+ * оставлены для совместимости ассетов.
  */
 export const SERVICES: Record<ServiceId, Service> = deepTypo({
   pg: {
     id: 'pg',
-    name: 'Managed PostgreSQL',
+    name: 'Managed Service for PostgreSQL',
     tagName: 'Managed Service for PostgreSQL',
-    short: 'реляционная БД (OLTP)',
-    inPalette: true,
+    short: 'индустриальный стандарт, реляционная БД (OLTP)',
   },
   mysql: {
     id: 'mysql',
-    name: 'Managed MySQL',
+    name: 'Managed Service for MySQL®',
     tagName: 'Managed Service for MySQL®',
     short: 'реляционная БД (OLTP)',
-    inPalette: true,
   },
   ch: {
     id: 'ch',
-    name: 'Managed ClickHouse',
+    name: 'Managed Service for ClickHouse®',
     tagName: 'Managed Service for ClickHouse®',
     short: 'колоночная аналитическая БД',
-    inPalette: true,
   },
   valkey: {
     id: 'valkey',
-    name: 'Managed Valkey',
+    name: 'Managed Service for Valkey™',
     tagName: 'Managed Service for Valkey™',
-    short: 'in-memory кэш',
-    inPalette: true,
+    short: 'in-memory кеш',
   },
   storedoc: {
     id: 'storedoc',
     name: 'Yandex StoreDoc',
     tagName: 'Yandex StoreDoc',
     short: 'документная БД',
-    inPalette: true,
   },
   kafka: {
     id: 'kafka',
-    name: 'Managed Kafka',
+    name: 'Managed Service for Apache Kafka®',
     tagName: 'Managed Service for Apache Kafka®',
     short: 'шина потоковых событий',
-    inPalette: true,
   },
   greenplum: {
     id: 'greenplum',
-    name: 'Managed Greenplum',
+    name: 'Yandex MPP Analytics Engine for PostgreSQL',
     tagName: 'Yandex MPP Analytics Engine for PostgreSQL',
-    short: 'MPP-хранилище (DWH)',
-    inPalette: true,
+    short: 'MPP-хранилище для DWH',
   },
   opensearch: {
     id: 'opensearch',
-    name: 'Managed OpenSearch',
+    name: 'Managed Service for OpenSearch',
     tagName: 'Managed Service for OpenSearch',
     short: 'полнотекстовый поиск и логи',
-    inPalette: true,
   },
   airflow: {
     id: 'airflow',
-    name: 'Managed Airflow',
+    name: 'Yandex Managed Service for Apache Airflow®',
     tagName: 'Yandex Managed Service for Apache Airflow®',
     short: 'оркестрация пайплайнов',
-    inPalette: true,
   },
   spark: {
     id: 'spark',
-    name: 'Managed Spark',
+    name: 'Managed Service for Apache Spark™',
     tagName: 'Managed Service for Apache Spark™',
     short: 'распределённые вычисления',
-    inPalette: true,
   },
   ytsaurus: {
     id: 'ytsaurus',
-    name: 'YTsaurus',
+    name: 'Managed Service for YTsaurus',
     tagName: 'Managed Service for YTsaurus',
-    short: 'хранилище больших данных',
-    inPalette: true,
+    short: 'управляемая платформа больших данных',
   },
   ydb: {
     id: 'ydb',
-    name: 'YDB',
+    name: 'Managed Service for YDB',
     tagName: 'Managed Service for YDB',
-    short: 'распределённая транзакционная БД',
-    inPalette: true,
+    short: 'управляемая распределённая транзакционная БД',
   },
   datalens: {
     id: 'datalens',
-    name: 'DataLens',
-    tagName: 'DataLens',
-    short: 'BI и дашборды',
-    inPalette: true,
+    name: 'Yandex DataLens',
+    tagName: 'Yandex DataLens',
+    short: 'Gen-BI и дашборды',
   },
-  // ---- только облако тегов на заставке ----
   trino: {
     id: 'trino',
-    name: 'Managed Trino',
+    name: 'Yandex Managed Service for Trino',
     tagName: 'Yandex Managed Service for Trino',
-    short: 'распределённый SQL-движок',
-    inPalette: false,
+    short: 'распределённый SQL по разным источникам',
   },
   data_transfer: {
     id: 'data_transfer',
     name: 'Data Transfer',
     tagName: 'Data Transfer',
-    short: 'миграция и репликация данных',
-    inPalette: false,
+    short: 'перенос и репликация данных',
   },
   sharded_pg: {
     id: 'sharded_pg',
-    name: 'Managed Sharded PostgreSQL',
+    name: 'Managed Service for Sharded PostgreSQL',
     tagName: 'Managed Service for Sharded PostgreSQL',
-    short: 'шардированный PostgreSQL',
-    inPalette: false,
+    short: 'горизонтально масштабируемый PostgreSQL',
   },
   websql: {
     id: 'websql',
-    name: 'Yandex WebSQL',
-    tagName: 'Yandex WebSQL',
-    short: 'SQL-запросы из браузера',
-    inPalette: false,
+    name: 'WebSQL',
+    tagName: 'WebSQL',
+    short: 'SQL-консоль для управляемых баз',
   },
   datalens_platform: {
     id: 'datalens_platform',
-    name: 'DataLens Platform',
-    tagName: 'DataLens Platform',
-    short: 'BI-платформа',
-    inPalette: false,
+    name: 'Yandex DataLens Platform',
+    tagName: 'Yandex DataLens Platform',
+    short: 'комплексная платформа для аналитики',
   },
-})
+  object_storage: {
+    id: 'object_storage',
+    name: 'Object Storage',
+    tagName: 'Object Storage',
+    short: 'объектное хранение данных',
+  },
+  ytsaurus_onprem: {
+    id: 'ytsaurus_onprem',
+    name: 'YTsaurus On-Premises',
+    tagName: 'YTsaurus On-Premises',
+    short: 'платформа больших данных в своём контуре',
+    icon: 'ytsaurus',
+  },
+  ydb_onprem: {
+    id: 'ydb_onprem',
+    name: 'YDB On-Premises',
+    tagName: 'YDB On-Premises',
+    short: 'распределённая БД в своём контуре',
+    icon: 'ydb',
+  },
+  datalens_onprem: {
+    id: 'datalens_onprem',
+    name: 'Yandex DataLens On-Premises',
+    tagName: 'Yandex DataLens On-Premises',
+    short: 'Gen-BI и дашборды в своём контуре',
+    icon: 'datalens',
+  },
+} satisfies Record<ServiceId, Service>)
 
-/** Палитра экрана сборки — 13 сервисов в порядке макета (фрейм 2334:4377). */
-export const PALETTE_ORDER: ServiceId[] = [
-  'pg',
-  'mysql',
-  'ch',
-  'valkey',
-  'storedoc',
-  'kafka',
-  'greenplum',
-  'opensearch',
-  'airflow',
-  'spark',
-  'ytsaurus',
-  'ydb',
-  'datalens',
-]
+/** Все ключи сервисов (для предзагрузки и аналитики). */
+export const ALL_SERVICE_IDS = Object.keys(SERVICES) as ServiceId[]
 
-/** Облако тегов заставки — порядок макета (фрейм 2334:3600), первым идёт «#Платформа данных». */
+/**
+ * Видимые теги на заставке — список и порядок из контент-дока лида (16 шт).
+ */
 export const TAG_CLOUD_ORDER: ServiceId[] = [
   'pg',
-  'ch',
-  'trino',
   'mysql',
+  'ch',
   'valkey',
-  'spark',
-  'storedoc',
-  'opensearch',
   'kafka',
-  'data_transfer',
   'greenplum',
-  'airflow',
-  'ydb',
-  'sharded_pg',
-  'ytsaurus',
-  'websql',
+  'opensearch',
+  'spark',
+  'trino',
   'datalens',
   'datalens_platform',
+  'data_transfer',
+  'object_storage',
+  'ytsaurus',
+  'ytsaurus_onprem',
+  'ydb_onprem',
 ]
 
 export const TAG_CLOUD_HASHTAG = '#Платформа данных'
