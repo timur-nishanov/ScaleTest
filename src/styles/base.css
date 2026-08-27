@@ -942,6 +942,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* плитки ряда равной высоты — содержимое коротких центрируем */
+  justify-content: center;
   gap: 20px;
   text-align: center;
 }
@@ -1134,10 +1136,13 @@ body {
 }
 
 /* чипы сервисов: раскладываются рядами по 2–3 (ReadyScreen считает разбивку),
-   внутри ряда тянутся на равную ширину, высота — по самому высокому */
+   внутри ряда тянутся на равную ширину, высота — по самому высокому.
+   Блок прижат к низу карточки: ряды стоят на общей линии у всех бандлов,
+   снизу — только внутреннее поле карточки */
 .bundle-card__services {
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   gap: 20px;
 }
 
@@ -1164,7 +1169,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  /* чипы в ряду равной высоты по самому «текстастому» — содержимое
+     остальных центрируем, иначе под коротким именем зияет пустота */
+  justify-content: center;
   gap: 20px;
   background: var(--color-surface);
   border: 2px solid var(--color-silver);
