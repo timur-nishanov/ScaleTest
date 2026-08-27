@@ -122,8 +122,9 @@ export const BUILD_TASKS: BuildTask[] = deepTypo([
   },
   {
     id: 'lakehouse',
-    // kv Object Storage ещё не прислали — карточка идёт без иллюстрации
-    kv: 'object_storage',
+    // kv Object Storage ещё не прислали — до заливки берём иллюстрацию DataLens
+    // (финальный сервис связки): соседние карточки колеса остаются разными
+    kv: 'datalens',
     type: 'Централизация данных',
     title: 'Lakehouse для аналитики и ML',
     cardDesc:

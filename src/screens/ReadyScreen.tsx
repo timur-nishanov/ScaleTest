@@ -95,20 +95,26 @@ export function ReadyScreen() {
                   <h3>{`Бандл ${'ABC'[pos] ?? pos + 1}`}</h3>
                   <p>{b.desc}</p>
                 </div>
-                {b.services.length > 0 && (
-                  <div className="bundle-card__services">
-                    {chipRows(b.services).map((row, i) => (
-                      <div className="bundle-card__services-row" key={i}>
-                        {row.map((id) => (
-                          <span className="bundle-chip" key={id}>
-                            <ServiceIcon id={id} size={70} variant="tile" />
-                            {SERVICES[id].name}
-                          </span>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                )}
+                {b.services.length > 0 && (() => {
+                  const rows = chipRows(b.services)
+                  // два ряда чипов не помещаются в карточку в полном размере —
+                  // компактный вариант (иконка 56, поля меньше)
+                  const compact = rows.length > 1
+                  return (
+                    <div className={`bundle-card__services ${compact ? 'is-compact' : ''}`}>
+                      {rows.map((row, i) => (
+                        <div className="bundle-card__services-row" key={i}>
+                          {row.map((id) => (
+                            <span className="bundle-chip" key={id}>
+                              <ServiceIcon id={id} size={compact ? 56 : 70} variant="tile" />
+                              {SERVICES[id].name}
+                            </span>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  )
+                })()}
               </article>
             )
           })}

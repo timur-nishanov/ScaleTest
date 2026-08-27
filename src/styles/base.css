@@ -1071,10 +1071,10 @@ body {
 .ready__bundles {
   position: absolute;
   left: 50%;
-  /* центр свободной зоны панели: от низа «Задания» (250) до подписи снизу.
-     Высота панели = 2070 − --panel-top, поэтому центр считается формулой */
-  top: calc(81px + (2070px - var(--panel-top, 596px)) / 2);
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
+  /* от «Задания» до подписи снизу — карточки занимают всю свободную зону */
+  top: 340px;
+  bottom: 148px;
   /* между макетными 2780 и «широкой» версией: чипы теперь в два ряда,
      поэтому карточкам не нужна вся ширина панели */
   width: 2940px;
@@ -1102,8 +1102,7 @@ body {
   display: grid;
   grid-row: span 2;
   grid-template-rows: subgrid;
-  align-content: start;
-  row-gap: 48px;
+  row-gap: 40px;
   text-align: left;
 }
 
@@ -1146,6 +1145,17 @@ body {
   display: flex;
   align-items: stretch;
   gap: 16px;
+}
+
+/* два ряда чипов: ужимаем поля и подпись, иначе блок не влезает в карточку */
+.bundle-card__services.is-compact {
+  gap: 16px;
+}
+
+.bundle-card__services.is-compact .bundle-chip {
+  padding: 24px 16px;
+  gap: 14px;
+  line-height: 34px;
 }
 
 .bundle-chip {
