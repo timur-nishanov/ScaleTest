@@ -151,6 +151,11 @@ body {
   z-index: 5;
 }
 
+/* кнопка теперь праймари-чёрная — кубик инвертируем в белый */
+.nav-random img {
+  filter: invert(1);
+}
+
 /* ---------- таймер ---------- */
 
 .timer-badge {
@@ -309,7 +314,10 @@ body {
 }
 
 .attract__cta {
-  width: 460px;
+  /* финальный текст CTA длиннее макетного «Начать» — ширина по контенту */
+  min-width: 460px;
+  width: max-content;
+  padding: 0 70px;
   height: 136px;
   display: flex;
   align-items: center;
@@ -648,6 +656,11 @@ body {
   font-size: 56px;
   line-height: 64px;
   margin: 0 0 20px;
+  /* финальные тексты лида длиннее макетных — режем многоточием */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
 }
 
 .task-card__desc {
@@ -655,6 +668,10 @@ body {
   line-height: 44px;
   color: var(--color-text-soft);
   margin: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 7;
+  overflow: hidden;
 }
 
 .task-card__ill {
@@ -928,6 +945,21 @@ body {
   opacity: 0.6;
 }
 
+/* tile-ассета ещё нет: монохромная иконка на подложке цвета плитки */
+.service-icon--tile-fallback {
+  background: var(--color-icon-bg);
+  border: 1.25px solid rgb(0 0 0 / 10%);
+  border-radius: 10.7%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.service-icon--tile-fallback img {
+  width: 75% !important;
+  height: 75% !important;
+}
+
 /* призрак перетаскивания — та же плитка палитры, без растягивания
    (фидбек: «какая есть, такая и есть»; растягивается только слот) */
 .drag-ghost {
@@ -1047,6 +1079,10 @@ body {
   line-height: 44px;
   color: rgb(0 0 0 / 85%);
   margin: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 12;
+  overflow: hidden;
 }
 
 /* чипы сервисов: тянутся на равную ширину, высота — по самому высокому */
@@ -1218,6 +1254,8 @@ body {
 
 .result-modal__actions {
   margin: 70px 0 0;
+  display: flex;
+  gap: 40px;
 }
 
 /* баннер справа вплотную к карточке (gap 32), прижат к её верху */

@@ -29,8 +29,9 @@ export function TaskSelectScreen() {
         {STRINGS.taskSelect.back}
       </Button>
 
+      {/* праймари-чёрная — фидбек заказчика: secondary было не видно */}
       {showRandom && (
-        <Button variant="secondary" className="nav-random" onClick={() => deferNav(openRandomTask)} data-assemble="static">
+        <Button className="nav-random" onClick={() => deferNav(openRandomTask)} data-assemble="static">
           {STRINGS.taskSelect.random}
           <img src="/assets/icons/dice-5.svg" width={44} height={44} alt="" draggable={false} />
         </Button>
@@ -70,6 +71,10 @@ export function TaskSelectScreen() {
                 src={`/assets/illustrations/kv_${t.kv}.svg`}
                 alt=""
                 draggable={false}
+                onError={(e) => {
+                  // kv-иллюстрация ещё не залита — прячем без битой картинки
+                  e.currentTarget.style.visibility = 'hidden'
+                }}
               />
             </article>
           )

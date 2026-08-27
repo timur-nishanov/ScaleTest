@@ -13,37 +13,44 @@ export type ServiceId =
   | 'ytsaurus'
   | 'ydb'
   | 'datalens'
-  // сервисы только для облака тегов на заставке (в палитре сборки их нет):
   | 'trino'
   | 'data_transfer'
   | 'sharded_pg'
   | 'websql'
   | 'datalens_platform'
+  | 'object_storage'
+  // on-prem варианты — отдельные позиции контента (тексты лида YC),
+  // иконки переиспользуют managed-версии (поле icon в Service)
+  | 'ytsaurus_onprem'
+  | 'ydb_onprem'
+  | 'datalens_onprem'
 
 export interface Service {
   id: ServiceId
-  /** Короткое имя на плитке палитры (как в макете, например «Managed Greenplum»). */
+  /** Имя на плитке палитры/чипах (финальные тексты лида — полные бренд-имена). */
   name: string
-  /** Полное имя в теге на заставке (например «Yandex MPP Analytics Engine for PostgreSQL»). */
+  /** Имя в теге на заставке. */
   tagName: string
   /** Короткое описание для панели подсказки (по тапу). */
   short: string
-  /** Участвует ли в палитре режима сборки (13 сервисов в макете). */
-  inPalette: boolean
+  /** Файл иконки без расширения, если отличается от id (on-prem → managed). */
+  icon?: string
 }
 
 export interface BuildTask {
   id: string
-  /** Тип задачи — капс-лейбл на карточке («Логи / наблюдаемость»). */
+  /** Тег задачи — капс-лейбл на карточке («Интернет-магазин»). */
   type: string
   /** Название карточки/задачи. */
   title: string
   /** Описание на карточке выбора. */
   cardDesc: string
-  /** Текст блока «Задание» на экране сборки. */
+  /** Текст блока «Задание» на экране сборки (подсказка-цепочка от лида). */
   assignment: string
   /** Эталонная связка по слотам (порядок = слоты слева направо). */
   correct: ServiceId[]
+  /** Палитра сервисов ИМЕННО этой задачи (по контент-доку лида). */
+  palette: ServiceId[]
   /** Сервис-иллюстрация карточки (файл assets/illustrations/kv_<id>.svg). */
   kv: ServiceId
 }
@@ -51,11 +58,15 @@ export interface BuildTask {
 export type BundleTier = 'best' | 'partial' | 'wrong'
 
 export interface ReadyBundle {
-  /** Название бандла («Бандл A» / «LakeHouse» / «DataLens Platform» …). */
-  name: string
+  /** Машинный идентификатор варианта (для аналитики). */
+  id: string
+  /**
+   * Состав из наших сервисов — чипы на карточке. Пустой массив — вариант
+   * описывает стороннюю технологию (например, «форк PostgreSQL»), чипов нет.
+   */
   services: ServiceId[]
   tier: BundleTier
-  /** Описание, почему стек собран так (текст на карточке бандла). */
+  /** Описание варианта (текст на карточке бандла). */
   desc: string
 }
 
@@ -65,6 +76,7 @@ export interface ReadyTask {
   title: string
   cardDesc: string
   assignment: string
+  /** Варианты; порядок отображения перемешивается при каждом открытии задачи. */
   bundles: ReadyBundle[]
   /** Сервис-иллюстрация карточки (файл assets/illustrations/kv_<id>.svg). */
   kv: ServiceId

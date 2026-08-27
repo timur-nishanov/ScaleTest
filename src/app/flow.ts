@@ -44,6 +44,11 @@ interface FlowState {
   serviceTaps: Partial<Record<ServiceId, number>>
   /** ready: какие бандлы видел (в текущем макете видны все сразу) */
   viewedBundles: string[]
+  /**
+   * ready: порядок отображения вариантов — перемешивается при каждом
+   * открытии задачи (контент-док лида). Буквы A/B/C идут по позиции.
+   */
+  bundleOrder: number[]
   /** оверлей результата поверх экрана задачи; null — игра идёт */
   result: ResultState | null
   /**
@@ -66,7 +71,8 @@ interface FlowState {
   clearSlots: () => void
   submitBuild: () => void
 
-  chooseBundle: (name: string) => void
+  /** Выбор варианта по его исходному индексу в task.bundles. */
+  chooseBundle: (index: number) => void
 
   timeoutTask: () => void
   resetToAttract: () => void
@@ -99,7 +105,18 @@ const cleanAttempt = {
   selectedService: null,
   serviceTaps: {},
   viewedBundles: [] as string[],
+  bundleOrder: [] as number[],
   result: null,
+}
+
+/** Тасование Фишера–Йетса (порядок бандлов — новый на каждое открытие). */
+function shuffled(n: number): number[] {
+  const arr = Array.from({ length: n }, (_, i) => i)
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[arr[i], arr[j]] = [arr[j], arr[i]]
+  }
+  return arr
 }
 
 export const useFlow = create<FlowState>((set, get) => {
@@ -178,7 +195,9 @@ export const useFlow = create<FlowState>((set, get) => {
           taskId,
           taskStartedAt: performance.now(),
           // в макете все бандлы с описаниями видны сразу
-          viewedBundles: task.bundles.map((b) => b.name),
+          viewedBundles: task.bundles.map((b) => b.id),
+          // порядок вариантов перемешивается при каждом открытии (док лида)
+          bundleOrder: shuffled(task.bundles.length),
           serviceTaps: {},
           result: null,
         })
@@ -249,10 +268,10 @@ export const useFlow = create<FlowState>((set, get) => {
       })
     },
 
-    chooseBundle: (name) => {
+    chooseBundle: (index) => {
       const s = get()
       const task = getReadyTask(s.taskId ?? '')
-      const bundle = task?.bundles.find((b) => b.name === name)
+      const bundle = task?.bundles[index]
       if (!task || !bundle || s.result) return
       const best = task.bundles.find((b) => b.tier === 'best')!
       const outcome: Outcome =
@@ -262,14 +281,14 @@ export const useFlow = create<FlowState>((set, get) => {
         outcome,
         earnedCoin,
         answerServices: bundle.services,
-        bundleChoice: name,
+        bundleChoice: bundle.id,
       })
       set({
         result: {
           outcome,
           earnedCoin,
           correct: best.services,
-          chosenBundle: name,
+          chosenBundle: bundle.id,
           bestBundle: best,
         },
       })

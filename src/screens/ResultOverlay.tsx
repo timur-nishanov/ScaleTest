@@ -63,13 +63,20 @@ export function ResultOverlay() {
 
   if (!result) return null
 
+  // build wrong: все сервисы мимо — отдельные тексты «Не верно!» (док лида)
+  const allWrong =
+    gameMode === 'build' &&
+    result.outcome === 'wrong' &&
+    (result.wrongSlots?.length ?? 0) === result.correct.length
   const texts =
     gameMode === 'build'
       ? result.outcome === 'correct'
         ? STRINGS.result.correct
         : result.outcome === 'timeout'
           ? STRINGS.result.timeoutBuild
-          : STRINGS.result.almost
+          : allWrong
+            ? STRINGS.result.allWrong
+            : STRINGS.result.almost
       : result.outcome === 'correct'
         ? STRINGS.result.readyBest
         : result.outcome === 'partial'
@@ -141,16 +148,23 @@ export function ResultOverlay() {
             </div>
           )}
           <div className="result-compare__group">
-            <span className="result-compare__label">{STRINGS.result.optimal}</span>
+            <span className="result-compare__label">
+              {gameMode === 'build' ? STRINGS.result.optimalBuild : STRINGS.result.optimalBundle}
+            </span>
             {chipRow(result.correct, undefined, gameMode === 'ready')}
           </div>
         </div>
 
         <div className="result-modal__actions">
           {gameMode === 'build' ? (
-            <Button variant="secondary" onClick={backToTasks}>
-              {STRINGS.result.anotherTask}
-            </Button>
+            <>
+              <Button variant="secondary" onClick={backToTasks}>
+                {STRINGS.result.anotherTask}
+              </Button>
+              <Button variant="secondary" onClick={resetToAttract}>
+                {STRINGS.result.finish}
+              </Button>
+            </>
           ) : (
             <Button variant="secondary" onClick={resetToAttract}>
               {result.outcome === 'correct' || result.outcome === 'timeout'

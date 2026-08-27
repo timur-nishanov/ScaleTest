@@ -22,6 +22,7 @@ import { ResultOverlay } from './ResultOverlay'
 export function ReadyScreen() {
   const taskId = useFlow((s) => s.taskId)
   const result = useFlow((s) => s.result)
+  const bundleOrder = useFlow((s) => s.bundleOrder)
   const chooseBundle = useFlow((s) => s.chooseBundle)
   const timeoutTask = useFlow((s) => s.timeoutTask)
   const backToTasks = useFlow((s) => s.backToTasks)
@@ -31,6 +32,11 @@ export function ReadyScreen() {
   const root = useAssemble<HTMLElement>()
 
   if (!task) return null
+
+  // порядок отображения перемешан при открытии; буквы A/B/C — по позиции
+  const order = bundleOrder.length === task.bundles.length
+    ? bundleOrder
+    : task.bundles.map((_, i) => i)
 
   return (
     <section ref={root} className="screen screen--ready">
@@ -56,26 +62,31 @@ export function ReadyScreen() {
         </div>
 
         <div className="ready__bundles">
-          {task.bundles.map((b) => (
-            <article
-              key={b.name}
-              className="bundle-card pressable"
-              onClick={() => deferNav(() => chooseBundle(b.name))}
-            >
-              <div className="bundle-card__head">
-                <h3>{b.name}</h3>
-                <p>{b.desc}</p>
-              </div>
-              <div className="bundle-card__services">
-                {b.services.map((id) => (
-                  <span className="bundle-chip" key={id}>
-                    <ServiceIcon id={id} size={70} variant="tile" />
-                    {SERVICES[id].name}
-                  </span>
-                ))}
-              </div>
-            </article>
-          ))}
+          {order.map((origIndex, pos) => {
+            const b = task.bundles[origIndex]
+            return (
+              <article
+                key={b.id}
+                className="bundle-card pressable"
+                onClick={() => deferNav(() => chooseBundle(origIndex))}
+              >
+                <div className="bundle-card__head">
+                  <h3>{`Бандл ${'ABC'[pos] ?? pos + 1}`}</h3>
+                  <p>{b.desc}</p>
+                </div>
+                {b.services.length > 0 && (
+                  <div className="bundle-card__services">
+                    {b.services.map((id) => (
+                      <span className="bundle-chip" key={id}>
+                        <ServiceIcon id={id} size={70} variant="tile" />
+                        {SERVICES[id].name}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </article>
+            )
+          })}
         </div>
 
         <div className="ready__hint">{STRINGS.ready.chooseHint}</div>

@@ -3,7 +3,11 @@
 Сюда заливаются материалы от заказчика/дизайнера. Код уже смотрит в эти папки — после заливки ничего перекладывать не нужно.
 
 **Статус (25.08):** разложено из заливок заказчика — шрифты (ttf + сгенерированные woff2), иконки сервисов в двух наборах: `icons/<ключ>.svg` (монохром 64, теги) и `icons/tile/<ключ>.svg` (70 с подложкой #CAB8FF — палитра, слоты, чипы), UI-иконки `icons/ui/` (alarm, hand, plus, arrow — стрелка между слотами; chevron-* и dice-5 в `icons/`), фигуры заставки и иллюстрации карточек (`illustrations/`).
-**Всё на месте (26.08):** иллюстрации попапов разложены полностью — almost/success/failure/timeout → `popup-not-found/-success/-access-denied/-unavailable`, монета circle-star → `coin-circle`; логотип, kv-иллюстрации, композиции режимов, шевроны, кубик — тоже.
+**Статус (26.08, вечер):** базовый комплект на месте (шрифты, иконки, попапы, монета). После финального контент-дока лида появились новые сервисы — **не хватает** (код показывает временные фолбэки):
+- tile-иконки (70 с подложкой): `tile/trino.svg`, `tile/data_transfer.svg`, `tile/sharded_pg.svg`, `tile/datalens_platform.svg`, `tile/object_storage.svg` — пока монохром на CSS-подложке;
+- монохром: `object_storage.svg` — пока пустой плейсхолдер;
+- kv-иллюстрации карточек: `kv_data_transfer.svg`, `kv_greenplum.svg`, `kv_trino.svg`, `kv_object_storage.svg`, `kv_opensearch.svg` — пока карточка без иллюстрации.
+On-prem версии (YTsaurus/YDB/DataLens On-Premises) переиспользуют иконки managed-версий — отдельные файлы не нужны.
 
 ## fonts/
 
