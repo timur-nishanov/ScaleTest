@@ -1071,25 +1071,39 @@ body {
 .ready__bundles {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
-  top: 340px;
-  /* шире макетных 2780: финальные имена сервисов длинные, чипам нужно место */
-  width: 3420px;
-  /* выше макетных 958: подпись под панелью однострочная, место отдано карточкам */
-  height: 1000px;
-  display: flex;
+  /* центр свободной зоны панели: от низа «Задания» (250) до подписи снизу.
+     Высота панели = 2070 − --panel-top, поэтому центр считается формулой */
+  top: calc(81px + (2070px - var(--panel-top, 596px)) / 2);
+  transform: translate(-50%, -50%);
+  /* между макетными 2780 и «широкой» версией: чипы теперь в два ряда,
+     поэтому карточкам не нужна вся ширина панели */
+  width: 2940px;
+  /* высота по контенту (карточки равняются на самую высокую), а не фикс 958:
+     у бандлов со сторонними технологиями сервисов нет вовсе, и фиксированная
+     высота оставляла в карточке дыру */
+  height: auto;
+  min-height: 700px;
+  /* сетка на две строки — «описание» и «сервисы». Карточки наследуют её
+     через subgrid, поэтому ряды чипов у всех трёх начинаются на одной линии
+     и одинокий чип не уезжает к полу карточки */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
   gap: 60px;
 }
 
 .bundle-card {
-  flex: 1;
   min-width: 0;
   background: var(--color-surface);
   border-radius: var(--radius-bundle);
   padding: 50px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  /* обе строки внешней сетки: описания и блоки сервисов выровнены между
+     карточками (в браузерах без subgrid — обычные две строки по контенту) */
+  display: grid;
+  grid-row: span 2;
+  grid-template-rows: subgrid;
+  align-content: start;
+  row-gap: 48px;
   text-align: left;
 }
 
@@ -1131,7 +1145,7 @@ body {
 .bundle-card__services-row {
   display: flex;
   align-items: stretch;
-  gap: 20px;
+  gap: 16px;
 }
 
 .bundle-chip {
@@ -1145,9 +1159,9 @@ body {
   background: var(--color-surface);
   border: 2px solid var(--color-silver);
   border-radius: var(--radius-tile);
-  /* по горизонтали чуть уже макетных 30 — иначе «Managed PostgreSQL»
-     не влезает в одну строку, как нарисовано */
-  padding: 32px 22px;
+  /* по горизонтали уже макетных 30: в ряду из трёх чипов каждый символ
+     на счету — имена сервисов длинные */
+  padding: 32px 16px;
   font-size: 32px;
   line-height: 36px;
   font-weight: 500;
