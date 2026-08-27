@@ -671,11 +671,19 @@ body {
   font-size: 32px;
   line-height: 44px;
   color: var(--color-text-soft);
-  margin: 0;
+  /* на строку меньше макетного максимума + воздух до иллюстрации:
+     при длинных текстах лида описание упиралось в неё вплотную */
+  margin: 0 0 48px;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 7;
+  -webkit-line-clamp: 6;
   overflow: hidden;
+}
+
+/* заголовок занял все четыре строки — описание режем ещё на строку,
+   иначе текст упирается в иллюстрацию (класс ставит TaskSelectScreen) */
+.task-card--tight .task-card__desc {
+  -webkit-line-clamp: 5;
 }
 
 .task-card__ill {

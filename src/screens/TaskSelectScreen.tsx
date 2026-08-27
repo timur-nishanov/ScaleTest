@@ -1,3 +1,4 @@
+import { useLayoutEffect } from 'react'
 import { useFlow } from '@/app/flow'
 import { BUILD_TASKS } from '@/data/buildTasks'
 import { READY_TASKS } from '@/data/readyTasks'
@@ -19,6 +20,23 @@ export function TaskSelectScreen() {
   const backToMode = useFlow((s) => s.backToMode)
   const taskWheelIndex = useFlow((s) => s.taskWheelIndex)
   const root = useAssemble<HTMLElement>()
+
+  // карточкам с четырёхстрочным заголовком оставляем на строку меньше
+  // описания — иначе текст упирается в иллюстрацию (фидбек заказчика 27.08)
+  useLayoutEffect(() => {
+    const el = root.current
+    if (!el) return
+    const apply = () => {
+      for (const card of el.querySelectorAll<HTMLElement>('.task-card')) {
+        const title = card.querySelector<HTMLElement>('.task-card__title')
+        if (!title) continue
+        card.classList.toggle('task-card--tight', title.clientHeight >= 4 * 64)
+      }
+    }
+    apply()
+    // шрифт мог ещё не примениться — пересчитываем, когда он готов
+    document.fonts?.ready.then(apply)
+  }, [gameMode, root])
 
   const tasks = gameMode === 'build' ? BUILD_TASKS : READY_TASKS
   const showRandom = gameMode === 'build' || FLAGS.randomInReadyMode
