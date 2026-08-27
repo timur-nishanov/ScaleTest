@@ -123,6 +123,9 @@ export const SERVICES: Record<ServiceId, Service> = deepTypo({
     name: 'Object Storage',
     tagName: 'Object Storage',
     short: 'объектное хранение данных',
+    // TODO(ассеты): иконку Object Storage заказчик ещё не прислал —
+    // временно показываем глиф Data Processing, чтобы плитка не была пустой
+    icon: 'data_proc',
   },
   ytsaurus_onprem: {
     id: 'ytsaurus_onprem',

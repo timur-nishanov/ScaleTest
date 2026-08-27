@@ -122,7 +122,8 @@ export const BUILD_TASKS: BuildTask[] = deepTypo([
   },
   {
     id: 'lakehouse',
-    kv: 'object_storage',
+    // TODO(ассеты): kv Object Storage не прислали — временно иллюстрация Data Processing
+    kv: 'data_proc',
     type: 'Централизация данных',
     title: 'Lakehouse для аналитики и ML',
     cardDesc:

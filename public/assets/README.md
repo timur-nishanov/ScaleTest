@@ -3,11 +3,13 @@
 Сюда заливаются материалы от заказчика/дизайнера. Код уже смотрит в эти папки — после заливки ничего перекладывать не нужно.
 
 **Статус (25.08):** разложено из заливок заказчика — шрифты (ttf + сгенерированные woff2), иконки сервисов в двух наборах: `icons/<ключ>.svg` (монохром 64, теги) и `icons/tile/<ключ>.svg` (70 с подложкой #CAB8FF — палитра, слоты, чипы), UI-иконки `icons/ui/` (alarm, hand, plus, arrow — стрелка между слотами; chevron-* и dice-5 в `icons/`), фигуры заставки и иллюстрации карточек (`illustrations/`).
-**Статус (26.08, вечер):** базовый комплект на месте (шрифты, иконки, попапы, монета). После финального контент-дока лида появились новые сервисы — **не хватает** (код показывает временные фолбэки):
-- tile-иконки (70 с подложкой): `tile/trino.svg`, `tile/data_transfer.svg`, `tile/sharded_pg.svg`, `tile/datalens_platform.svg`, `tile/object_storage.svg` — пока монохром на CSS-подложке;
-- монохром: `object_storage.svg` — пока пустой плейсхолдер;
-- kv-иллюстрации карточек: `kv_data_transfer.svg`, `kv_greenplum.svg`, `kv_trino.svg`, `kv_object_storage.svg`, `kv_opensearch.svg` — пока карточка без иллюстрации.
-On-prem версии (YTsaurus/YDB/DataLens On-Premises) переиспользуют иконки managed-версий — отдельные файлы не нужны.
+**Статус (27.08):** заказчик прислал полный набор иконок сервисов (19 tile-иконок 32×32 с подложкой #CAB8FF) и 19 kv-иллюстраций карточек. Разложено по ключам `src/data/services.ts`, дубликаты уже имевшихся файлов не заводились, исходники из корня репозитория удалены. Соответствия, где имя файла не совпадало с ключом: `Cloud Router` → `data_transfer`, `MPP` → `greenplum`, `PostgreSQL1` → `sharded_pg`, `data` → `data_proc`, `kv_postgre-sql` → `kv_pg`, `managed-kafka-kv` → `kv_kafka`, `managed-valkey-kv` → `kv_valkey`.
+
+**Чего ещё не хватает:**
+- **Object Storage** — ни иконки, ни kv-иллюстрации. Временно сервис показывается глифом Data Processing (`icon: 'data_proc'` в `services.ts`), карточка «Lakehouse для аналитики и ML» — иллюстрацией `kv_data_proc.svg`. Пришлёте — снимем заглушку (два TODO в коде).
+- **DataLens Platform** — tile-версии не было, собрана из монохромной иконки (`icons/datalens_platform.svg` на стандартной подложке). Если есть исходная — заменим.
+
+Не пригодились (в контенте лида таких задач нет, поэтому в репозиторий не клали): `MetaData Hub`, `kv_metadata-hub`, `kv_managed-mysql`, `kv_managed-spqr`, `kv_websql`.
 
 ## fonts/
 
@@ -25,7 +27,10 @@ On-prem версии (YTsaurus/YDB/DataLens On-Premises) переиспольз�
 pg.svg  mysql.svg  ch.svg  valkey.svg  storedoc.svg  kafka.svg  greenplum.svg
 opensearch.svg  airflow.svg  spark.svg  ytsaurus.svg  ydb.svg  datalens.svg
 trino.svg  data_transfer.svg  sharded_pg.svg  websql.svg  datalens_platform.svg
+data_proc.svg
 ```
+
+Два набора: `icons/<ключ>.svg` — монохром без подложки (теги заставки), `icons/tile/<ключ>.svg` — тот же глиф на подложке #CAB8FF (палитра, слоты, чипы). On-prem версии (YTsaurus/YDB/DataLens On-Premises) переиспользуют файлы managed-версий через поле `icon` — отдельных файлов не нужно.
 
 Один и тот же файл используется в тегах заставки (64px), палитре (70px), слотах (84px), чипсах бандлов и попапах — заливать оригинал, масштаб задаёт код.
 
