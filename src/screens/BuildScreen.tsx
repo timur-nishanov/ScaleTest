@@ -11,6 +11,7 @@ import { TimerBadge } from '@/components/ui/TimerBadge'
 import { useTimer } from '@/lib/useTimer'
 import { deferNav } from '@/lib/navDelay'
 import { useAssemble } from '@/lib/useAssemble'
+import { useHeaderFit } from '@/lib/useHeaderFit'
 import { ResultOverlay } from './ResultOverlay'
 
 /** Коннектор между слотами — стрелка из макета (238×28). */
@@ -54,6 +55,8 @@ export function BuildScreen() {
   const task = getBuildTask(taskId ?? '')
   const timer = useTimer(!result, timeoutTask)
   const root = useAssemble<HTMLElement>()
+  // панель со слотами отъезжает вниз, если шапка задачи выросла
+  const fit = useHeaderFit<HTMLElement>([taskId])
 
   // --- drag-слой (pointer-based, работает и с тачем, и с мышью) ---
   const [ghost, setGhost] = useState<{ id: ServiceId; x: number; y: number } | null>(null)
@@ -112,6 +115,7 @@ export function BuildScreen() {
       ref={(el) => {
         sectionRef.current = el
         root.current = el
+        fit.current = el
       }}
       className="screen screen--build"
       onPointerMove={onPointerMove}

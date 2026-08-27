@@ -4,11 +4,24 @@ import { STRINGS } from '@/data/strings'
 import { Button } from '@/components/ui/Button'
 import { ServiceIcon } from '@/components/ui/ServiceIcon'
 import { SERVICES } from '@/data/services'
+import type { ServiceId } from '@/data/types'
 import { TimerBadge } from '@/components/ui/TimerBadge'
 import { useTimer } from '@/lib/useTimer'
 import { deferNav } from '@/lib/navDelay'
 import { useAssemble } from '@/lib/useAssemble'
+import { useHeaderFit } from '@/lib/useHeaderFit'
 import { ResultOverlay } from './ResultOverlay'
+
+/**
+ * Разбивка чипов на ряды: до трёх — один ряд, дальше два этажа
+ * (4 → 2+2, 5 → 2+3, 6 → 3+3). В один ряд по пять чипов имена сервисов
+ * сжимаются в столбик по слову — фидбек заказчика 27.08.
+ */
+function chipRows(ids: ServiceId[]): ServiceId[][] {
+  if (ids.length <= 3) return [ids]
+  const first = Math.floor(ids.length / 2)
+  return [ids.slice(0, first), ids.slice(first)]
+}
 
 /**
  * Экран 6 — выбор готового бандла (ветка Б). Макет 11:2265 + стейты.
@@ -30,6 +43,8 @@ export function ReadyScreen() {
   const task = getReadyTask(taskId ?? '')
   const timer = useTimer(!result, timeoutTask)
   const root = useAssemble<HTMLElement>()
+  // панель с бандлами отъезжает вниз, если шапка задачи выросла
+  const fit = useHeaderFit<HTMLElement>([taskId])
 
   if (!task) return null
 
@@ -39,7 +54,13 @@ export function ReadyScreen() {
     : task.bundles.map((_, i) => i)
 
   return (
-    <section ref={root} className="screen screen--ready">
+    <section
+      ref={(el) => {
+        root.current = el
+        fit.current = el
+      }}
+      className="screen screen--ready"
+    >
       <Button
         variant="secondary"
         className="nav-back"
@@ -76,11 +97,15 @@ export function ReadyScreen() {
                 </div>
                 {b.services.length > 0 && (
                   <div className="bundle-card__services">
-                    {b.services.map((id) => (
-                      <span className="bundle-chip" key={id}>
-                        <ServiceIcon id={id} size={70} variant="tile" />
-                        {SERVICES[id].name}
-                      </span>
+                    {chipRows(b.services).map((row, i) => (
+                      <div className="bundle-card__services-row" key={i}>
+                        {row.map((id) => (
+                          <span className="bundle-chip" key={id}>
+                            <ServiceIcon id={id} size={70} variant="tile" />
+                            {SERVICES[id].name}
+                          </span>
+                        ))}
+                      </div>
                     ))}
                   </div>
                 )}

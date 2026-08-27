@@ -221,11 +221,12 @@ body {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: 130px;
-  width: 2394px;
+  top: 120px;
+  /* шире макетных 2394: финальные тексты лида длинные, показываем их целиком */
+  width: 2900px;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 32px;
   text-align: center;
   z-index: 2;
   pointer-events: none;
@@ -237,22 +238,15 @@ body {
   font-size: 96px;
   line-height: 116px;
   margin: 0;
-  /* финальные тексты длиннее макетных: шапка не должна налезать на панель */
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
 }
 
+/* описание не режем: панель ниже сама отъезжает под фактическую высоту
+   шапки (--panel-top считает useHeaderFit) */
 .task__top p {
   font-size: 44px;
   line-height: 56px;
-  width: 1800px;
+  width: 100%;
   margin: 0 auto;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
 }
 
 /* ---------- заставка (макет 11:1134, всё в дизайн-координатах) ---------- */
@@ -722,9 +716,10 @@ body {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: 596px;
+  /* низ панели фиксирован макетом, верх едет под длину шапки */
+  top: var(--panel-top, 596px);
   width: 3660px;
-  height: 1268px;
+  height: calc(1864px - var(--panel-top, 596px));
   background: var(--color-panel);
   border-radius: var(--radius-screen-card);
 }
@@ -920,7 +915,8 @@ body {
 }
 
 .service-tile {
-  width: 320px;
+  /* шире макетных: имена сервисов длинные, в 320 они сжимались в столбик */
+  width: 460px;
   min-height: 226px;
   height: 100%;
   background: var(--color-surface);
@@ -985,7 +981,7 @@ body {
   z-index: 50;
   pointer-events: none;
   transform: translate(-50%, -60%);
-  width: 320px;
+  width: 460px;
   min-height: 226px;
   display: flex;
   flex-direction: column;
@@ -1024,9 +1020,9 @@ body {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: 596px;
+  top: var(--panel-top, 596px);
   width: 3660px;
-  height: 1474px;
+  height: calc(2070px - var(--panel-top, 596px));
   background: var(--color-panel);
   border-radius: var(--radius-screen-card);
 }
@@ -1104,8 +1100,15 @@ body {
   overflow: hidden;
 }
 
-/* чипы сервисов: тянутся на равную ширину, высота — по самому высокому */
+/* чипы сервисов: раскладываются рядами по 2–3 (ReadyScreen считает разбивку),
+   внутри ряда тянутся на равную ширину, высота — по самому высокому */
 .bundle-card__services {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bundle-card__services-row {
   display: flex;
   align-items: stretch;
   gap: 20px;
