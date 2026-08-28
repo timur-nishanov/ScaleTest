@@ -123,8 +123,6 @@ export const SERVICES: Record<ServiceId, Service> = deepTypo({
     name: 'Object Storage',
     tagName: 'Object Storage',
     short: 'объектное хранение данных',
-    // иконку Object Storage заказчик ещё не прислал — плитка идёт без глифа
-    // (решение 27.08: чужие иконки не подставляем)
   },
   ytsaurus_onprem: {
     id: 'ytsaurus_onprem',

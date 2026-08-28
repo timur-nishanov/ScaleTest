@@ -5,8 +5,10 @@
 **Статус (25.08):** разложено из заливок заказчика — шрифты (ttf + сгенерированные woff2), иконки сервисов в двух наборах: `icons/<ключ>.svg` (монохром 64, теги) и `icons/tile/<ключ>.svg` (70 с подложкой #CAB8FF — палитра, слоты, чипы), UI-иконки `icons/ui/` (alarm, hand, plus, arrow — стрелка между слотами; chevron-* и dice-5 в `icons/`), фигуры заставки и иллюстрации карточек (`illustrations/`).
 **Статус (27.08):** заказчик прислал полный набор иконок сервисов (19 tile-иконок 32×32 с подложкой #CAB8FF) и 19 kv-иллюстраций карточек. Разложено по ключам `src/data/services.ts`, дубликаты уже имевшихся файлов не заводились, исходники из корня репозитория удалены. Соответствия, где имя файла не совпадало с ключом: `Cloud Router` → `data_transfer`, `MPP` → `greenplum`, `PostgreSQL1` → `sharded_pg`, `data` → `data_proc`, `kv_postgre-sql` → `kv_pg`, `managed-kafka-kv` → `kv_kafka`, `managed-valkey-kv` → `kv_valkey`.
 
+**Статус (28.08):** заказчик прислал иконки Object Storage (`Object Storage 1` → `tile/object_storage.svg` — 70 с подложкой, файл лида как есть, подложка у него голубая #94CFFF; `Object Storage 2` → `object_storage.svg` — монохром для тегов). Лид подтвердил: используем в таком виде, не перерисовываем.
+
 **Чего ещё не хватает:**
-- **Object Storage** — ни иконки, ни kv-иллюстрации. Заглушки не ставим (решение заказчика 27.08): в палитре и чипах сервис идёт без глифа, карточка «Lakehouse для аналитики и ML» — без иллюстрации. Нужны `icons/object_storage.svg`, `icons/tile/object_storage.svg` и `illustrations/kv_object_storage.svg`.
+- kv-иллюстрация Object Storage (`illustrations/kv_object_storage.svg`) — карточка «Lakehouse для аналитики и ML» пока показывает иллюстрацию DataLens (решение заказчика: без картинки карточка смотрелась дырой, Object Storage на превью не ставим).
 - **DataLens Platform** — tile-версии не было, собрана из монохромной иконки (`icons/datalens_platform.svg` на стандартной подложке). Если есть исходная — заменим.
 
 Не пригодились (в контенте лида таких задач нет, поэтому в репозиторий не клали): `MetaData Hub`, `kv_metadata-hub`, `kv_managed-mysql`, `kv_managed-spqr`, `kv_websql`, `data` и `kv_data-proc` (Data Processing).
