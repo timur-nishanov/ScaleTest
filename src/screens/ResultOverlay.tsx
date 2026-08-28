@@ -34,6 +34,18 @@ export function ResultOverlay() {
   const resetToAttract = useFlow((s) => s.resetToAttract)
   const rootRef = useRef<HTMLDivElement>(null)
 
+  // все чипы сравнения одной высоты: ряды «Ваша сборка» и «Оптимальная»
+  // не отличаются, даже когда длинное имя даёт лишнюю строку (замер в
+  // offsetHeight — это дизайн-пиксели, скейл Stage на них не влияет)
+  useLayoutEffect(() => {
+    const root = rootRef.current
+    if (!root) return
+    const chips = Array.from(root.querySelectorAll<HTMLElement>('.result-chip'))
+    if (chips.length < 2) return
+    const max = Math.max(...chips.map((c) => c.offsetHeight))
+    for (const c of chips) c.style.minHeight = `${max}px`
+  }, [])
+
   // плавное появление: дим → карточка снизу катом → баннер следом
   useLayoutEffect(() => {
     const root = rootRef.current

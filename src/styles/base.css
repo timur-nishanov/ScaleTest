@@ -1289,7 +1289,12 @@ body {
 
 .result-compare__row {
   display: flex;
-  align-items: center;
+  /* чипы ряда одной высоты — однострочные имена не ниже двухстрочных */
+  align-items: stretch;
+}
+
+.result-compare__row .result-compare__arrow {
+  align-self: center;
 }
 
 .result-compare__arrow {
@@ -1307,6 +1312,9 @@ body {
   border: 4px solid transparent;
   border-radius: var(--radius-tile);
   padding: 30px;
+  /* высота двухстрочного имени (30 + 72 + 30 + рамки) — ряды «Ваша сборка»
+     и «Оптимальная последовательность» одинаковые даже при коротких именах */
+  min-height: 140px;
   font-size: 30px;
   line-height: 36px;
   font-weight: 500;
@@ -1324,7 +1332,6 @@ body {
 .result-chip--empty {
   border: 4px dashed var(--color-silver);
   background: rgb(255 255 255 / 20%);
-  min-height: 130px;
 }
 
 .result-modal__actions {
