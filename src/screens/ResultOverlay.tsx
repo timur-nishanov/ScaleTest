@@ -98,37 +98,42 @@ export function ResultOverlay() {
             ? STRINGS.result.timeoutReady
             : STRINGS.result.readyWrong
 
-  // neutral — без цветных рамок (ветка Б: связку не «проверяли» по слотам)
-  const chipRow = (ids: (ServiceId | null)[], wrongSlots?: number[], neutral = false) => (
-    <div className="result-compare__row">
-      {ids.map((id, i) => {
-        const state = neutral ? '' : wrongSlots?.includes(i) ? 'is-wrong' : 'is-ok'
-        const chip =
-          id === null ? (
-            <span key={`c${i}`} className="result-chip result-chip--empty" />
-          ) : (
-            <span key={`c${i}`} className={`result-chip ${state}`}>
-              <ServiceIcon id={id} size={70} variant="tile" />
-              {SERVICES[id].name}
-            </span>
-          )
-        return i > 0
-          ? [
-              <img
-                key={`a${i}`}
-                className="result-compare__arrow"
-                src="/assets/icons/ui/arrow.svg"
-                width={114}
-                height={13}
-                alt=""
-                draggable={false}
-              />,
-              chip,
-            ]
-          : chip
-      })}
-    </div>
-  )
+  // neutral — без цветных рамок (ветка Б: связку не «проверяли» по слотам).
+  // С четырёх чипов ряд переходит в компактный режим: иначе длинные имена
+  // («…for ClickHouse®») не помещаются и вылезают за рамку чипа
+  const chipRow = (ids: (ServiceId | null)[], wrongSlots?: number[], neutral = false) => {
+    const tight = ids.length >= 4
+    return (
+      <div className={`result-compare__row ${tight ? 'result-compare__row--tight' : ''}`}>
+        {ids.map((id, i) => {
+          const state = neutral ? '' : wrongSlots?.includes(i) ? 'is-wrong' : 'is-ok'
+          const chip =
+            id === null ? (
+              <span key={`c${i}`} className="result-chip result-chip--empty" />
+            ) : (
+              <span key={`c${i}`} className={`result-chip ${state}`}>
+                <ServiceIcon id={id} size={tight ? 56 : 70} variant="tile" />
+                {SERVICES[id].name}
+              </span>
+            )
+          return i > 0
+            ? [
+                <img
+                  key={`a${i}`}
+                  className="result-compare__arrow"
+                  src="/assets/icons/ui/arrow.svg"
+                  width={tight ? 60 : 114}
+                  height={13}
+                  alt=""
+                  draggable={false}
+                />,
+                chip,
+              ]
+            : chip
+        })}
+      </div>
+    )
+  }
 
   // «Твоя сборка» показываем, только если игрок успел что-то поставить
   // (макет «Время вышло»: при пустых слотах остаётся один ряд)

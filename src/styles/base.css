@@ -1302,6 +1302,20 @@ body {
   width: 114px;
 }
 
+/* ряд из четырёх чипов: компактнее поля/шрифт и короткие стрелки,
+   иначе длинные бренд-имена не помещаются в узкий чип */
+.result-compare__row--tight .result-chip {
+  padding: 20px 18px;
+  gap: 12px;
+  font-size: 28px;
+  line-height: 34px;
+  min-height: 120px;
+}
+
+.result-compare__row--tight .result-compare__arrow {
+  width: 60px;
+}
+
 .result-chip {
   flex: 1;
   min-width: 0;
