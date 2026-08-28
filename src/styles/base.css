@@ -1216,7 +1216,9 @@ body {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 1560px;
+  /* шире макетных 1560: в 4-слотовых задачах чипам сравнения нужна ширина.
+     1760 — баланс: баннер справа (742 + зазор 32) ещё помещается на экране */
+  width: 1760px;
   background: var(--color-surface);
   border-radius: var(--radius-screen-card);
   padding-bottom: 100px;
@@ -1258,13 +1260,13 @@ body {
   line-height: 56px;
   color: var(--color-text);
   margin: 24px 0 0;
-  /* по внутренним полям карточки 1560 — длинные тексты лида не сжимаются в столбик */
-  max-width: 1380px;
+  /* по внутренним полям карточки — длинные тексты лида не сжимаются в столбик */
+  max-width: 1520px;
   text-wrap: balance;
 }
 
 .result-compare {
-  width: 1460px;
+  width: 1660px;
   margin: 70px 0 0;
   background: var(--color-compare-bg);
   border-radius: var(--radius-compare);
@@ -1302,18 +1304,18 @@ body {
   width: 114px;
 }
 
-/* ряд из четырёх чипов: компактнее поля/шрифт и короткие стрелки,
-   иначе длинные бренд-имена не помещаются в узкий чип */
+/* ряд из четырёх чипов: чуть компактнее поля/стрелки, чтобы длинные
+   бренд-имена помещались в чип целиком */
 .result-compare__row--tight .result-chip {
-  padding: 20px 18px;
-  gap: 12px;
+  padding: 24px 20px;
+  gap: 14px;
   font-size: 28px;
   line-height: 34px;
-  min-height: 120px;
+  min-height: 128px;
 }
 
 .result-compare__row--tight .result-compare__arrow {
-  width: 60px;
+  width: 80px;
 }
 
 .result-chip {
