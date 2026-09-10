@@ -195,6 +195,7 @@ export function ResultOverlay() {
               />
             </div>
             <h3>{STRINGS.result.coinPromo}</h3>
+            <p>{STRINGS.result.coinPromoHint}</p>
             <Button className="result-banner__cta" onClick={() => chooseMode('ready')}>
               {STRINGS.result.coinPromoCta}
             </Button>

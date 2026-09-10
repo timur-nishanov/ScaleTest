@@ -11,7 +11,7 @@ export interface Fact {
 }
 
 export const FACTS: Fact[] = deepTypo([
-  { value: '20+', label: 'сервисов в Платформе данных' },
+  { value: '20+', label: 'сервисов в платформе данных' },
   { value: '99,99%', label: 'доступность управляемых сервисов в год' },
   { value: '0', label: 'забот по доступности и масштабированию' },
 ])
