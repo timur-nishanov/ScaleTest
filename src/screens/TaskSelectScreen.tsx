@@ -83,7 +83,7 @@ export function TaskSelectScreen() {
             <article className="task-card">
               <div className="task-card__type">{t.type}</div>
               <h3 className="task-card__title">{t.title}</h3>
-              <p className="task-card__desc">{t.cardDesc}</p>
+              <p className="task-card__desc">{t.previewDesc ?? t.cardDesc}</p>
               <img
                 className="task-card__ill"
                 src={`/assets/illustrations/kv_${t.kv}.svg`}
