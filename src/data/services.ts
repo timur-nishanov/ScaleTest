@@ -3,7 +3,7 @@ import { deepTypo } from '@/lib/typo'
 
 /**
  * Сервисы Платформы данных. Имена и описания — финальный контент-док
- * продуктового лида YC (26.08, «Актуальные тексты интерфейса_FINAL»).
+ * продуктового лида YC (Final, 10.09).
  *
  * on-prem позиции — отдельные сущности контента, но иконки переиспользуют
  * managed-версии (поле icon). storedoc/websql в новом контенте не участвуют,
@@ -60,8 +60,8 @@ export const SERVICES: Record<ServiceId, Service> = deepTypo({
   },
   airflow: {
     id: 'airflow',
-    name: 'Yandex Managed Service for Apache Airflow®',
-    tagName: 'Yandex Managed Service for Apache Airflow®',
+    name: 'Managed Service for Apache Airflow®',
+    tagName: 'Managed Service for Apache Airflow®',
     short: 'оркестрация пайплайнов',
   },
   spark: {
@@ -90,8 +90,8 @@ export const SERVICES: Record<ServiceId, Service> = deepTypo({
   },
   trino: {
     id: 'trino',
-    name: 'Yandex Managed Service for Trino',
-    tagName: 'Yandex Managed Service for Trino',
+    name: 'Managed Service for Trino',
+    tagName: 'Managed Service for Trino',
     short: 'распределённый SQL по разным источникам',
   },
   data_transfer: {
@@ -126,22 +126,22 @@ export const SERVICES: Record<ServiceId, Service> = deepTypo({
   },
   ytsaurus_onprem: {
     id: 'ytsaurus_onprem',
-    name: 'YTsaurus On-Premises',
-    tagName: 'YTsaurus On-Premises',
+    name: 'YTsaurus On-premises',
+    tagName: 'YTsaurus On-premises',
     short: 'платформа больших данных в своём контуре',
     icon: 'ytsaurus',
   },
   ydb_onprem: {
     id: 'ydb_onprem',
-    name: 'YDB On-Premises',
-    tagName: 'YDB On-Premises',
+    name: 'YDB On-premises',
+    tagName: 'YDB On-premises',
     short: 'распределённая БД в своём контуре',
     icon: 'ydb',
   },
   datalens_onprem: {
     id: 'datalens_onprem',
-    name: 'Yandex DataLens On-Premises',
-    tagName: 'Yandex DataLens On-Premises',
+    name: 'Yandex DataLens On-premises',
+    tagName: 'Yandex DataLens On-premises',
     short: 'Gen-BI и дашборды в своём контуре',
     icon: 'datalens',
   },
