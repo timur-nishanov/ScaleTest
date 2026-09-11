@@ -1,10 +1,12 @@
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { useFlow } from '@/app/flow'
+import { APP_MODE, QR_URL } from '@/app/config'
 import { SERVICES } from '@/data/services'
 import { STRINGS } from '@/data/strings'
 import { Button } from '@/components/ui/Button'
 import { ServiceIcon } from '@/components/ui/ServiceIcon'
+import { QrCode } from '@/components/ui/QrCode'
 import type { Outcome, ServiceId } from '@/data/types'
 
 /**
@@ -12,9 +14,18 @@ import type { Outcome, ServiceId } from '@/data/types'
  * (11:3819, эталон «Собрать самому. Почти. 2 красных» 15:861):
  * карточка 1560 по центру экрана (img-контейнер 1560×472 с иллюстрацией 320
  * по низу, заголовок 96/116, текст 44/56, блок сравнения 1460 r56 с чипами
- * и стрелками, кнопка), справа вплотную (gap 32) — баннер 742:
- * ветка А — промо монеты (все исходы), ветка Б — «Ты заработал монету!»
- * (кроме «Мимо»). В ветке Б в сравнении только «Оптимальная связка».
+ * и стрелками, кнопки), справа вплотную (gap 32) — колонка баннеров 742:
+ * ветка А — промо «Хотите печать…» (все исходы), ветка Б — «Вы заработали
+ * печать!» (кроме «Мимо»). В ветке Б в сравнении только «Оптимальный бандл».
+ *
+ * Правая колонка (.result-side) — стопка баннеров одной анатомии: под
+ * промо/печатью при любом исходе стоит QR-баннер «Хотите получить
+ * материалы…» (заказчик 11.09, размещение — предложение артдира: «в
+ * попапе справа, в „Собрать самому“ — под переходом в „Выбрать из
+ * готового“»). Композиция «карточка + колонка» центрируется по вертикали
+ * целиком; низ карточки и низ колонки всегда на одной линии: QR-баннер
+ * добирает остаток высоты колонки, а карточка растягивается, если колонка
+ * выше неё (правила — в base.css у .result-layout).
  */
 
 /** Иллюстрация попапа по исходу (assets/illustrations/popup-*.svg). */
@@ -52,7 +63,7 @@ export function ResultOverlay() {
     if (!root) return
     const dim = root.querySelector('.overlay__dim')
     const modal = root.querySelector('.result-modal')
-    const banner = root.querySelector('.result-banner')
+    const banners = root.querySelectorAll('.result-banner')
     const tl = gsap.timeline()
     if (dim) tl.fromTo(dim, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3, ease: 'power1.out' }, 0)
     if (modal)
@@ -62,11 +73,11 @@ export function ResultOverlay() {
         { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out', clearProps: 'y' },
         0.05,
       )
-    if (banner)
+    if (banners.length)
       tl.fromTo(
-        banner,
+        banners,
         { autoAlpha: 0, y: 48 },
-        { autoAlpha: 1, y: 0, duration: 0.45, ease: 'power3.out', clearProps: 'y' },
+        { autoAlpha: 1, y: 0, duration: 0.45, ease: 'power3.out', stagger: 0.1, clearProps: 'y' },
         0.2,
       )
     return () => {
@@ -146,76 +157,97 @@ export function ResultOverlay() {
     <div className="overlay" ref={rootRef}>
       <div className="overlay__dim" />
 
-      <div className={`result-modal result-modal--${result.outcome}`}>
-        <div className="result-modal__illbox">
-          <img
-            src={`/assets/illustrations/${ill}.svg`}
-            alt=""
-            draggable={false}
-            onError={(e) => e.currentTarget.classList.add('is-missing')}
-          />
-        </div>
-        <h2>{texts.title}</h2>
-        <p>{texts.msg}</p>
-
-        <div className="result-compare">
-          {placedAny && result.placedSnapshot && (
-            <div className="result-compare__group">
-              <span className="result-compare__label">{STRINGS.result.yourBuild}</span>
-              {chipRow(result.placedSnapshot, result.wrongSlots ?? [])}
-            </div>
-          )}
-          <div className="result-compare__group">
-            <span className="result-compare__label">
-              {gameMode === 'build' ? STRINGS.result.optimalBuild : STRINGS.result.optimalBundle}
-            </span>
-            {chipRow(result.correct, undefined, gameMode === 'ready')}
+      <div className="result-layout">
+        <div className={`result-modal result-modal--${result.outcome}`}>
+          <div className="result-modal__illbox">
+            <img
+              src={`/assets/illustrations/${ill}.svg`}
+              alt=""
+              draggable={false}
+              onError={(e) => e.currentTarget.classList.add('is-missing')}
+            />
           </div>
-        </div>
+          <h2>{texts.title}</h2>
+          <p>{texts.msg}</p>
 
-        {/* кнопки едины для обеих веток (решение заказчика 26.08):
-            «Выбрать другую задачу» → колесо, «Завершить» → заставка */}
-        <div className="result-modal__actions">
-          <Button variant="secondary" onClick={backToTasks}>
-            {STRINGS.result.anotherTask}
-          </Button>
-          <Button variant="secondary" onClick={resetToAttract}>
-            {STRINGS.result.finish}
-          </Button>
-        </div>
-
-        {gameMode === 'build' && (
-          <aside className="result-banner">
-            <div className="result-banner__circle" aria-hidden>
-              <img
-                src="/assets/illustrations/coin-circle.svg"
-                alt=""
-                draggable={false}
-                onError={(e) => e.currentTarget.classList.add('is-missing')}
-              />
+          <div className="result-compare">
+            {placedAny && result.placedSnapshot && (
+              <div className="result-compare__group">
+                <span className="result-compare__label">{STRINGS.result.yourBuild}</span>
+                {chipRow(result.placedSnapshot, result.wrongSlots ?? [])}
+              </div>
+            )}
+            <div className="result-compare__group">
+              <span className="result-compare__label">
+                {gameMode === 'build' ? STRINGS.result.optimalBuild : STRINGS.result.optimalBundle}
+              </span>
+              {chipRow(result.correct, undefined, gameMode === 'ready')}
             </div>
-            <h3>{STRINGS.result.coinPromo}</h3>
-            <p>{STRINGS.result.coinPromoHint}</p>
-            <Button className="result-banner__cta" onClick={() => chooseMode('ready')}>
-              {STRINGS.result.coinPromoCta}
+          </div>
+
+          {/* кнопки едины для обеих веток (решение заказчика 26.08):
+              «Выбрать другую задачу» → колесо, «Завершить» → заставка */}
+          <div className="result-modal__actions">
+            <Button variant="secondary" onClick={backToTasks}>
+              {STRINGS.result.anotherTask}
             </Button>
-          </aside>
-        )}
+            <Button variant="secondary" onClick={resetToAttract}>
+              {STRINGS.result.finish}
+            </Button>
+          </div>
 
-        {gameMode === 'ready' && result.earnedCoin && (
-          <aside className="result-banner">
-            <div className="result-banner__circle" aria-hidden>
-              <img
-                src="/assets/illustrations/coin-circle.svg"
-                alt=""
-                draggable={false}
-                onError={(e) => e.currentTarget.classList.add('is-missing')}
-              />
-            </div>
-            <h3>{STRINGS.result.coinEarned}</h3>
-            <p>{STRINGS.result.coinEarnedHint}</p>
+        </div>
+
+        <div className="result-side">
+          {gameMode === 'build' && (
+            <aside className="result-banner">
+              <div className="result-banner__circle" aria-hidden>
+                <img
+                  src="/assets/illustrations/coin-circle.svg"
+                  alt=""
+                  draggable={false}
+                  onError={(e) => e.currentTarget.classList.add('is-missing')}
+                />
+              </div>
+              <h3>{STRINGS.result.coinPromo}</h3>
+              <p>{STRINGS.result.coinPromoHint}</p>
+              <Button className="result-banner__cta" onClick={() => chooseMode('ready')}>
+                {STRINGS.result.coinPromoCta}
+              </Button>
+            </aside>
+          )}
+
+          {gameMode === 'ready' && result.earnedCoin && (
+            <aside className="result-banner">
+              <div className="result-banner__circle" aria-hidden>
+                <img
+                  src="/assets/illustrations/coin-circle.svg"
+                  alt=""
+                  draggable={false}
+                  onError={(e) => e.currentTarget.classList.add('is-missing')}
+                />
+              </div>
+              <h3>{STRINGS.result.coinEarned}</h3>
+              <p>{STRINGS.result.coinEarnedHint}</p>
+            </aside>
+          )}
+
+          {/* QR-баннер — при любом исходе обеих веток (продуктовый лид, 11.09).
+              В веб-версии пользователь и так у экрана — плашка ещё и ссылка */}
+          <aside className="result-banner result-banner--qr">
+            <h3>{STRINGS.result.qrTitle}</h3>
+            <p>{STRINGS.result.qrHint}</p>
+            {APP_MODE === 'web' ? (
+              <a className="result-qr" href={QR_URL} target="_blank" rel="noopener">
+                <QrCode value={QR_URL} size={352} className="result-qr__code" />
+              </a>
+            ) : (
+              <div className="result-qr">
+                <QrCode value={QR_URL} size={352} className="result-qr__code" />
+              </div>
+            )}
           </aside>
-        )}
+        </div>
       </div>
     </div>
   )
