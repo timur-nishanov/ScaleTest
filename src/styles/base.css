@@ -1212,12 +1212,25 @@ body {
   background: rgb(11 13 18 / 45%);
 }
 
+/* композиция «карточка + правая колонка баннеров»: карточка стоит по центру
+   экрана по горизонтали (left 1040 = (3840 − 1760) / 2), а по вертикали
+   центрируется вся композиция. Если колонка выше карточки (ветка Б с
+   баннером печати, ветка А при пустых слотах), карточка растягивается до её
+   высоты, а содержимое карточки центрируется — низ карточки и колонки всегда
+   на одной линии, колонка не свисает и не уезжает за низ экрана */
+.result-layout {
+  position: absolute;
+  left: 1040px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: stretch;
+  gap: 32px;
+}
+
 /* карточка результата 1560 по центру экрана (эталон 15:861) */
 .result-modal {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  flex: none;
   /* шире макетных 1560: в 4-слотовых задачах чипам сравнения нужна ширина.
      1760 — баланс: баннер справа (742 + зазор 32) ещё помещается на экране */
   width: 1760px;
@@ -1228,6 +1241,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 /* контейнер иллюстрации: во всю ширину карточки, картинка прижата к низу */
@@ -1358,11 +1372,17 @@ body {
   gap: 40px;
 }
 
-/* баннер справа вплотную к карточке (gap 32), прижат к её верху */
+/* правая колонка: баннеры одной анатомии стопкой сверху вниз (gap 32),
+   прижаты к верху карточки; правый край 3574 — как у одиночного баннера */
+.result-side {
+  flex: none;
+  width: 742px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
 .result-banner {
-  position: absolute;
-  left: calc(100% + 32px);
-  top: 0;
   width: 742px;
   background: var(--color-accent);
   color: var(--color-text-invert);
@@ -1418,6 +1438,33 @@ body {
 .result-banner__cta {
   margin-top: 64px;
   width: 100%;
+}
+
+/* QR-баннер: заголовок и подпись как у промо, ниже белая плашка на всю
+   внутреннюю ширину (как CTA-кнопка) с QR-кодом по центру. Код 360 —
+   читается с телефона у 55" 4K-экрана; плашка даёт ему тихую зону 24+ */
+.result-banner--qr h3 {
+  font-size: 44px;
+  line-height: 56px;
+}
+
+.result-banner--qr p {
+  margin-top: 16px;
+}
+
+.result-qr {
+  margin-top: 40px;
+  width: 100%;
+  padding: 24px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-radius: var(--radius-tile);
+  display: grid;
+  place-items: center;
+}
+
+.result-qr__code {
+  display: block;
 }
 
 .idle-modal {
