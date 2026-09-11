@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { useFlow } from '@/app/flow'
-import { QR_URL } from '@/app/config'
+import { APP_MODE, QR_URL } from '@/app/config'
 import { SERVICES } from '@/data/services'
 import { STRINGS } from '@/data/strings'
 import { Button } from '@/components/ui/Button'
@@ -14,16 +14,18 @@ import type { Outcome, ServiceId } from '@/data/types'
  * (11:3819, эталон «Собрать самому. Почти. 2 красных» 15:861):
  * карточка 1560 по центру экрана (img-контейнер 1560×472 с иллюстрацией 320
  * по низу, заголовок 96/116, текст 44/56, блок сравнения 1460 r56 с чипами
- * и стрелками, кнопка), справа вплотную (gap 32) — баннер 742:
- * ветка А — промо монеты (все исходы), ветка Б — «Ты заработал монету!»
- * (кроме «Мимо»). В ветке Б в сравнении только «Оптимальная связка».
+ * и стрелками, кнопки), справа вплотную (gap 32) — колонка баннеров 742:
+ * ветка А — промо «Хотите печать…» (все исходы), ветка Б — «Вы заработали
+ * печать!» (кроме «Мимо»). В ветке Б в сравнении только «Оптимальный бандл».
  *
- * Правая колонка (.result-side) — стопка баннеров той же анатомии: под
+ * Правая колонка (.result-side) — стопка баннеров одной анатомии: под
  * промо/печатью при любом исходе стоит QR-баннер «Хотите получить
  * материалы…» (заказчик 11.09, размещение — предложение артдира: «в
  * попапе справа, в „Собрать самому“ — под переходом в „Выбрать из
  * готового“»). Композиция «карточка + колонка» центрируется по вертикали
- * целиком, чтобы колонка не уезжала за низ экрана, когда она выше карточки.
+ * целиком; низ карточки и низ колонки всегда на одной линии: QR-баннер
+ * добирает остаток высоты колонки, а карточка растягивается, если колонка
+ * выше неё (правила — в base.css у .result-layout).
  */
 
 /** Иллюстрация попапа по исходу (assets/illustrations/popup-*.svg). */
@@ -230,13 +232,20 @@ export function ResultOverlay() {
             </aside>
           )}
 
-          {/* QR-баннер — при любом исходе обеих веток (продуктовый лид, 11.09) */}
+          {/* QR-баннер — при любом исходе обеих веток (продуктовый лид, 11.09).
+              В веб-версии пользователь и так у экрана — плашка ещё и ссылка */}
           <aside className="result-banner result-banner--qr">
             <h3>{STRINGS.result.qrTitle}</h3>
             <p>{STRINGS.result.qrHint}</p>
-            <div className="result-qr">
-              <QrCode value={QR_URL} size={360} className="result-qr__code" />
-            </div>
+            {APP_MODE === 'web' ? (
+              <a className="result-qr" href={QR_URL} target="_blank" rel="noopener">
+                <QrCode value={QR_URL} size={352} className="result-qr__code" />
+              </a>
+            ) : (
+              <div className="result-qr">
+                <QrCode value={QR_URL} size={352} className="result-qr__code" />
+              </div>
+            )}
           </aside>
         </div>
       </div>
