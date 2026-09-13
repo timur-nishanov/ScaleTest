@@ -1217,18 +1217,48 @@ body {
 
 /* композиция «карточка + правая колонка баннеров»: карточка стоит по центру
    экрана по горизонтали (880 = половина ширины карточки 1760), по вертикали
-   центрируется вся композиция. Карточка всегда своей естественной высоты
-   (иначе внутренние отступы «плавают» от исхода к исходу), колонка справа
-   центрируется по её высоте — одинаковый заход сверху и снизу вместо
-   «почти выровненного» низа */
+   центрируется вся композиция.
+
+   Один баннер справа (ветка Б без печати) — всё по верхнему краю, высоты
+   натуральные. Два баннера (--stretch) — карточка и колонка тянутся друг
+   под друга: та, что ниже, подстраивается под высокую, а лишняя высота
+   уходит в «воздух» внутри блоков, не в поля. Минимальные отступы при этом
+   сохраняются (кнопки 70, круг-иконка 90, код 48): auto добирает только
+   свободное место, поэтому в блоке, который задаёт высоту, всё остаётся
+   ровно как было */
 .result-layout {
   position: absolute;
   left: calc(50% - 880px);
   top: 50%;
   transform: translateY(-50%);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 32px;
+}
+
+.result-layout--stretch {
+  align-items: stretch;
+}
+
+/* карточка: контент сверху, кнопки прижаты к низу */
+.result-layout--stretch .result-modal__actions {
+  margin-top: auto;
+  padding-top: 70px;
+}
+
+/* баннеры делят лишнюю высоту колонки поровну */
+.result-layout--stretch .result-side > .result-banner {
+  flex: 1 0 auto;
+}
+
+/* баннер с круглой иконкой: иконка сверху, текст и кнопка к низу */
+.result-layout--stretch .result-banner:not(.result-banner--qr) h3 {
+  margin-top: auto;
+}
+
+/* QR-карточка: заголовок с подписью сверху, код к низу */
+.result-layout--stretch .result-banner--qr p {
+  margin-bottom: auto;
 }
 
 /* карточка результата 1560 по центру экрана (эталон 15:861) */
@@ -1479,6 +1509,58 @@ body {
 
 .result-qr__code {
   display: block;
+}
+
+/* светлый вариант QR-карточки (второй вариант для выбора заказчиком):
+   белая карточка, текст чёрный, код прямо на карточке без плашки —
+   тихая зона = внутренние поля 60 */
+.result-banner--qr-light {
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.result-banner--qr-light p {
+  color: var(--color-text-soft);
+}
+
+.result-banner--qr-light .result-qr {
+  width: auto;
+  height: auto;
+  background: transparent;
+}
+
+/* демо-тумблер варианта QR-карточки: показать заказчику оба и выбрать.
+   Убрать вместе с классом --qr-light, когда решение принято */
+.qr-variant-toggle {
+  position: absolute;
+  left: 90px;
+  bottom: 60px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 20px 16px 32px;
+  background: rgb(11 13 18 / 60%);
+  color: var(--color-text-invert);
+  border-radius: var(--radius-pill);
+  font-size: 28px;
+  line-height: 36px;
+}
+
+.qr-variant-toggle button {
+  border: none;
+  font-family: inherit;
+  font-size: 28px;
+  line-height: 36px;
+  padding: 12px 28px;
+  border-radius: var(--radius-pill);
+  background: rgb(255 255 255 / 15%);
+  color: var(--color-text-invert);
+}
+
+.qr-variant-toggle button.is-on {
+  background: var(--color-surface);
+  color: var(--color-text);
 }
 
 .idle-modal {
