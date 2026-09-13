@@ -269,11 +269,11 @@ export function ResultOverlay() {
             <p>{STRINGS.result.qrHint}</p>
             {APP_MODE === 'web' ? (
               <a className="result-qr" href={QR_URL} target="_blank" rel="noopener">
-                <QrCode value={QR_URL} size={352} className="result-qr__code" />
+                <QrCode value={QR_URL} size={qrVariant === 'light' ? 440 : 352} className="result-qr__code" />
               </a>
             ) : (
               <div className="result-qr">
-                <QrCode value={QR_URL} size={352} className="result-qr__code" />
+                <QrCode value={QR_URL} size={qrVariant === 'light' ? 440 : 352} className="result-qr__code" />
               </div>
             )}
           </aside>

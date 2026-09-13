@@ -1487,6 +1487,8 @@ body {
 }
 
 .result-banner.result-banner--qr h3 {
+  /* Heavy (800), не Black: решение лида 13.09 для зага QR-карточки */
+  font-weight: 800;
   font-size: 42px;
   line-height: 48px;
   max-width: 100%;
@@ -1523,9 +1525,10 @@ body {
   color: var(--color-text-soft);
 }
 
+/* бокс остаётся 440×440 (геометрия карточки в обоих вариантах одна —
+   при переключении тумблера ничего не прыгает), виден только код:
+   он здесь крупнее, во всю плашку, раз белых границ не видно */
 .result-banner--qr-light .result-qr {
-  width: auto;
-  height: auto;
   background: transparent;
 }
 
