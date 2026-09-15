@@ -63,7 +63,9 @@ interface FlowState {
   openTask: (taskId: string) => void
   openRandomTask: () => void
   backToMode: () => void
-  backToTasks: () => void
+  /** Возврат на колесо; advanceWheel — встать на следующую задачу
+   * (кнопка «Выбрать другую задачу», просьба Олега 15.09). */
+  backToTasks: (advanceWheel?: boolean) => void
 
   tapService: (id: ServiceId) => void
   placeService: (id: ServiceId, slot: number) => void
@@ -212,8 +214,19 @@ export const useFlow = create<FlowState>((set, get) => {
 
     // после карточек «Назад» — следующий вход на колесо снова с интро
     backToMode: () => set({ screen: 'mode', taskWheelIndex: null, ...cleanAttempt }),
-    // из задачи «Назад» — колесо на прежнем месте, без повторного интро
-    backToTasks: () => set({ screen: 'taskSelect', ...cleanAttempt }),
+    // из задачи «Назад» — колесо на прежнем месте, без повторного интро.
+    // «Выбрать другую задачу» из попапа (advanceWheel) ставит колесо на
+    // следующую карточку — иначе посетитель возвращается на уже решённую
+    // задачу и листает вручную (Олег, 15.09; для обеих веток)
+    backToTasks: (advanceWheel = false) =>
+      set((s) => {
+        const pool = s.gameMode === 'build' ? BUILD_TASKS : READY_TASKS
+        const wheelIndex =
+          advanceWheel && s.taskWheelIndex !== null
+            ? (s.taskWheelIndex + 1) % pool.length
+            : s.taskWheelIndex
+        return { screen: 'taskSelect', taskWheelIndex: wheelIndex, ...cleanAttempt }
+      }),
 
     tapService: (id) =>
       set((s) => ({
