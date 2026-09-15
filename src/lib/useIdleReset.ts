@@ -7,10 +7,18 @@ import { FLAGS, IDLE_PROMPT_AFTER_S, IDLE_RESET_AFTER_S } from '@/app/config'
  * заставку. При FLAGS.idlePrompt=false попап скрыт (решение заказчика 27.08):
  * отсчёт идёт единым таймером на сумму обоих интервалов.
  *
+ * totalS переопределяет полный порог до сброса (по умолчанию — сумма
+ * интервалов): на экранах задачи он больше таймера, чтобы киоск не ушёл
+ * на заставку раньше попапа «Время вышло» (см. App).
+ *
  * enabled=false на attract-экране. Любой pointerdown сбрасывает отсчёт.
  * Возвращает showPrompt + stay() для кнопки «Да» (перезаряжает отсчёт).
  */
-export function useIdleReset(enabled: boolean, onReset: () => void) {
+export function useIdleReset(
+  enabled: boolean,
+  onReset: () => void,
+  totalS: number = IDLE_PROMPT_AFTER_S + IDLE_RESET_AFTER_S,
+) {
   const [showPrompt, setShowPrompt] = useState(false)
   const onResetRef = useRef(onReset)
   onResetRef.current = onReset
@@ -30,19 +38,19 @@ export function useIdleReset(enabled: boolean, onReset: () => void) {
       window.clearTimeout(resetTimer)
       setShowPrompt(false)
       if (!FLAGS.idlePrompt) {
-        resetTimer = window.setTimeout(
-          () => onResetRef.current(),
-          (IDLE_PROMPT_AFTER_S + IDLE_RESET_AFTER_S) * 1000,
-        )
+        resetTimer = window.setTimeout(() => onResetRef.current(), totalS * 1000)
         return
       }
-      promptTimer = window.setTimeout(() => {
-        setShowPrompt(true)
-        resetTimer = window.setTimeout(() => {
-          setShowPrompt(false)
-          onResetRef.current()
-        }, IDLE_RESET_AFTER_S * 1000)
-      }, IDLE_PROMPT_AFTER_S * 1000)
+      promptTimer = window.setTimeout(
+        () => {
+          setShowPrompt(true)
+          resetTimer = window.setTimeout(() => {
+            setShowPrompt(false)
+            onResetRef.current()
+          }, IDLE_RESET_AFTER_S * 1000)
+        },
+        (totalS - IDLE_RESET_AFTER_S) * 1000,
+      )
     }
     armRef.current = arm
 
@@ -54,7 +62,7 @@ export function useIdleReset(enabled: boolean, onReset: () => void) {
       window.clearTimeout(resetTimer)
       window.removeEventListener('pointerdown', arm, true)
     }
-  }, [enabled])
+  }, [enabled, totalS])
 
   return { showPrompt, stay: () => armRef.current() }
 }

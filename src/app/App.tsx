@@ -1,6 +1,13 @@
 import { useEffect } from 'react'
 import { useFlow } from './flow'
-import { APP_MODE, DESIGN_H, DESIGN_W } from './config'
+import {
+  APP_MODE,
+  DESIGN_H,
+  DESIGN_W,
+  IDLE_PROMPT_AFTER_S,
+  IDLE_RESET_AFTER_S,
+  TIMER_SECONDS,
+} from './config'
 import { useStageScale } from '@/lib/useStageScale'
 import { useIdleReset } from '@/lib/useIdleReset'
 import { useScreenTransition } from '@/lib/useScreenTransition'
@@ -18,13 +25,25 @@ import { GridOverlay } from '@/components/dev/GridOverlay'
  */
 export default function App() {
   const screen = useFlow((s) => s.screen)
+  const hasResult = useFlow((s) => s.result !== null)
   const resetToAttract = useFlow((s) => s.resetToAttract)
   const scale = useStageScale()
   // плавная смена: сначала гаснет текущий экран, потом маунтится следующий
   const { displayed, hostRef } = useScreenTransition(screen)
 
-  // автосброс по бездействию — только в киоске и не на заставке
-  const idle = useIdleReset(APP_MODE === 'kiosk' && screen !== 'attract', resetToAttract)
+  // автосброс по бездействию — только в киоске и не на заставке.
+  // Пока на экране задачи идёт таймер, порог простоя = таймер + обычные
+  // интервалы: иначе киоск уходил на заставку раньше попапа «Время вышло»
+  // (таймер 120 с против простоя 45 с). С появлением результата (в т.ч.
+  // «Время вышло») порог снова обычный — попап висит 45 с и сброс
+  const onTask = (screen === 'build' || screen === 'ready') && !hasResult
+  const idleTotalS =
+    (onTask ? TIMER_SECONDS : 0) + IDLE_PROMPT_AFTER_S + IDLE_RESET_AFTER_S
+  const idle = useIdleReset(
+    APP_MODE === 'kiosk' && screen !== 'attract',
+    resetToAttract,
+    idleTotalS,
+  )
 
   // киоск-ограждения: контекстное меню и случайные жесты браузера
   useEffect(() => {
