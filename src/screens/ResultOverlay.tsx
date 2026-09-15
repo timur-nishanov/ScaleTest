@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { useFlow } from '@/app/flow'
 import { APP_MODE, QR_URL } from '@/app/config'
@@ -156,25 +156,6 @@ export function ResultOverlay() {
 
   const ill = illustrationFor(result.outcome, gameMode, allWrong)
 
-  // вариант QR-карточки: фиолетовая с белой плашкой или белая с кодом
-  // на карточке. Демо-выбор для заказчика (тумблер внизу слева), решение
-  // запоминается на устройстве; после решения оставить один вариант
-  const [qrVariant, setQrVariant] = useState<'accent' | 'light'>(() => {
-    try {
-      return localStorage.getItem('qrCardVariant') === 'light' ? 'light' : 'accent'
-    } catch {
-      return 'accent'
-    }
-  })
-  const pickQrVariant = (v: 'accent' | 'light') => {
-    setQrVariant(v)
-    try {
-      localStorage.setItem('qrCardVariant', v)
-    } catch {
-      /* приватный режим — живёт до перезагрузки */
-    }
-  }
-
   // в колонке два баннера (промо/печать + QR) — карточка и колонка
   // подстраиваются друг под друга; один баннер — выравнивание по верху
   const stacked = gameMode === 'build' || result.earnedCoin
@@ -214,7 +195,7 @@ export function ResultOverlay() {
           {/* кнопки едины для обеих веток (решение заказчика 26.08):
               «Выбрать другую задачу» → колесо, «Завершить» → заставка */}
           <div className="result-modal__actions">
-            <Button variant="secondary" onClick={backToTasks}>
+            <Button variant="secondary" onClick={() => backToTasks(true)}>
               {STRINGS.result.anotherTask}
             </Button>
             <Button variant="secondary" onClick={resetToAttract}>
@@ -258,45 +239,23 @@ export function ResultOverlay() {
             </aside>
           )}
 
-          {/* QR-баннер — при любом исходе обеих веток (продуктовый лид, 11.09).
-              В веб-версии пользователь и так у экрана — плашка ещё и ссылка */}
-          <aside
-          className={`result-banner result-banner--qr ${
-            qrVariant === 'light' ? 'result-banner--qr-light' : ''
-          }`}
-        >
+          {/* QR-карточка — при любом исходе обеих веток (продуктовый лид,
+              11.09); белая — выбор заказчика 15.09. В веб-версии пользователь
+              и так у экрана — бокс с кодом ещё и ссылка */}
+          <aside className="result-banner result-banner--qr">
             <h3>{STRINGS.result.qrTitle}</h3>
             <p>{STRINGS.result.qrHint}</p>
             {APP_MODE === 'web' ? (
               <a className="result-qr" href={QR_URL} target="_blank" rel="noopener">
-                <QrCode value={QR_URL} size={qrVariant === 'light' ? 440 : 352} className="result-qr__code" />
+                <QrCode value={QR_URL} size={440} className="result-qr__code" />
               </a>
             ) : (
               <div className="result-qr">
-                <QrCode value={QR_URL} size={qrVariant === 'light' ? 440 : 352} className="result-qr__code" />
+                <QrCode value={QR_URL} size={440} className="result-qr__code" />
               </div>
             )}
           </aside>
         </div>
-      </div>
-
-      {/* демо-тумблер: выбор варианта QR-карточки, убрать после решения */}
-      <div className="qr-variant-toggle">
-        <span>QR-карточка</span>
-        <button
-          type="button"
-          className={qrVariant === 'accent' ? 'is-on' : ''}
-          onClick={() => pickQrVariant('accent')}
-        >
-          Фиолетовая
-        </button>
-        <button
-          type="button"
-          className={qrVariant === 'light' ? 'is-on' : ''}
-          onClick={() => pickQrVariant('light')}
-        >
-          Белая
-        </button>
       </div>
     </div>
   )

@@ -1474,14 +1474,14 @@ body {
 }
 
 /* QR-карточка: как панель с QR в бренд-системе YC — заголовок,
-   «Сканируйте QR-код» и белый бокс с кодом по центру. Анатомия
-   фиксированная: карточка выглядит одинаково в обеих ветках и при всех
-   исходах, ничего не растягивается.
-   Заголовок 42/48 — то же отношение кегля к интерлиньяжу, что у 56/64
-   в баннерах (на 56 фраза заказчика дала бы 7 строк).
-   Код 348 (целые модули: 12 px при 29 модулях ≈ 3,9 мм на 55" 4K), тихая
-   зона бокса 46 ≈ 4 модуля по ISO 18004 */
+   «Сканируйте QR-код» и код по центру. Белая (выбор заказчика 15.09),
+   код лежит прямо на карточке — тихая зона во всё её белое поле.
+   Анатомия фиксированная: карточка одинакова в обеих ветках и при всех
+   исходах. Заголовок 42/48 — то же отношение кегля к интерлиньяжу,
+   что у 56/64 в баннерах (на 56 фраза заказчика дала бы 7 строк) */
 .result-banner--qr {
+  background: var(--color-surface);
+  color: var(--color-text);
   align-items: center;
   text-align: center;
 }
@@ -1496,74 +1496,21 @@ body {
 
 .result-banner--qr p {
   max-width: 100%;
+  color: var(--color-text-soft);
 }
 
+/* бокс под код: фиксированные 440×440 держат анатомию карточки, сам код
+   целыми модулями чуть меньше и центрируется */
 .result-qr {
   margin-top: 48px;
   width: 440px;
   height: 440px;
-  background: var(--color-surface);
-  color: var(--color-text);
-  border-radius: var(--radius-tile);
   display: grid;
   place-items: center;
 }
 
 .result-qr__code {
   display: block;
-}
-
-/* светлый вариант QR-карточки (второй вариант для выбора заказчиком):
-   белая карточка, текст чёрный, код прямо на карточке без плашки —
-   тихая зона = внутренние поля 60 */
-.result-banner--qr-light {
-  background: var(--color-surface);
-  color: var(--color-text);
-}
-
-.result-banner--qr-light p {
-  color: var(--color-text-soft);
-}
-
-/* бокс остаётся 440×440 (геометрия карточки в обоих вариантах одна —
-   при переключении тумблера ничего не прыгает), виден только код:
-   он здесь крупнее, во всю плашку, раз белых границ не видно */
-.result-banner--qr-light .result-qr {
-  background: transparent;
-}
-
-/* демо-тумблер варианта QR-карточки: показать заказчику оба и выбрать.
-   Убрать вместе с классом --qr-light, когда решение принято */
-.qr-variant-toggle {
-  position: absolute;
-  left: 90px;
-  bottom: 60px;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding: 16px 20px 16px 32px;
-  background: rgb(11 13 18 / 60%);
-  color: var(--color-text-invert);
-  border-radius: var(--radius-pill);
-  font-size: 28px;
-  line-height: 36px;
-}
-
-.qr-variant-toggle button {
-  border: none;
-  font-family: inherit;
-  font-size: 28px;
-  line-height: 36px;
-  padding: 12px 28px;
-  border-radius: var(--radius-pill);
-  background: rgb(255 255 255 / 15%);
-  color: var(--color-text-invert);
-}
-
-.qr-variant-toggle button.is-on {
-  background: var(--color-surface);
-  color: var(--color-text);
 }
 
 .idle-modal {
