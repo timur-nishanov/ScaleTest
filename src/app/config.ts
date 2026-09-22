@@ -32,11 +32,12 @@ export const WHEEL_STEP_DEG = 15
 
 /**
  * Ссылка, зашитая в QR-код на экране результата («Хотите получить материалы
- * или консультацию…») — форма заявки, боевая ссылка от Олега 15.09.
+ * или консультацию…») — форма заявки, боевая ссылка от Олега 15.09;
+ * 22.09 добавлена метка utm_source=data (просьба клиента).
  * Меняется здесь, QR перерисуется сам.
  */
 export const QR_URL =
-  'https://forms.yandex.ru/surveys/13892037.0875dc4cdb371a4c83970a37d3451c5fae45feab/'
+  'https://forms.yandex.ru/surveys/13892037.0875dc4cdb371a4c83970a37d3451c5fae45feab/?utm_source=data'
 
 export const FLAGS = {
   /**
