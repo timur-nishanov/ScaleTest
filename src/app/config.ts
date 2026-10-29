@@ -56,6 +56,19 @@ export const FLAGS = {
   idlePrompt: false,
 } as const
 
+export type Lang = 'en' | 'ru'
+
+/**
+ * Язык интерфейса. По умолчанию английский (версия для портфолио и резюме);
+ * русская версия для стенда Yandex Scale открывается по ?lang=ru — её тексты
+ * лежат в src/data/*.ts дословно, английские — рядом в *.en.ts.
+ */
+export const LANG: Lang =
+  typeof location !== 'undefined' &&
+  new URLSearchParams(location.search).get('lang') === 'ru'
+    ? 'ru'
+    : 'en'
+
 export type AppMode = 'kiosk' | 'web'
 
 /** kiosk — тач-экран на стенде; web — версия для рассылки пользователям. */

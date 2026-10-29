@@ -1,5 +1,7 @@
 import type { BuildTask } from './types'
+import { LANG } from '@/app/config'
 import { deepTypo } from '@/lib/typo'
+import { BUILD_TASKS_EN } from './buildTasks.en'
 
 /**
  * Задачи режима «Собрать самому» — 12 карточек.
@@ -10,7 +12,8 @@ import { deepTypo } from '@/lib/typo'
  * previewDesc — короткие тексты для карточек-превью (140–150 символов,
  * лид YC, 11.09); полное условие (cardDesc) остаётся на экране сборки.
  */
-export const BUILD_TASKS: BuildTask[] = deepTypo([
+/* русские тексты (?lang=ru) — дословно; английские — buildTasks.en.ts */
+const BUILD_TASKS_RU: BuildTask[] = deepTypo([
   {
     id: 'shop',
     kv: 'valkey',
@@ -171,5 +174,15 @@ export const BUILD_TASKS: BuildTask[] = deepTypo([
     palette: ['airflow', 'datalens', 'kafka', 'valkey', 'trino', 'object_storage'],
   },
 ])
+
+/* английская версия: тексты по id поверх тех же ответов и палитр */
+export const BUILD_TASKS: BuildTask[] =
+  LANG === 'ru'
+    ? BUILD_TASKS_RU
+    : BUILD_TASKS_RU.map((t) => {
+        const en = BUILD_TASKS_EN[t.id]
+        if (!en) console.error(`No English text for build task "${t.id}"`)
+        return en ? { ...t, ...en } : t
+      })
 
 export const getBuildTask = (id: string) => BUILD_TASKS.find((t) => t.id === id)

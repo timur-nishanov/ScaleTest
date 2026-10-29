@@ -1,5 +1,7 @@
 import type { Service, ServiceId } from './types'
+import { LANG } from '@/app/config'
 import { deepTypo } from '@/lib/typo'
+import { SERVICES_SHORT_EN, TAG_CLOUD_HASHTAG_EN } from './services.en'
 
 /**
  * Сервисы Платформы данных. Имена и описания — финальный контент-док
@@ -9,7 +11,8 @@ import { deepTypo } from '@/lib/typo'
  * managed-версии (поле icon). storedoc/websql в новом контенте не участвуют,
  * оставлены для совместимости ассетов.
  */
-export const SERVICES: Record<ServiceId, Service> = deepTypo({
+/* русские описания (?lang=ru) — дословно; английские — services.en.ts */
+const SERVICES_RU: Record<ServiceId, Service> = deepTypo({
   pg: {
     id: 'pg',
     name: 'Managed Service for PostgreSQL',
@@ -147,6 +150,17 @@ export const SERVICES: Record<ServiceId, Service> = deepTypo({
   },
 } satisfies Record<ServiceId, Service>)
 
+/* имена — бренды, одинаковые в обоих языках; переводится только описание */
+export const SERVICES: Record<ServiceId, Service> =
+  LANG === 'ru'
+    ? SERVICES_RU
+    : (Object.fromEntries(
+        Object.entries(SERVICES_RU).map(([id, s]) => [
+          id,
+          { ...s, short: SERVICES_SHORT_EN[id as ServiceId] },
+        ]),
+      ) as Record<ServiceId, Service>)
+
 /** Все ключи сервисов (для предзагрузки и аналитики). */
 export const ALL_SERVICE_IDS = Object.keys(SERVICES) as ServiceId[]
 
@@ -172,4 +186,4 @@ export const TAG_CLOUD_ORDER: ServiceId[] = [
   'ydb_onprem',
 ]
 
-export const TAG_CLOUD_HASHTAG = '#Платформа данных'
+export const TAG_CLOUD_HASHTAG = LANG === 'ru' ? '#Платформа данных' : TAG_CLOUD_HASHTAG_EN

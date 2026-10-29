@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import qrcode from 'qrcode-generator'
+import { STRINGS } from '@/data/strings'
 
 /** Скруглённый квадрат как сегмент SVG-пути (координаты в модулях). */
 function rr(x: number, y: number, w: number, h: number, r: number) {
@@ -62,7 +63,7 @@ export function QrCode({ value, size, className }: { value: string; size: number
       height={px}
       viewBox={`0 0 ${count} ${count}`}
       role="img"
-      aria-label={`QR-код: ${value}`}
+      aria-label={`${STRINGS.a11y.qr}: ${value}`}
     >
       {/* квадратные модули — с чёткими краями, скруглённые глазки — со сглаживанием */}
       <path d={dots} fill="currentColor" shapeRendering="crispEdges" />

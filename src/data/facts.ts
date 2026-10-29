@@ -1,4 +1,5 @@
-import { deepTypo } from '@/lib/typo'
+import { LANG } from '@/app/config'
+import { deepTypo, deepTypoEn } from '@/lib/typo'
 
 /**
  * Факт-блоки заставки. В макете (фрейм 11:1134) три статичных блока
@@ -10,8 +11,16 @@ export interface Fact {
   label: string
 }
 
-export const FACTS: Fact[] = deepTypo([
+const FACTS_RU: Fact[] = deepTypo([
   { value: '20+', label: 'сервисов в платформе данных' },
   { value: '99,99%', label: 'доступность управляемых сервисов в год' },
   { value: '0', label: 'забот по доступности и масштабированию' },
 ])
+
+const FACTS_EN: Fact[] = deepTypoEn([
+  { value: '20+', label: 'services in the data platform' },
+  { value: '99.99%', label: 'availability of managed services\u00A0per\u00A0year' },
+  { value: '0', label: 'worries about availability and scaling' },
+])
+
+export const FACTS: Fact[] = LANG === 'ru' ? FACTS_RU : FACTS_EN

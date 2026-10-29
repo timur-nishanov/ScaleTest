@@ -1,5 +1,7 @@
 import type { ReadyTask } from './types'
+import { LANG } from '@/app/config'
 import { deepTypo } from '@/lib/typo'
+import { READY_TASKS_EN } from './readyTasks.en'
 
 /**
  * Задачи режима «Выбрать из готового» — 6 карточек.
@@ -12,7 +14,8 @@ import { deepTypo } from '@/lib/typo'
  * services пустой — карточка без чипов.
  * kv-иллюстрации — по маппингу лида (комменты в Figma).
  */
-export const READY_TASKS: ReadyTask[] = deepTypo([
+/* русские тексты (?lang=ru) — дословно; английские — readyTasks.en.ts */
+const READY_TASKS_RU: ReadyTask[] = deepTypo([
   {
     id: 'logs_sec',
     kv: 'opensearch',
@@ -188,5 +191,26 @@ export const READY_TASKS: ReadyTask[] = deepTypo([
     ],
   },
 ])
+
+/* английская версия: тексты по id задачи и бандла поверх тех же ответов */
+export const READY_TASKS: ReadyTask[] =
+  LANG === 'ru'
+    ? READY_TASKS_RU
+    : READY_TASKS_RU.map((t) => {
+        const en = READY_TASKS_EN[t.id]
+        if (!en) {
+          console.error(`No English text for ready task "${t.id}"`)
+          return t
+        }
+        const { bundles, ...text } = en
+        return {
+          ...t,
+          ...text,
+          bundles: t.bundles.map((b) => {
+            if (!bundles[b.id]) console.error(`No English text for bundle "${t.id}/${b.id}"`)
+            return { ...b, desc: bundles[b.id] ?? b.desc }
+          }),
+        }
+      })
 
 export const getReadyTask = (id: string) => READY_TASKS.find((t) => t.id === id)
