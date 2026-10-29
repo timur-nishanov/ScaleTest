@@ -25,14 +25,35 @@ export function typo(text: string): string {
   return out
 }
 
-/** Рекурсивно прогоняет все строковые поля объекта/массива через typo. */
-export function deepTypo<T>(value: T): T {
-  if (typeof value === 'string') return typo(value) as T
-  if (Array.isArray(value)) return value.map(deepTypo) as T
+/* английская версия: артикли и короткие предлоги не висят в конце строки */
+const HANGING_EN = /(^|[\s(“])(a|an|the|to|of|in|on|at|by|for|and|or|as|is|its|no|if|with)( )/gi
+
+export function typoEn(text: string): string {
+  let out = text
+  out = out.replace(HANGING_EN, `$1$2${NBSP}`)
+  out = out.replace(HANGING_EN, `$1$2${NBSP}`)
+  out = out.replace(/(\d) /g, `$1${NBSP}`)
+  out = out.replace(/ \+ /g, `${NBSP}+${NBSP}`)
+  return out
+}
+
+function deepMap<T>(value: T, fn: (s: string) => string): T {
+  if (typeof value === 'string') return fn(value) as T
+  if (Array.isArray(value)) return value.map((v) => deepMap(v, fn)) as T
   if (value && typeof value === 'object') {
     const out: Record<string, unknown> = {}
-    for (const [k, v] of Object.entries(value)) out[k] = deepTypo(v)
+    for (const [k, v] of Object.entries(value)) out[k] = deepMap(v, fn)
     return out as T
   }
   return value
+}
+
+/** Рекурсивно прогоняет все строковые поля объекта/массива через typo. */
+export function deepTypo<T>(value: T): T {
+  return deepMap(value, typo)
+}
+
+/** То же для английских текстов. */
+export function deepTypoEn<T>(value: T): T {
+  return deepMap(value, typoEn)
 }

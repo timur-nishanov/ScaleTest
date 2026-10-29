@@ -4,9 +4,16 @@
  * вы-форма, «печать» вместо «монеты», «платформа данных» со строчной.
  * Расхождения контента с согласованным дизайном — docs/DESIGN-NOTES.md.
  */
+import { LANG } from '@/app/config'
 import { deepTypo } from '@/lib/typo'
+import { STRINGS_EN } from './strings.en'
 
-export const STRINGS = deepTypo({
+/* русская версия (стенд Yandex Scale, ?lang=ru) — тексты дословно; английская
+   по умолчанию — strings.en.ts, та же структура */
+const STRINGS_RU = deepTypo({
+  meta: {
+    title: 'Собери свой идеальный бандл — Yandex Cloud',
+  },
   attract: {
     title: 'Соберите идеальный бандл',
     subtitle:
@@ -51,6 +58,7 @@ export const STRINGS = deepTypo({
     assignmentLabel: 'Задание',
     chooseHint: 'Выберите подходящий бандл',
     back: 'К задачам',
+    bundleName: (letter: string) => `Бандл ${letter}`,
   },
   /* Тексты результатов — финальный контент-док лида (экран 4). */
   result: {
@@ -109,4 +117,13 @@ export const STRINGS = deepTypo({
     title: 'Вы ещё здесь?',
     stay: 'Да',
   },
-} as const)
+  a11y: {
+    prevCard: 'Предыдущая карточка',
+    nextCard: 'Следующая карточка',
+    qr: 'QR-код',
+  },
+})
+
+export type Strings = typeof STRINGS_RU
+
+export const STRINGS: Strings = LANG === 'ru' ? STRINGS_RU : STRINGS_EN

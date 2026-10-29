@@ -92,7 +92,7 @@ export function ReadyScreen() {
                 onClick={() => deferNav(() => chooseBundle(origIndex))}
               >
                 <div className="bundle-card__head">
-                  <h3>{`Бандл ${'ABC'[pos] ?? pos + 1}`}</h3>
+                  <h3>{STRINGS.ready.bundleName('ABC'[pos] ?? String(pos + 1))}</h3>
                   <p>{b.desc}</p>
                 </div>
                 {b.services.length > 0 && (() => {

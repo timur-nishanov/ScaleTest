@@ -4,6 +4,7 @@ import type { Draggable } from 'gsap/Draggable'
 import { DEG_PER_PX, STEP, cardAngle, cardTransform } from './wheelMath'
 import { createWheelDrag, degToX, tweenWheelTo, xToDeg } from '@/animations/wheelDrag'
 import { createWheelIntro } from '@/animations/wheelIntro'
+import { STRINGS } from '@/data/strings'
 
 /**
  * Колесо карточек (см. docs/REFS.md и docs/ANIMATIONS.md):
@@ -196,7 +197,7 @@ export function WheelCarousel({ count, renderCard, onPick, initialIndex }: Props
       <div className="wheel-arrows">
         <button
           className="arrow pressable"
-          aria-label="Предыдущая карточка"
+          aria-label={STRINGS.a11y.prevCard}
           onPointerDown={(e) => e.stopPropagation()}
           onClick={() => step(-1)}
         >
@@ -204,7 +205,7 @@ export function WheelCarousel({ count, renderCard, onPick, initialIndex }: Props
         </button>
         <button
           className="arrow pressable"
-          aria-label="Следующая карточка"
+          aria-label={STRINGS.a11y.nextCard}
           onPointerDown={(e) => e.stopPropagation()}
           onClick={() => step(1)}
         >
